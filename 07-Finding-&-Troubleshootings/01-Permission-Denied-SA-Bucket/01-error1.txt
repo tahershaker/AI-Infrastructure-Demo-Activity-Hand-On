@@ -1,0 +1,152 @@
+source .envrc                                                                                                                   ─╯
+IAM token expires at: Sat 10 Oct 2026 22:53:29 +04
+token from NEBIUS_IAM_TOKEN env is used
+token from NEBIUS_IAM_TOKEN env is used
+token from NEBIUS_IAM_TOKEN env is used
+waiting for operation "opserviceaccount-e00mctq7238b94sjkj" over resource "serviceaccount-e00fkk9cegvqa9wge8" to complete
+Created new service account with ID: serviceaccount-e00fkk9cegvqa9wge8
+token from NEBIUS_IAM_TOKEN env is used
+Error: rpc error: code = PermissionDenied desc = No permission
+request = 24cde97f-899b-4b56-8b48-5987ee3cad32
+caused by service error:
+  Permission denied PermissionDenied: service iam, resource ID: group-e00nfs5h3fp1gkrcbk
+
+This issue may be linked to API request calls. The following information may be helpful while debugging the issue:
+  Trace ID: 95a7a3517279e5ceb0eddbe0ed34a480
+(1/5) Command failed, retrying in 2s...
+token from NEBIUS_IAM_TOKEN env is used
+Error: rpc error: code = PermissionDenied desc = No permission
+request = bff6deda-821e-416e-a2bb-7a5e37df962e
+caused by service error:
+  Permission denied PermissionDenied: service iam, resource ID: group-e00nfs5h3fp1gkrcbk
+
+This issue may be linked to API request calls. The following information may be helpful while debugging the issue:
+  Trace ID: 45e718ac419343150bd80950e58a30c1
+(2/5) Command failed, retrying in 2s...
+token from NEBIUS_IAM_TOKEN env is used
+Error: rpc error: code = PermissionDenied desc = No permission
+request = b7fb18df-b5de-439e-b5f9-146ff9ef3f02
+caused by service error:
+  Permission denied PermissionDenied: service iam, resource ID: group-e00nfs5h3fp1gkrcbk
+
+This issue may be linked to API request calls. The following information may be helpful while debugging the issue:
+  Trace ID: 99303d4a1d6441e508a4909cfc047587
+(3/5) Command failed, retrying in 2s...
+token from NEBIUS_IAM_TOKEN env is used
+Error: rpc error: code = PermissionDenied desc = No permission
+request = 9bc66ad5-633e-462c-beac-70796edfc949
+caused by service error:
+  Permission denied PermissionDenied: service iam, resource ID: group-e00nfs5h3fp1gkrcbk
+
+This issue may be linked to API request calls. The following information may be helpful while debugging the issue:
+  Trace ID: 657738825277eb6563130412b9e56d43
+(4/5) Command failed, retrying in 2s...
+token from NEBIUS_IAM_TOKEN env is used
+Error: rpc error: code = PermissionDenied desc = No permission
+request = 012b6dbd-ca68-478b-82c9-237ea0c3087c
+caused by service error:
+  Permission denied PermissionDenied: service iam, resource ID: group-e00nfs5h3fp1gkrcbk
+
+This issue may be linked to API request calls. The following information may be helpful while debugging the issue:
+  Trace ID: a1c1228b0c35030fc90fdf17ae0930c3
+Command failed after 5 attempts
+token from NEBIUS_IAM_TOKEN env is used
+Error: rpc error: code = InvalidArgument desc = '' is invalid for parentId
+request = 1f6c3434-ae76-4f6d-8e5b-c31e717e3cf1
+caused by service error:
+  Bad Request BadRequest: service iam, violations:
+
+
+This issue may be linked to API request calls. The following information may be helpful while debugging the issue:
+  Trace ID: 7beea0d1a77881ff8e3c8621af62e347
+(1/5) Command failed, retrying in 2s...
+token from NEBIUS_IAM_TOKEN env is used
+Error: rpc error: code = InvalidArgument desc = '' is invalid for parentId
+request = 1000d3d8-a865-4d2b-8f54-163d9a06a9ec
+caused by service error:
+  Bad Request BadRequest: service iam, violations:
+
+
+This issue may be linked to API request calls. The following information may be helpful while debugging the issue:
+  Trace ID: cb36e546d0b60732728d72e0f7bd14c3
+(2/5) Command failed, retrying in 2s...
+token from NEBIUS_IAM_TOKEN env is used
+Error: rpc error: code = InvalidArgument desc = '' is invalid for parentId
+request = dd3e6495-0885-4656-9f97-1584c1cbe014
+caused by service error:
+  Bad Request BadRequest: service iam, violations:
+
+
+This issue may be linked to API request calls. The following information may be helpful while debugging the issue:
+  Trace ID: afe9ee31f9cb7bc756c8b047896e601b
+(3/5) Command failed, retrying in 2s...
+token from NEBIUS_IAM_TOKEN env is used
+Error: rpc error: code = InvalidArgument desc = '' is invalid for parentId
+request = c2d1ad8b-607a-4321-b857-1845e723219d
+caused by service error:
+  Bad Request BadRequest: service iam, violations:
+
+
+This issue may be linked to API request calls. The following information may be helpful while debugging the issue:
+  Trace ID: e2ee2676e2f3ae0fd396c7b62f42df71
+(4/5) Command failed, retrying in 2s...
+token from NEBIUS_IAM_TOKEN env is used
+Error: rpc error: code = InvalidArgument desc = '' is invalid for parentId
+request = 352b6f93-ae43-4cf7-8a12-3333004fa59d
+caused by service error:
+  Bad Request BadRequest: service iam, violations:
+
+
+This issue may be linked to API request calls. The following information may be helpful while debugging the issue:
+  Trace ID: 708309015d5b1d49d9c6aa83e202079a
+Command failed after 5 attempts
+token from NEBIUS_IAM_TOKEN env is used
+Error: rpc error: code = InvalidArgument desc = Expected type of nid should be group, but found project
+request = 414d6860-4087-4ac0-b8b9-032634627518
+caused by service error:
+  Service iam error InvalidNid
+
+This issue may be linked to API request calls. The following information may be helpful while debugging the issue:
+  Trace ID: 2bd1355868cd01ec7f82ba88ab037ef0
+Added service account to editors group
+Cleaning up expired access keys for service account
+token from NEBIUS_IAM_TOKEN env is used
+Creating new access key for Object Storage
+token from NEBIUS_IAM_TOKEN env is used
+waiting for operation "opaccesskey-e00j8m787wtykbmnb1" over resource "accesskey-e00w3n6x3pfeqfndpz" to complete
+Created new access key: accesskey-e00w3n6x3pfeqfndpz
+token from NEBIUS_IAM_TOKEN env is used
+Generating new AWS_SECRET_ACCESS_KEY
+token from NEBIUS_IAM_TOKEN env is used
+token from NEBIUS_IAM_TOKEN env is used
+waiting for operation "opstoragebucket-e00zka9amf3sq41hps" over resource "storagebucket-e0013859832918253484839" to complete
+Operation completed successfully: opstoragebucket-e00zka9amf3sq41hps
+completed successfully: Create bucket: tfstate-slurm-k8s-ad197cacfd23a032bd8596c89cbc528e
+metadata:
+  id: storagebucket-e0013859832918253484839
+  parent_id: project-e00hq8rdpr00cb57ha9dkd
+  name: tfstate-slurm-k8s-ad197cacfd23a032bd8596c89cbc528e
+  resource_version: "1"
+  created_at: "2026-10-10T15:31:30.245879Z"
+  updated_at: "2026-10-10T15:31:33.720214Z"
+spec:
+  versioning_policy: ENABLED
+status:
+  state: ACTIVE
+  suspension_state: NOT_SUSPENDED
+  domain_name: storage.eu-north1.nebius.cloud
+  region: eu-north1
+  insecure_endpoint:
+    mode: DISABLED
+  bucket_type: REGULAR
+
+Created bucket: tfstate-slurm-k8s-ad197cacfd23a032bd8596c89cbc528e
+Exported variables:
+TF_VAR_region: eu-north1
+TF_VAR_iam_tenant_id: tenant-e00vj0jkxzwvp8q5xe
+TF_VAR_iam_project_id: project-e00hq8rdpr00cb57ha9dkd
+TF_VAR_o11y_iam_tenant_id: tenant-e00vyb5y1x5vqkzw5e
+TF_VAR_o11y_profile: soperator-telemetry
+TF_VAR_vpc_subnet_id: vpcsubnet-e00k040b5anr61adkt
+TF_VAR_aws_access_key_id: NAKIODOIQFDEI6THDL3F
+TFE_PARALLELISM: 20

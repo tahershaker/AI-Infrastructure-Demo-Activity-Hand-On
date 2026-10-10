@@ -1,0 +1,24 @@
+source .envrc                                                                                                                  
+IAM token expires at: Sat 10 Oct 2026 22:53:29 +04
+token from NEBIUS_IAM_TOKEN env is used
+token from NEBIUS_IAM_TOKEN env is used
+Found existing service account - Using existing service account: soperator-taher-shaker-tfstate-sa
+Cleaning up expired access keys for service account
+token from NEBIUS_IAM_TOKEN env is used
+Creating new access key for Object Storage
+token from NEBIUS_IAM_TOKEN env is used
+waiting for operation "opaccesskey-e00xpjpabjbm4nhksx" over resource "accesskey-e00q84fnh2252cdn7n" to complete
+Created new access key: accesskey-e00q84fnh2252cdn7n
+token from NEBIUS_IAM_TOKEN env is used
+Generating new AWS_SECRET_ACCESS_KEY
+token from NEBIUS_IAM_TOKEN env is used
+Found existing bucket - Using existing bucket: csa-soperator-tfstate-taher-shaker-e00hq8rd
+Exported variables:
+TF_VAR_region: eu-north1
+TF_VAR_iam_tenant_id: tenant-e00vj0jkxzwvp8q5xe
+TF_VAR_iam_project_id: project-e00hq8rdpr00cb57ha9dkd
+TF_VAR_o11y_iam_tenant_id: tenant-e00vyb5y1x5vqkzw5e
+TF_VAR_o11y_profile: soperator-telemetry
+TF_VAR_vpc_subnet_id: vpcsubnet-e00k040b5anr61adkt
+TF_VAR_aws_access_key_id: NAKIDQH61BK9SWAQR4SJ
+TFE_PARALLELISM: 20
