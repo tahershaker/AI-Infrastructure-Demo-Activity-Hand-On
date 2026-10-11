@@ -20,9 +20,9 @@ The README of each phase folder explains in detail what was done in that phase. 
 
 | # | Issue | Phase | Short description |
 |:---|:---|:---|:---|
-| 01 | [Permission denied for the provided tfstate service account](01-Permission-Denied-SA-Bucket/README.md) | 03-Provision | The provided service account cannot access the provided state bucket (HTTP 403), so `terraform init` fails |
-| 02 | [Permission denied reading the tenant data source](02-Permission-Denied-Reading-Tenant-Data-Source/README.md) | 03-Provision | My user cannot read the tenant, and the recipe reads it in an unused lookup, so `terraform plan` stops |
-| 03 | [Disk quota limit](03-Qouta-Limitation-On-Disk/README.md) | 03-Provision | The project allows only 2048 GiB of Network SSD, so the NFS disk could not be created and `terraform apply` stalled |
-| 04 | [GRES data written for 8-GPU nodes](04-Gres-Data-8-GPU/README.md) | 03-Provision | The recipe describes an 8-GPU node, but mine have 1 GPU, so the Slurm controller crashes in a loop |
+| 01 | [Permission denied for the provided tfstate service account](/07-Finding-&-Troubleshootings/01-Permission-Denied-SA-Bucket/README.md) | 03-Provision | The provided service account cannot access the provided state bucket (HTTP 403), so `terraform init` fails |
+| 02 | [Permission denied reading the tenant data source](/07-Finding-&-Troubleshootings/02-Permission-Denied-Reading-Tenant-Data-Source/README.md) | 03-Provision | My user cannot read the tenant, and the recipe reads it in an unused lookup, so `terraform plan` stops |
+| 03 | [Disk quota limit](/07-Finding-&-Troubleshootings/03-Qouta-Limitation-On-Disk/README.md) | 03-Provision | The project allows only 2048 GiB of Network SSD, so the NFS disk could not be created and `terraform apply` stalled |
+| 04 | [GRES data written for 8-GPU nodes](/07-Finding-&-Troubleshootings/04-Gres-Data-8-GPU/README.md) | 03-Provision | The recipe describes an 8-GPU node, but mine have 1 GPU, so the Slurm controller crashes in a loop |
 
 ---
