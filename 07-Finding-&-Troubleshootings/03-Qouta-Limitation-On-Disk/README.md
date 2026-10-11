@@ -294,12 +294,12 @@ The cluster has 4–5 system nodes (autoscaled), plus one controller, one login,
 
 | Filesystem | Size | Used for |
 |---|---|---|
-| Jail | 512 GiB [TO CONFIRM] | Slurm root filesystem: OS, Python environments |
+| Jail | 1024 GiB [TO CONFIRM] | Slurm root filesystem: OS, Python environments |
 | Data (`/mnt/data`) | 1024 GiB [TO CONFIRM] | Datasets, base model, checkpoints, LoRA weights |
-| Controller spool | 32 GiB | Deprecated in this release, probably unused |
-| Accounting | 64 GiB | Probably unused; see the MariaDB note |
-| **Total** | **1632 GiB** | |
+| Controller spool | 128 GiB | Deprecated in this release, probably unused |
+| Accounting | 128 GiB | Probably unused; see the MariaDB note |
+| **Total** | **2304 GiB** | |
 
-1632 GiB is 53% of the 3072 GiB limit.
+1632 GiB is 75% of the 3072 GiB limit.
 
 ---
