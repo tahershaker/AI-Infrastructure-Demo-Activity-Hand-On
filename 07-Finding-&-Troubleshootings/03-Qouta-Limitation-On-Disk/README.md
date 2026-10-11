@@ -258,6 +258,8 @@ I had three options:
 2. Reduce the sizes in `modules/slurm/variables.tf`. I did not choose this, because I do not know the impact of smaller sizes and I did not want to lose time on it.
 3. Keep the 768 GiB as a fixed amount and size all other disks around it. This is what I chose.
 
+---
+
 > **Round 1:** This was my first assumption, and it turned out to be wrong.
 
 I set the disk sizes in `terraform.tfvars` as follows:
@@ -286,6 +288,8 @@ When I ran Terraform, it failed with an `Invalid value for variable` error for e
 With 5 system nodes and 2 workers, the boot disks alone need 2304 GiB. This is already above the 2048 GiB quota, before adding the NFS `/home` disk, the controller state disk and the Victoria disks.
 
 At this point I was guessing, because I did not know the reasons behind these minimums or what would break if I went lower. I decided not to change the validation rules. I set every boot disk to its minimum allowed value in the tfvars file, ran Terraform again, and used the result to see what happens next.
+
+---
 
 > **Round 2:** I hit the same quota limit again. At this point I had to think about my options.
 
@@ -321,6 +325,8 @@ I am going to test with options 1, 2 and 3, and I am setting the NFS share (`/ho
 | **Total** | | | **2034** |
 | Quota limit | | | 2048 |
 | **Spare** | | | **14** (99% used) |
+
+---
 
 > **Round 3:** the storage problem was solved, but I hit a new issue in the `flux-system-soperator-fluxcd-soperator` HelmRelease.
 
@@ -392,13 +398,17 @@ With these values the disk budget is 1970 GiB with 4 system nodes (78 GiB spare)
 
 I ran Terraform again to see the result.
 
+---
+
 > **Round 4:** i hit another issue related to `GRES data for gpu` as the gres configuraiton is set for 8-GPU node and the nodes we are using is only 1-GPU node.
 
 This is a different issue from the disk qouta and will be troubleshooted in a different page - please refer to [Gress-Data-8-GPU-Issue](/07-Finding-&-Troubleshootings/04-Gres-Data-8-GPU/README.md)
 
 The fact that we did not get another qouta limitation issue means that this fix is working so far - however, i would like to go for another roud after fixing the above issue to make sure everything is working fine 
 
-> **Round 4:** I hit a different issue, this time with the `GRES` data for the GPU. The GRES configuration in the recipe is written for an 8-GPU node. The nodes in this lab have only 1 GPU each.
+---
+
+> **Round 5:** I hit a different issue, this time with the `GRES` data for the GPU. The GRES configuration in the recipe is written for an 8-GPU node. The nodes in this lab have only 1 GPU each.
 
 This issue is not related to the disk quota, so I troubleshoot it on its own page: [Gres-Data-8-GPU-Issue](/07-Finding-&-Troubleshootings/04-Gres-Data-8-GPU/README.md)
 
@@ -462,7 +472,9 @@ service/soperator-login-headless-svc          ClusterIP      None           <non
 
 I want to confirm this with one more clean round after I fix the GRES issue. I will destroy the lab, fix the GRES issue and apply again from zero. If that run also passes without a quota error, I will treat the quota issue as closed.
 
-> **Round 5:** 
+---
+
+> **Round 6:** 
 
 
 
