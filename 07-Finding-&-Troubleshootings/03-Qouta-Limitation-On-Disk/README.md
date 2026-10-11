@@ -284,11 +284,12 @@ The cluster has 4–5 system nodes (autoscaled), plus one controller, one login,
 | Accounting node boot | 1 | 64 | 64 |
 | NFS node boot | 1 | 64 | 64 |
 | Worker boot | 2 | 192 | 384 |
-| NFS `/home` disk | 1 | 96 | 96 |
+| NFS boot | 1 | 64 | 64 |
+| NFS `/home` disk | 1 | 64 | 64 |
 | VictoriaMetrics + VictoriaLogs (fixed) | 2 | 768 in total | 768 |
-| **Total** | | | **2016** |
+| **Total** | | | **2048** |
 
-2016 GiB is 98.5% of the 2048 GiB limit.
+2048 GiB is 100% of the 2048 GiB limit.
 
 ## Shared filesystems (limit: 3072 GiB, 32 filesystems)
 
