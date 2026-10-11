@@ -248,6 +248,8 @@ In `terraform.tfvars` there is a variable `telemetry_enabled`, which is `true` b
 
 ![image6](/07-Finding-&-Troubleshootings/03-Qouta-Limitation-On-Disk/Images/image6.png)
 
+## Step 12: Look for a workaround 
+
 With telemetry enabled, VictoriaMetrics requests **512 GiB** and VictoriaLogs requests **256 GiB**, which is **768 GiB** in total. Each one is a separate Network SSD disk created through the CSI driver, so both count against the 2048 GiB disk quota.
 
 I had three options:
