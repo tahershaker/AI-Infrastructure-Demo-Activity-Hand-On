@@ -249,7 +249,7 @@ slurm_nodeset_system = {
   }
   boot_disk = {
     type                 = "NETWORK_SSD"
-    size_gibibytes       = 96
+    size_gibibytes       = 128
     block_size_kibibytes = 4
   }
 }
@@ -264,7 +264,7 @@ slurm_nodeset_controller = {
   }
   boot_disk = {
     type                 = "NETWORK_SSD"
-    size_gibibytes       = 96
+    size_gibibytes       = 128
     block_size_kibibytes = 4
   }
 }
@@ -302,7 +302,7 @@ slurm_nodeset_workers = [
     }
     boot_disk = {
       type                 = "NETWORK_SSD"
-      size_gibibytes       = 192
+      size_gibibytes       = 512
       block_size_kibibytes = 4
     }
     # The 1-GPU preset cannot join an InfiniBand GPU cluster, so none is set.
@@ -390,14 +390,14 @@ use_preinstalled_gpu_drivers = true
 slurm_nodeset_login = {
   size = 1
   # Optional. For GB300, this is set to false internally so login pods run on worker nodes.
-  # node_group_enabled = true
+  node_group_enabled = false
   resource = {
     platform = "cpu-d3"
     preset   = "16vcpu-64gb"
   }
   boot_disk = {
     type                 = "NETWORK_SSD"
-    size_gibibytes       = 64
+    size_gibibytes       = 256
     block_size_kibibytes = 4
   }
 }
@@ -413,7 +413,7 @@ slurm_nodeset_accounting = {
   }
   boot_disk = {
     type                 = "NETWORK_SSD"
-    size_gibibytes       = 64
+    size_gibibytes       = 128
     block_size_kibibytes = 4
   }
 }
@@ -428,7 +428,7 @@ slurm_nodeset_nfs = {
   }
   boot_disk = {
     type                 = "NETWORK_SSD"
-    size_gibibytes       = 64
+    size_gibibytes       = 128
     block_size_kibibytes = 4
   }
 }
@@ -581,7 +581,7 @@ public_o11y_enabled = false
 # Whether to enable Accounting.
 # By default, true.
 # ---
-accounting_enabled = true
+accounting_enabled = false
 
 # endregion Accounting
 

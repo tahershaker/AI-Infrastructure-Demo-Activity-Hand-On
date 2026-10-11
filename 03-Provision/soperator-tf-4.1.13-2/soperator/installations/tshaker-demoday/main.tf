@@ -520,6 +520,19 @@ module "slurm" {
   public_o11y_enabled = var.public_o11y_enabled
   soperator_notifier  = var.soperator_notifier
 
+  # Demo Day change: smaller monitoring disks and requests, to fit the 2048 GiB Network SSD quota.
+  resources_vm_single = {
+    memory     = "8Gi"
+    cpu        = "2000m"
+    size       = "32Gi"
+    gomaxprocs = 2
+  }
+  resources_vm_logs_server = {
+    memory = "2Gi"
+    cpu    = "1000m"
+    size   = "32Gi"
+  }
+
   backups_enabled = local.backups_enabled
   backups_config = {
     secret_name    = local.backups_enabled ? module.backups[0].secret_name : null

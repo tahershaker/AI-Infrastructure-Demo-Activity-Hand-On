@@ -256,6 +256,214 @@ I had three options:
 2. Reduce the sizes in `modules/slurm/variables.tf`. I did not choose this, because I do not know the impact of smaller sizes and I did not want to lose time on it.
 3. Keep the 768 GiB as a fixed amount and size all other disks around it. This is what I chose.
 
+> **Round 1:** This was my first assumption, and it turned out to be wrong.
+
+I set the disk sizes in `terraform.tfvars` as follows:
+
+| Disk | Size I set (GiB) |
+|---|---|
+| System nodes (each) | 96 |
+| Controller | 96 |
+| Login | 64 |
+| Accounting | 64 |
+| NFS node | 64 |
+| Worker (each) | 192 |
+| NFS share (`/home`) | 64 |
+
+When I ran Terraform, it failed with an `Invalid value for variable` error for each node group. The error said that each node type has a minimum boot disk size. I opened `variables.tf` and found validation rules that set these minimums:
+
+| Node | Minimum (GiB) |
+|---|---|
+| System nodes (each) | 128 |
+| Controller | 128 |
+| Login | 256 |
+| Accounting | 128 |
+| NFS node | 128 |
+| Worker (each) | 512 |
+
+With 5 system nodes and 2 workers, the boot disks alone need 2304 GiB. This is already above the 2048 GiB quota, before adding the NFS `/home` disk, the controller state disk and the Victoria disks.
+
+At this point I was guessing, because I did not know the reasons behind these minimums or what would break if I went lower. I decided not to change the validation rules. I set every boot disk to its minimum allowed value in the tfvars file, ran Terraform again, and used the result to see what happens next.
+
+> **Round 2:** I hit the same quota limit again. At this point I had to think about my options.
+
+With the minimum sizes from the validation checks, the boot disks alone need **2304 GiB** (assuming 5 nodes in the system group). My limit is **2048 GiB**, so the boot disks are already **256 GiB** over. Several other disks are not in this number:
+
+| Item | GiB |
+|---|---|
+| Boot disks at the minimum sizes (5 system nodes) | 2304 |
+| NFS share (`/home`), assuming 128 GiB | 128 |
+| Controller state (default) | 50 |
+| VictoriaMetrics + VictoriaLogs (default) | 768 |
+| **Total needed** | **3250** |
+| Quota limit | 2048 |
+| **Missing** | **1202** |
+
+Currently these are my options:
+
+1. **Disable telemetry in the tfvars** (saves 768 GiB). 
+2. **Disable accounting in the tfvars** (`accounting_enabled = false`, saves 128 GiB). This removes the accounting node group and the Slurm accounting system. It also removes the accounting shared filesystem and the MariaDB claim, because they are no longer created.
+3. **Disable the login node group in the tfvars** (`node_group_enabled = false` saves 256 GiB). The tfvars has an option for this. Its comment says that the login pods then run on the worker nodes. I have not tested this option for my preset yet.
+4. **Edit the validation checks in `variables.tf`** and lower the disk sizes to fit the quota. 
+
+I am going to test with options 1, 2 and 3, and I am setting the NFS share (`/home`) disk to 64 GiB. Option 4 stays unused.
+
+| Disk | Count | GiB each | Total GiB |
+|---|---|---|---|
+| System boot | 5 (max) | 128 | 640 |
+| Controller boot | 1 | 128 | 128 |
+| Worker boot | 2 | 512 | 1024 |
+| NFS node boot | 1 | 128 | 128 |
+| NFS share (`/home`) | 1 | 64 | 64 |
+| Controller state | 1 | 50 | 50 |
+| **Total** | | | **2034** |
+| Quota limit | | | 2048 |
+| **Spare** | | | **14** (99% used) |
+
+> **Round 3:** the storage problem was solved, but I hit a new issue in the `flux-system-soperator-fluxcd-soperator` HelmRelease.
+
+The quota error was gone and `nfs-server` installed. But the Soperator controller release failed, because it creates a `soperator-controller-manager-servicemonitor` object, and the cluster has no `ServiceMonitor` CRD (`monitoring.coreos.com/v1`). Every release that depends on it stayed `False`.
+
+```bash
+kubectl get helmreleases -A
+NAMESPACE     NAME                                                      AGE   READY   STATUS
+flux-system   flux-system-soperator-fluxcd-cert-manager                 21m   True    Helm install succeeded for release cert-manager-system/cert-manager
+....
+flux-system   flux-system-soperator-fluxcd-monitoring-dashboards        21m   False   Helm install failed for release monitoring-system/soperator-monitoring-dashboards with chart helm-soperator-monitoring-dashboards@4.1.13: 7 errors occurred:...
+...
+flux-system   flux-system-soperator-fluxcd-nodeconfigurator             21m   False   dependency 'flux-system/flux-system-soperator-fluxcd-soperator' is not ready
+flux-system   flux-system-soperator-fluxcd-nodesets                     21m   False   dependency 'flux-system/flux-system-soperator-fluxcd-soperator' is not ready
+...
+flux-system   flux-system-soperator-fluxcd-slurm-cluster                21m   False   dependency 'flux-system/flux-system-soperator-fluxcd-soperator' is not ready
+flux-system   flux-system-soperator-fluxcd-slurm-cluster-storage        21m   False   dependency 'flux-system/flux-system-soperator-fluxcd-soperator' is not ready
+flux-system   flux-system-soperator-fluxcd-soperator                    21m   False   Helm install failed for release soperator-system/soperator-controller with chart helm-soperator@4.1.13: unable to build kubernetes objects from release manifest: resource mapping not found for name: "soperator-controller-manager-servicemonitor" namespace: "" from "": no matches for kind "ServiceMonitor" in version "monitoring.coreos.com/v1"...
+flux-system   flux-system-soperator-fluxcd-soperator-activechecks       21m   False   dependency 'flux-system/flux-system-soperator-fluxcd-slurm-cluster' is not ready
+flux-system   flux-system-soperator-fluxcd-soperatorchecks              21m   False   dependency 'flux-system/flux-system-soperator-fluxcd-soperator' is not ready
+
+---
+
+kubectl -n flux-system describe helmrelease flux-system-soperator-fluxcd-soperator
+.....
+Last Helm logs:
+2026-10-11T16:16:19.893060773Z: beginning wait for 6 resources with timeout of 1m0s
+2026-10-11T16:16:21.128405816Z: wait for resources succeeded within 1s
+2026-10-11T16:16:21.128412497Z: successfully applied 6 CustomResourceDefinition(s)
+2026-10-11T16:16:21.12841468Z: clearing REST mapper cache
+  Warning  InstallFailed  30m  helm-controller  Helm install failed for release soperator-system/soperator-controller with chart helm-soperator@4.1.13: unable to build kubernetes objects from release manifest: resource mapping not found for name: "soperator-controller-manager-servicemonitor" namespace: "" from "": no matches for kind "ServiceMonitor" in version "monitoring.coreos.com/v1"
+ensure CRDs are installed first
+```
+
+See [05-output3](/07-Finding-&-Troubleshootings/03-Qouta-Limitation-On-Disk/05-output3.txt) for the full command output.
+
+I expected that disabling telemetry in the tfvars would take care of all its dependencies. It did not. I checked three things:
+
+- `kubectl get crd | grep monitoring.coreos.com` returned nothing, so the Prometheus CRDs were never installed.
+- The `monitoring-dashboards` release failed with `namespaces "monitoring-system" not found`. That namespace is created by the telemetry stack.
+- The `describe` output of the Soperator release shows that the Flux chart (`helm-soperator-fluxcd`) passes `serviceMonitor.enabled: true` to the controller as an inline value, even with telemetry off.
+
+My conclusion is that in this release, the controller's ServiceMonitor is enabled unconditionally, while the CRD that it needs is installed only when telemetry is on. I did not find a tfvars option to separate the two. I also could not see the chart sources, so I cannot say whether a values override would work.
+
+I chose to turn telemetry back on, and to make its disks smaller. I set `vm_single` (VictoriaMetrics) and `vm_logs` (VictoriaLogs) to 32 GiB each in `main.tf`, inside the `module "slurm"` block. I also lowered the metrics store requests (CPU and memory), because the defaults are large for an 8 vCPU system node. These values are my own estimates.
+
+```hcl
+  telemetry_enabled   = var.telemetry_enabled
+  public_o11y_enabled = var.public_o11y_enabled
+  soperator_notifier  = var.soperator_notifier
+
+  # Demo Day change: smaller monitoring disks and requests, to fit the 2048 GiB Network SSD quota.
+  resources_vm_single = {
+    memory     = "8Gi"
+    cpu        = "2000m"
+    size       = "32Gi"
+    gomaxprocs = 2
+  }
+  resources_vm_logs_server = {
+    memory = "2Gi"
+    cpu    = "1000m"
+    size   = "32Gi"
+  }
+
+  backups_enabled = local.backups_enabled
+```
+
+With these values the disk budget is 1970 GiB with 4 system nodes (78 GiB spare). With a fifth system node it would be 2098 GiB, which is 50 GiB over the quota. So the system node group can be configured for 4–5 nodes, but in practice it cannot reach 5 nodes with this quota.
+
+I ran Terraform again to see the result.
+
+> **Round 4:** i hit another issue related to `GRES data for gpu` as the gres configuraiton is set for 8-GPU node and the nodes we are using is only 1-GPU node.
+
+This is a different issue from the disk qouta and will be troubleshooted in a different page - please refer to [Gress-Data-8-GPU-Issue](/07-Finding-&-Troubleshootings/04-Gres-Data-8-GPU/README.md)
+
+The fact that we did not get another qouta limitation issue means that this fix is working so far - however, i would like to go for another roud after fixing the above issue to make sure everything is working fine 
+
+> **Round 4:** I hit a different issue, this time with the `GRES` data for the GPU. The GRES configuration in the recipe is written for an 8-GPU node. The nodes in this lab have only 1 GPU each.
+
+This issue is not related to the disk quota, so I troubleshoot it on its own page: [Gres-Data-8-GPU-Issue](/07-Finding-&-Troubleshootings/04-Gres-Data-8-GPU/README.md)
+
+This time Terraform did not stop on a quota error. The cluster, the node groups, the Flux releases (with exception to ), soperator-system components, and soperator cluster components (with exception to the soperator-controller) were all created. This tells me the disk quota fix works.
+
+```bash
+kubectl -n soperator-system get all
+NAME                                                READY   STATUS    RESTARTS   AGE
+pod/soperator-checks-checks-b757c4cc9-475t2         2/2     Running   0          15m
+pod/soperator-controller-manager-584b65dc7c-xbpjt   2/2     Running   0          15m
+pod/soperator-node-configurator-ds-2g7nr            1/1     Running   0          15m
+pod/soperator-node-configurator-ds-dnk4b            1/1     Running   0          15m
+pod/soperator-node-configurator-ds-fmpvt            1/1     Running   0          15m
+pod/soperator-node-configurator-ds-jcbsn            1/1     Running   0          15m
+pod/soperator-node-configurator-ds-k4p97            1/1     Running   0          15m
+pod/soperator-node-configurator-ds-qhlq6            1/1     Running   0          15m
+pod/soperator-node-configurator-ds-rdvt5            1/1     Running   0          15m
+pod/soperator-node-configurator-ds-xpkdd            1/1     Running   0          15m
+
+NAME                                                   TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)    AGE
+service/soperator-checks-metrics                       ClusterIP   10.1.222.139   <none>        8443/TCP   15m
+service/soperator-controller-metrics                   ClusterIP   10.1.150.69    <none>        8443/TCP   15m
+
+kubectl -n soperator get all
+NAME                                                     READY   STATUS             RESTARTS       AGE
+pod/controller-0                                         1/2     CrashLoopBackOff   5 (100s ago)   6m42s
+pod/controller-placeholder-r56xj                         3/3     Running            0              6m42s
+pod/controller-spool-mount-x8szw                         1/1     Running            0              16m
+pod/helm-soperator-dcgm-exporter-ds-tnnmn                1/1     Running            0              18m
+pod/helm-soperator-dcgm-exporter-ds-znb77                1/1     Running            0              18m
+pod/jail-mount-7v2zs                                     1/1     Running            0              16m
+pod/jail-mount-8fgrq                                     1/1     Running            0              16m
+pod/jail-mount-gv997                                     1/1     Running            0              16m
+pod/jail-mount-h5th5                                     1/1     Running            0              16m
+pod/jail-mount-r94l4                                     1/1     Running            0              16m
+pod/jail-mount-swjsq                                     1/1     Running            0              16m
+pod/jail-mount-vx8bd                                     1/1     Running            0              16m
+pod/jail-submount-data-mount-4bblc                       1/1     Running            0              16m
+pod/jail-submount-data-mount-78pnm                       1/1     Running            0              16m
+pod/jail-submount-data-mount-d6nmw                       1/1     Running            0              16m
+pod/jail-submount-data-mount-g7gj6                       1/1     Running            0              16m
+pod/jail-submount-data-mount-hlxs7                       1/1     Running            0              16m
+pod/jail-submount-data-mount-srn9f                       1/1     Running            0              16m
+pod/jail-submount-data-mount-w52dp                       1/1     Running            0              16m
+pod/login-0                                              0/2     Pending            0              6m41s
+pod/run-extensive-check-on-reservations-29862360-g2hfr   0/2     Completed          0              13m
+pod/run-extensive-check-on-reservations-29862370-js52q   0/2     Completed          0              2m52s
+pod/sconfigcontroller-7b868fdf86-7phxl                   1/1     Running            0              6m42s
+pod/sconfigcontroller-7b868fdf86-fj729                   1/1     Running            0              6m42s
+pod/slurm-exporter-6cf785fbd7-tvspk                      1/1     Running            0              6m41s
+pod/soperator-populate-jail-nnp2g                        0/1     Completed          0              16m
+pod/wait-for-active-checks-sjz2c                         1/1     Running            0              15m
+pod/worker-0                                             1/2     Init:3/4           1 (59s ago)    6m41s
+pod/worker-1                                             1/2     Init:3/4           1 (59s ago)    6m41s
+
+NAME                                          TYPE           CLUSTER-IP     EXTERNAL-IP      PORT(S)        AGE
+service/helm-soperator-dcgm-exporter-svc      ClusterIP      10.1.118.55    <none>           9400/TCP       18m
+service/soperator-controller-svc              ClusterIP      10.1.89.252    <none>           6817/TCP       6m42s
+service/soperator-login-headless-svc          ClusterIP      None           <none>           22/TCP         6m41s
+```
+
+I want to confirm this with one more clean round after I fix the GRES issue. I will destroy the lab, fix the GRES issue and apply again from zero. If that run also passes without a quota error, I will treat the quota issue as closed.
+
+> **Round 5:** 
+
+
+
 ---
 
 # Conclusion

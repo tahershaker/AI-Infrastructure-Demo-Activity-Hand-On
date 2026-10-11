@@ -1,0 +1,552 @@
+kubectl get nodes                                                                                                               ─╯
+NAME                                 STATUS   ROLES    AGE   VERSION
+computeinstance-e00dwey0v75460yjza   Ready    <none>   30m   v1.35.7
+computeinstance-e00pwh96tapdk95pt7   Ready    <none>   30m   v1.35.7
+computeinstance-e00rm6xdfxfcge50j5   Ready    <none>   30m   v1.35.7
+computeinstance-e00s7zddtshy6wra6r   Ready    <none>   30m   v1.35.7
+computeinstance-e00tnmrtj9g8rhtex7   Ready    <none>   30m   v1.35.7
+computeinstance-e00xk184cymjn917bp   Ready    <none>   30m   v1.35.7
+computeinstance-e00y6awask1vfkc4b4   Ready    <none>   29m   v1.35.7
+computeinstance-e00ynpyp37vebg8r5b   Ready    <none>   20m   v1.35.7
+
+kubectl get nodes -o wide                                                                                                                                                                                                       ─╯
+NAME                                 STATUS   ROLES    AGE   VERSION   INTERNAL-IP   EXTERNAL-IP   OS-IMAGE             KERNEL-VERSION       CONTAINER-RUNTIME
+computeinstance-e00dwey0v75460yjza   Ready    <none>   31m   v1.35.7   10.6.0.136    <none>        Ubuntu 24.04.5 LTS   6.11.0-1016-nvidia   containerd://2.2.6
+computeinstance-e00pwh96tapdk95pt7   Ready    <none>   31m   v1.35.7   10.6.0.2      <none>        Ubuntu 24.04.5 LTS   6.11.0-1016-nvidia   containerd://2.2.6
+computeinstance-e00rm6xdfxfcge50j5   Ready    <none>   31m   v1.35.7   10.0.0.9      <none>        Ubuntu 24.04.5 LTS   6.11.0-1016-nvidia   containerd://2.2.6
+computeinstance-e00s7zddtshy6wra6r   Ready    <none>   31m   v1.35.7   10.0.29.60    <none>        Ubuntu 24.04.5 LTS   6.11.0-1016-nvidia   containerd://2.2.6
+computeinstance-e00tnmrtj9g8rhtex7   Ready    <none>   31m   v1.35.7   10.6.39.1     <none>        Ubuntu 24.04.5 LTS   6.11.0-1016-nvidia   containerd://2.2.6
+computeinstance-e00xk184cymjn917bp   Ready    <none>   31m   v1.35.7   10.6.0.0      <none>        Ubuntu 24.04.5 LTS   6.11.0-1016-nvidia   containerd://2.2.6
+computeinstance-e00y6awask1vfkc4b4   Ready    <none>   31m   v1.35.7   10.0.0.57     <none>        Ubuntu 24.04.4 LTS   6.11.0-1016-nvidia   containerd://2.2.6
+computeinstance-e00ynpyp37vebg8r5b   Ready    <none>   21m   v1.35.7   10.6.0.177    <none>        Ubuntu 24.04.4 LTS   6.11.0-1016-nvidia   containerd://2.2.6
+
+kubectl get ns                                                                                                                                                                                                                  ─╯
+NAME                                STATUS   AGE
+cert-manager-system                 Active   20m
+cilium-secrets                      Active   39m
+default                             Active   40m
+flux-system                         Active   21m
+kruise-daemon-config                Active   19m
+kruise-system                       Active   19m
+kube-node-lease                     Active   40m
+kube-public                         Active   40m
+kube-system                         Active   40m
+nfs-system                          Active   20m
+security-profiles-operator-system   Active   20m
+soperator                           Active   20m
+soperator-system                    Active   20m
+
+
+kubectl get helmreleases -A
+NAMESPACE     NAME                                                      AGE   READY   STATUS
+flux-system   flux-system-soperator-fluxcd-cert-manager                 21m   True    Helm install succeeded for release cert-manager-system/cert-manager.v1 with chart cert-manager@v1.19.6
+flux-system   flux-system-soperator-fluxcd-csi-driver-nfs               21m   True    Helm install succeeded for release nfs-system/csi-driver-nfs.v1 with chart csi-driver-nfs@4.11.0
+flux-system   flux-system-soperator-fluxcd-custom-configmaps            21m   True    Helm install succeeded for release soperator/soperator-custom-configmaps.v1 with chart helm-soperator-custom-configmaps@4.1.13
+flux-system   flux-system-soperator-fluxcd-kruise                       21m   True    Helm install succeeded for release soperator/soperator-kruise.v1 with chart kruise@1.8.0
+flux-system   flux-system-soperator-fluxcd-monitoring-dashboards        21m   False   Helm install failed for release monitoring-system/soperator-monitoring-dashboards with chart helm-soperator-monitoring-dashboards@4.1.13: 7 errors occurred:...
+flux-system   flux-system-soperator-fluxcd-nfs-server                   21m   True    Helm install succeeded for release nfs-system/nfs-server.v1 with chart helm-nfs-server@1.2.2
+flux-system   flux-system-soperator-fluxcd-nodeconfigurator             21m   False   dependency 'flux-system/flux-system-soperator-fluxcd-soperator' is not ready
+flux-system   flux-system-soperator-fluxcd-nodesets                     21m   False   dependency 'flux-system/flux-system-soperator-fluxcd-soperator' is not ready
+flux-system   flux-system-soperator-fluxcd-ns                           21m   True    Helm install succeeded for release flux-system/flux-system-soperator-fluxcd-ns.v1 with chart raw@2.0.0
+flux-system   flux-system-soperator-fluxcd-security-profiles-operator   21m   True    Helm install succeeded for release security-profiles-operator-system/security-profiles-operator.v1 with chart security-profiles-operator@0.8.5-soperator
+flux-system   flux-system-soperator-fluxcd-slurm-cluster                21m   False   dependency 'flux-system/flux-system-soperator-fluxcd-soperator' is not ready
+flux-system   flux-system-soperator-fluxcd-slurm-cluster-storage        21m   False   dependency 'flux-system/flux-system-soperator-fluxcd-soperator' is not ready
+flux-system   flux-system-soperator-fluxcd-soperator                    21m   False   Helm install failed for release soperator-system/soperator-controller with chart helm-soperator@4.1.13: unable to build kubernetes objects from release manifest: resource mapping not found for name: "soperator-controller-manager-servicemonitor" namespace: "" from "": no matches for kind "ServiceMonitor" in version "monitoring.coreos.com/v1"...
+flux-system   flux-system-soperator-fluxcd-soperator-activechecks       21m   False   dependency 'flux-system/flux-system-soperator-fluxcd-slurm-cluster' is not ready
+flux-system   flux-system-soperator-fluxcd-soperatorchecks              21m   False   dependency 'flux-system/flux-system-soperator-fluxcd-soperator' is not ready
+flux-system   flux-system-soperator-fluxcd-storageclasses               21m   True    Helm install succeeded for release storage-system/soperator-storageclasses.v1 with chart helm-storageclasses@4.1.13
+flux-system   soperator-fluxcd                                          21m   True    Helm install succeeded for release flux-system/flux-system-soperator-fluxcd.v1 with chart helm-soperator-fluxcd@4.1.13
+
+
+kubectl get pods -A -o wide                                                                                                                                                                                                     ─╯
+NAMESPACE                           NAME                                                      READY   STATUS    RESTARTS   AGE   IP            NODE                                 NOMINATED NODE   READINESS GATES
+cert-manager-system                 cert-manager-689dbf96cf-j7zrw                             1/1     Running   0          23m   10.6.25.201   computeinstance-e00s7zddtshy6wra6r   <none>           <none>
+cert-manager-system                 cert-manager-cainjector-7c8d57866-bfvn8                   1/1     Running   0          23m   10.6.25.96    computeinstance-e00s7zddtshy6wra6r   <none>           <none>
+cert-manager-system                 cert-manager-webhook-5b78b88bc6-2499v                     1/1     Running   0          23m   10.6.25.28    computeinstance-e00s7zddtshy6wra6r   <none>           <none>
+flux-system                         helm-controller-b654b75f8-tfnqv                           1/1     Running   0          24m   10.6.38.167   computeinstance-e00xk184cymjn917bp   <none>           <none>
+flux-system                         image-automation-controller-86497776cd-z7wkw              1/1     Running   0          24m   10.6.38.89    computeinstance-e00xk184cymjn917bp   <none>           <none>
+flux-system                         image-reflector-controller-684c57479b-g97zv               1/1     Running   0          24m   10.6.25.47    computeinstance-e00s7zddtshy6wra6r   <none>           <none>
+flux-system                         kustomize-controller-6f87798dcc-ck78p                     1/1     Running   0          24m   10.0.63.176   computeinstance-e00dwey0v75460yjza   <none>           <none>
+flux-system                         notification-controller-6966dcb565-pr7p8                  1/1     Running   0          24m   10.0.63.6     computeinstance-e00dwey0v75460yjza   <none>           <none>
+flux-system                         source-controller-c7c5b47d6-cj89h                         1/1     Running   0          24m   10.6.25.52    computeinstance-e00s7zddtshy6wra6r   <none>           <none>
+kruise-system                       kruise-controller-manager-7c6f58d74-22z7d                 1/1     Running   0          23m   10.6.13.71    computeinstance-e00tnmrtj9g8rhtex7   <none>           <none>
+kruise-system                       kruise-controller-manager-7c6f58d74-j7z9l                 1/1     Running   0          23m   10.6.25.250   computeinstance-e00s7zddtshy6wra6r   <none>           <none>
+kruise-system                       kruise-daemon-4n6pm                                       1/1     Running   0          23m   10.0.29.60    computeinstance-e00s7zddtshy6wra6r   <none>           <none>
+kruise-system                       kruise-daemon-7scwd                                       1/1     Running   0          23m   10.0.0.9      computeinstance-e00rm6xdfxfcge50j5   <none>           <none>
+kruise-system                       kruise-daemon-qg6kq                                       1/1     Running   0          23m   10.0.0.57     computeinstance-e00y6awask1vfkc4b4   <none>           <none>
+kruise-system                       kruise-daemon-tzh67                                       1/1     Running   0          23m   10.6.39.1     computeinstance-e00tnmrtj9g8rhtex7   <none>           <none>
+kruise-system                       kruise-daemon-vxrg5                                       1/1     Running   0          23m   10.6.0.136    computeinstance-e00dwey0v75460yjza   <none>           <none>
+kruise-system                       kruise-daemon-w9hq6                                       1/1     Running   0          23m   10.6.0.177    computeinstance-e00ynpyp37vebg8r5b   <none>           <none>
+kruise-system                       kruise-daemon-wn52t                                       1/1     Running   0          23m   10.6.0.0      computeinstance-e00xk184cymjn917bp   <none>           <none>
+kruise-system                       kruise-daemon-zvxgt                                       1/1     Running   0          23m   10.6.0.2      computeinstance-e00pwh96tapdk95pt7   <none>           <none>
+kube-system                         cilium-54s4t                                              1/1     Running   0          25m   10.6.0.177    computeinstance-e00ynpyp37vebg8r5b   <none>           <none>
+kube-system                         cilium-56v4q                                              1/1     Running   0          35m   10.0.0.9      computeinstance-e00rm6xdfxfcge50j5   <none>           <none>
+kube-system                         cilium-7qdkp                                              1/1     Running   0          35m   10.6.0.136    computeinstance-e00dwey0v75460yjza   <none>           <none>
+kube-system                         cilium-envoy-24nmt                                        1/1     Running   0          35m   10.6.39.1     computeinstance-e00tnmrtj9g8rhtex7   <none>           <none>
+kube-system                         cilium-envoy-2xd7j                                        1/1     Running   0          25m   10.6.0.177    computeinstance-e00ynpyp37vebg8r5b   <none>           <none>
+kube-system                         cilium-envoy-6swvz                                        1/1     Running   0          35m   10.0.0.9      computeinstance-e00rm6xdfxfcge50j5   <none>           <none>
+kube-system                         cilium-envoy-cww8k                                        1/1     Running   0          35m   10.0.29.60    computeinstance-e00s7zddtshy6wra6r   <none>           <none>
+kube-system                         cilium-envoy-fgdd4                                        1/1     Running   0          35m   10.6.0.2      computeinstance-e00pwh96tapdk95pt7   <none>           <none>
+kube-system                         cilium-envoy-g54qj                                        1/1     Running   0          35m   10.6.0.136    computeinstance-e00dwey0v75460yjza   <none>           <none>
+kube-system                         cilium-envoy-vhnt7                                        1/1     Running   0          35m   10.6.0.0      computeinstance-e00xk184cymjn917bp   <none>           <none>
+kube-system                         cilium-envoy-wx9dq                                        1/1     Running   0          34m   10.0.0.57     computeinstance-e00y6awask1vfkc4b4   <none>           <none>
+kube-system                         cilium-f58xr                                              1/1     Running   0          35m   10.6.39.1     computeinstance-e00tnmrtj9g8rhtex7   <none>           <none>
+kube-system                         cilium-fs6p9                                              1/1     Running   0          35m   10.0.29.60    computeinstance-e00s7zddtshy6wra6r   <none>           <none>
+kube-system                         cilium-lgkht                                              1/1     Running   0          35m   10.6.0.0      computeinstance-e00xk184cymjn917bp   <none>           <none>
+kube-system                         cilium-operator-76f98df984-d2zln                          1/1     Running   0          42m   10.6.39.1     computeinstance-e00tnmrtj9g8rhtex7   <none>           <none>
+kube-system                         cilium-operator-76f98df984-jzddh                          1/1     Running   0          42m   10.6.0.136    computeinstance-e00dwey0v75460yjza   <none>           <none>
+kube-system                         cilium-pvlzf                                              1/1     Running   0          34m   10.0.0.57     computeinstance-e00y6awask1vfkc4b4   <none>           <none>
+kube-system                         cilium-qvswh                                              1/1     Running   0          35m   10.6.0.2      computeinstance-e00pwh96tapdk95pt7   <none>           <none>
+kube-system                         compute-csi-node-6ldfp                                    2/2     Running   0          35m   10.6.0.136    computeinstance-e00dwey0v75460yjza   <none>           <none>
+kube-system                         compute-csi-node-8m5jd                                    2/2     Running   0          34m   10.0.0.57     computeinstance-e00y6awask1vfkc4b4   <none>           <none>
+kube-system                         compute-csi-node-dn5vl                                    2/2     Running   0          35m   10.0.0.9      computeinstance-e00rm6xdfxfcge50j5   <none>           <none>
+kube-system                         compute-csi-node-htsv6                                    2/2     Running   0          35m   10.6.0.0      computeinstance-e00xk184cymjn917bp   <none>           <none>
+kube-system                         compute-csi-node-j2v92                                    2/2     Running   0          25m   10.6.0.177    computeinstance-e00ynpyp37vebg8r5b   <none>           <none>
+kube-system                         compute-csi-node-rbxrn                                    2/2     Running   0          35m   10.6.0.2      computeinstance-e00pwh96tapdk95pt7   <none>           <none>
+kube-system                         compute-csi-node-v9klr                                    2/2     Running   0          35m   10.6.39.1     computeinstance-e00tnmrtj9g8rhtex7   <none>           <none>
+kube-system                         compute-csi-node-wcnrn                                    2/2     Running   0          35m   10.0.29.60    computeinstance-e00s7zddtshy6wra6r   <none>           <none>
+kube-system                         container-runtime-monitor-installer-58nxt                 1/1     Running   0          35m   10.0.0.9      computeinstance-e00rm6xdfxfcge50j5   <none>           <none>
+kube-system                         container-runtime-monitor-installer-drtr9                 1/1     Running   0          35m   10.0.29.60    computeinstance-e00s7zddtshy6wra6r   <none>           <none>
+kube-system                         container-runtime-monitor-installer-dtts6                 1/1     Running   0          35m   10.6.0.136    computeinstance-e00dwey0v75460yjza   <none>           <none>
+kube-system                         container-runtime-monitor-installer-gkwxd                 1/1     Running   0          34m   10.0.0.57     computeinstance-e00y6awask1vfkc4b4   <none>           <none>
+kube-system                         container-runtime-monitor-installer-l74mn                 1/1     Running   0          25m   10.6.0.177    computeinstance-e00ynpyp37vebg8r5b   <none>           <none>
+kube-system                         container-runtime-monitor-installer-n7k58                 1/1     Running   0          35m   10.6.39.1     computeinstance-e00tnmrtj9g8rhtex7   <none>           <none>
+kube-system                         container-runtime-monitor-installer-n9m5g                 1/1     Running   0          35m   10.6.0.2      computeinstance-e00pwh96tapdk95pt7   <none>           <none>
+kube-system                         container-runtime-monitor-installer-vqtb5                 1/1     Running   0          35m   10.6.0.0      computeinstance-e00xk184cymjn917bp   <none>           <none>
+kube-system                         coredns-77c89844c-cmdkd                                   1/1     Running   0          34m   10.6.25.92    computeinstance-e00s7zddtshy6wra6r   <none>           <none>
+kube-system                         coredns-77c89844c-rtzgj                                   1/1     Running   0          42m   10.6.13.30    computeinstance-e00tnmrtj9g8rhtex7   <none>           <none>
+kube-system                         coredns-autoscaler-695db474c-hgsjl                        1/1     Running   0          42m   10.6.13.242   computeinstance-e00tnmrtj9g8rhtex7   <none>           <none>
+kube-system                         coredns-autoscaler-695db474c-p4w49                        1/1     Running   0          42m   10.6.13.164   computeinstance-e00tnmrtj9g8rhtex7   <none>           <none>
+kube-system                         hubble-relay-6868665797-c2jmf                             1/1     Running   0          42m   10.6.13.34    computeinstance-e00tnmrtj9g8rhtex7   <none>           <none>
+kube-system                         hubble-ui-55c9496fb6-w59vg                                2/2     Running   0          42m   10.6.13.26    computeinstance-e00tnmrtj9g8rhtex7   <none>           <none>
+kube-system                         metrics-server-8694976875-6x78n                           1/1     Running   0          42m   10.6.13.217   computeinstance-e00tnmrtj9g8rhtex7   <none>           <none>
+kube-system                         metrics-server-8694976875-g46vd                           1/1     Running   0          42m   10.6.13.109   computeinstance-e00tnmrtj9g8rhtex7   <none>           <none>
+kube-system                         nebius-node-problem-detector-cpu-2xhw6                    1/1     Running   0          34m   10.0.0.9      computeinstance-e00rm6xdfxfcge50j5   <none>           <none>
+kube-system                         nebius-node-problem-detector-cpu-6jb8s                    1/1     Running   0          34m   10.6.39.1     computeinstance-e00tnmrtj9g8rhtex7   <none>           <none>
+kube-system                         nebius-node-problem-detector-cpu-fr2wj                    1/1     Running   0          34m   10.6.0.0      computeinstance-e00xk184cymjn917bp   <none>           <none>
+kube-system                         nebius-node-problem-detector-cpu-gsprn                    1/1     Running   0          34m   10.0.29.60    computeinstance-e00s7zddtshy6wra6r   <none>           <none>
+kube-system                         nebius-node-problem-detector-cpu-jcdvh                    1/1     Running   0          34m   10.6.0.136    computeinstance-e00dwey0v75460yjza   <none>           <none>
+kube-system                         nebius-node-problem-detector-cpu-xp9wp                    1/1     Running   0          34m   10.6.0.2      computeinstance-e00pwh96tapdk95pt7   <none>           <none>
+kube-system                         nebius-node-problem-detector-gpu-9nmdj                    1/1     Running   0          24m   10.6.0.177    computeinstance-e00ynpyp37vebg8r5b   <none>           <none>
+kube-system                         nebius-node-problem-detector-gpu-cd2hd                    1/1     Running   0          34m   10.0.0.57     computeinstance-e00y6awask1vfkc4b4   <none>           <none>
+kube-system                         nvidia-device-plugin-computeinstance-e00y6awask1vfkc4b4   1/1     Running   0          34m   10.0.46.63    computeinstance-e00y6awask1vfkc4b4   <none>           <none>
+kube-system                         nvidia-device-plugin-computeinstance-e00ynpyp37vebg8r5b   1/1     Running   0          25m   10.0.98.11    computeinstance-e00ynpyp37vebg8r5b   <none>           <none>
+nfs-system                          csi-nfs-controller-5f9c78d959-c5ns6                       5/5     Running   0          24m   10.6.0.0      computeinstance-e00xk184cymjn917bp   <none>           <none>
+nfs-system                          csi-nfs-node-5t6lt                                        3/3     Running   0          24m   10.0.0.9      computeinstance-e00rm6xdfxfcge50j5   <none>           <none>
+nfs-system                          csi-nfs-node-82jgd                                        3/3     Running   0          24m   10.6.0.0      computeinstance-e00xk184cymjn917bp   <none>           <none>
+nfs-system                          csi-nfs-node-dszd2                                        3/3     Running   0          24m   10.0.29.60    computeinstance-e00s7zddtshy6wra6r   <none>           <none>
+nfs-system                          csi-nfs-node-jzlfx                                        3/3     Running   0          24m   10.6.0.136    computeinstance-e00dwey0v75460yjza   <none>           <none>
+nfs-system                          csi-nfs-node-k4ld2                                        3/3     Running   0          24m   10.6.0.177    computeinstance-e00ynpyp37vebg8r5b   <none>           <none>
+nfs-system                          csi-nfs-node-ms769                                        3/3     Running   0          24m   10.6.39.1     computeinstance-e00tnmrtj9g8rhtex7   <none>           <none>
+nfs-system                          csi-nfs-node-nmtl9                                        3/3     Running   0          24m   10.6.0.2      computeinstance-e00pwh96tapdk95pt7   <none>           <none>
+nfs-system                          csi-nfs-node-s9qq5                                        3/3     Running   0          24m   10.0.0.57     computeinstance-e00y6awask1vfkc4b4   <none>           <none>
+nfs-system                          nfs-server-0                                              1/1     Running   0          23m   10.0.28.238   computeinstance-e00pwh96tapdk95pt7   <none>           <none>
+security-profiles-operator-system   security-profiles-operator-bf6c8455c-qmxg7                1/1     Running   0          24m   10.0.63.116   computeinstance-e00dwey0v75460yjza   <none>           <none>
+security-profiles-operator-system   security-profiles-operator-bf6c8455c-zwx4t                1/1     Running   0          24m   10.6.38.201   computeinstance-e00xk184cymjn917bp   <none>           <none>
+security-profiles-operator-system   security-profiles-operator-webhook-56b6f8df7f-b6ckz       1/1     Running   0          23m   10.6.25.130   computeinstance-e00s7zddtshy6wra6r   <none>           <none>
+security-profiles-operator-system   security-profiles-operator-webhook-56b6f8df7f-clsfg       1/1     Running   0          23m   10.0.98.71    computeinstance-e00ynpyp37vebg8r5b   <none>           <none>
+security-profiles-operator-system   security-profiles-operator-webhook-56b6f8df7f-kk9xw       1/1     Running   0          23m   10.0.46.222   computeinstance-e00y6awask1vfkc4b4   <none>           <none>
+security-profiles-operator-system   spod-54cn4                                                2/2     Running   0          23m   10.6.25.180   computeinstance-e00s7zddtshy6wra6r   <none>           <none>
+security-profiles-operator-system   spod-5shbt                                                2/2     Running   0          23m   10.0.98.19    computeinstance-e00ynpyp37vebg8r5b   <none>           <none>
+security-profiles-operator-system   spod-6kbrq                                                2/2     Running   0          23m   10.0.63.228   computeinstance-e00dwey0v75460yjza   <none>           <none>
+security-profiles-operator-system   spod-clf7k                                                2/2     Running   0          23m   10.6.38.54    computeinstance-e00xk184cymjn917bp   <none>           <none>
+security-profiles-operator-system   spod-g2744                                                2/2     Running   0          23m   10.0.28.126   computeinstance-e00pwh96tapdk95pt7   <none>           <none>
+security-profiles-operator-system   spod-jpj9l                                                2/2     Running   0          23m   10.0.46.104   computeinstance-e00y6awask1vfkc4b4   <none>           <none>
+security-profiles-operator-system   spod-l5lg4                                                2/2     Running   0          23m   10.6.13.57    computeinstance-e00tnmrtj9g8rhtex7   <none>           <none>
+security-profiles-operator-system   spod-lgpgz                                                2/2     Running   0          23m   10.6.32.17    computeinstance-e00rm6xdfxfcge50j5   <none>           <none>
+
+
+kubectl -n flux-system get all                                                                                                                                                                                                  ─╯
+NAME                                               READY   STATUS    RESTARTS   AGE
+pod/helm-controller-b654b75f8-tfnqv                1/1     Running   0          27m
+pod/image-automation-controller-86497776cd-z7wkw   1/1     Running   0          27m
+pod/image-reflector-controller-684c57479b-g97zv    1/1     Running   0          27m
+pod/kustomize-controller-6f87798dcc-ck78p          1/1     Running   0          27m
+pod/notification-controller-6966dcb565-pr7p8       1/1     Running   0          27m
+pod/source-controller-c7c5b47d6-cj89h              1/1     Running   0          27m
+
+NAME                              TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)   AGE
+service/notification-controller   ClusterIP   10.5.159.169   <none>        80/TCP    27m
+service/source-controller         ClusterIP   10.5.19.100    <none>        80/TCP    27m
+service/webhook-receiver          ClusterIP   10.5.27.181    <none>        80/TCP    27m
+
+NAME                                          READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/helm-controller               1/1     1            1           27m
+deployment.apps/image-automation-controller   1/1     1            1           27m
+deployment.apps/image-reflector-controller    1/1     1            1           27m
+deployment.apps/kustomize-controller          1/1     1            1           27m
+deployment.apps/notification-controller       1/1     1            1           27m
+deployment.apps/source-controller             1/1     1            1           27m
+
+NAME                                                     DESIRED   CURRENT   READY   AGE
+replicaset.apps/helm-controller-b654b75f8                1         1         1       27m
+replicaset.apps/image-automation-controller-86497776cd   1         1         1       27m
+replicaset.apps/image-reflector-controller-684c57479b    1         1         1       27m
+replicaset.apps/kustomize-controller-6f87798dcc          1         1         1       27m
+replicaset.apps/notification-controller-6966dcb565       1         1         1       27m
+replicaset.apps/source-controller-c7c5b47d6              1         1         1       27m
+
+
+kubectl -n soperator get all                                                                                                                                                                                                    ─╯
+No resources found in soperator namespace.
+
+kubectl -n soperator-system get all                                                                                                                                                                                             ─╯
+No resources found in soperator-system namespace.
+
+kubectl -n nfs-system get all                                                                                                                                                                                                   ─╯
+NAME                                      READY   STATUS    RESTARTS   AGE
+pod/csi-nfs-controller-5f9c78d959-c5ns6   5/5     Running   0          28m
+pod/csi-nfs-node-5t6lt                    3/3     Running   0          28m
+pod/csi-nfs-node-82jgd                    3/3     Running   0          28m
+pod/csi-nfs-node-dszd2                    3/3     Running   0          28m
+pod/csi-nfs-node-jzlfx                    3/3     Running   0          28m
+pod/csi-nfs-node-k4ld2                    3/3     Running   0          28m
+pod/csi-nfs-node-ms769                    3/3     Running   0          28m
+pod/csi-nfs-node-nmtl9                    3/3     Running   0          28m
+pod/csi-nfs-node-s9qq5                    3/3     Running   0          28m
+pod/nfs-server-0                          1/1     Running   0          28m
+
+NAME                 TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)                      AGE
+service/nfs-server   ClusterIP   10.5.205.109   <none>        2049/TCP,111/TCP,20048/TCP   28m
+
+NAME                          DESIRED   CURRENT   READY   UP-TO-DATE   AVAILABLE   NODE SELECTOR            AGE
+daemonset.apps/csi-nfs-node   8         8         8       8            8           kubernetes.io/os=linux   28m
+
+NAME                                 READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/csi-nfs-controller   1/1     1            1           28m
+
+NAME                                            DESIRED   CURRENT   READY   AGE
+replicaset.apps/csi-nfs-controller-5f9c78d959   1         1         1       28m
+
+NAME                          READY   AGE
+statefulset.apps/nfs-server   1/1     28m
+
+kubectl -n nfs-system get pvc                                                                                                                                                                                                   ─╯
+NAME                 STATUS   VOLUME                                     CAPACITY   ACCESS MODES   STORAGECLASS                   VOLUMEATTRIBUTESCLASS   AGE
+nfs-server-storage   Bound    pvc-9e4e275d-1596-4074-8605-77bc3389e111   64Gi       RWO            compute-csi-network-ssd-ext4   <unset>                 28m
+
+kubectl -n nfs-system describe pvc nfs-server-storage                                                                                                                                                                           ─╯
+Name:          nfs-server-storage
+Namespace:     nfs-system
+StorageClass:  compute-csi-network-ssd-ext4
+Status:        Bound
+Volume:        pvc-9e4e275d-1596-4074-8605-77bc3389e111
+Labels:        app.kubernetes.io/instance=nfs-server
+               app.kubernetes.io/managed-by=Helm
+               app.kubernetes.io/name=nfs-server
+               app.kubernetes.io/version=1.2.2
+               helm.sh/chart=helm-nfs-server-1.2.2
+               helm.toolkit.fluxcd.io/name=flux-system-soperator-fluxcd-nfs-server
+               helm.toolkit.fluxcd.io/namespace=flux-system
+Annotations:   meta.helm.sh/release-name: nfs-server
+               meta.helm.sh/release-namespace: nfs-system
+               pv.kubernetes.io/bind-completed: yes
+               pv.kubernetes.io/bound-by-controller: yes
+               volume.beta.kubernetes.io/storage-provisioner: compute.csi.nebius.com
+               volume.kubernetes.io/selected-node: computeinstance-e00pwh96tapdk95pt7
+               volume.kubernetes.io/storage-provisioner: compute.csi.nebius.com
+Finalizers:    [kubernetes.io/pvc-protection]
+Capacity:      64Gi
+Access Modes:  RWO
+VolumeMode:    Filesystem
+Used By:       nfs-server-0
+Events:
+  Type    Reason                 Age                From                                                                                            Message
+  ----    ------                 ----               ----                                                                                            -------
+  Normal  WaitForFirstConsumer   28m                persistentvolume-controller                                                                     waiting for first consumer to be created before binding
+  Normal  Provisioning           28m                compute.csi.nebius.com_computeinstance-e00nzh00d7cxq55nw2_8e5268ef-d2b0-4675-bc94-bb72b5dfde71  External provisioner is provisioning volume for claim "nfs-system/nfs-server-storage"
+  Normal  ExternalProvisioning   28m (x2 over 28m)  persistentvolume-controller                                                                     Waiting for a volume to be created either by the external provisioner 'compute.csi.nebius.com' or manually by the system administrator. If volume creation is delayed, please verify that the provisioner is running and correctly registered.
+  Normal  ProvisioningSucceeded  28m                compute.csi.nebius.com_computeinstance-e00nzh00d7cxq55nw2_8e5268ef-d2b0-4675-bc94-bb72b5dfde71  Successfully provisioned volume pvc-9e4e275d-1596-4074-8605-77bc3389e111
+  
+  
+kubectl -n flux-system describe helmrelease flux-system-soperator-fluxcd soperator
+
+Name:         flux-system-soperator-fluxcd-soperator
+Namespace:    flux-system
+Labels:       app.kubernetes.io/instance=flux-system-soperator-fluxcd
+              app.kubernetes.io/managed-by=Helm
+              app.kubernetes.io/name=helm-soperator-fluxcd
+              app.kubernetes.io/version=4.1.13
+              helm.sh/chart=helm-soperator-fluxcd-4.1.13
+              helm.toolkit.fluxcd.io/name=soperator-fluxcd
+              helm.toolkit.fluxcd.io/namespace=flux-system
+Annotations:  meta.helm.sh/release-name: flux-system-soperator-fluxcd
+              meta.helm.sh/release-namespace: flux-system
+API Version:  helm.toolkit.fluxcd.io/v2
+Kind:         HelmRelease
+Metadata:
+  Creation Timestamp:  2026-10-11T16:14:45Z
+  Finalizers:
+    finalizers.fluxcd.io
+  Generation:        1
+  Resource Version:  23971
+  UID:               81d83fbe-69c3-4324-848b-6a13427c4b9a
+Spec:
+  Chart:
+    Spec:
+      Chart:               helm-soperator
+      Interval:            5m
+      Reconcile Strategy:  ChartVersion
+      Source Ref:
+        Kind:   HelmRepository
+        Name:   flux-system-soperator-fluxcd-soperator
+      Version:  4.1.13
+  Depends On:
+    Name:  flux-system-soperator-fluxcd-ns
+    Name:  flux-system-soperator-fluxcd-kruise
+    Name:  flux-system-soperator-fluxcd-cert-manager
+  Drift Detection:
+    Mode:  warn
+  Install:
+    Crds:  CreateReplace
+    Remediation:
+      Retries:       3
+  Interval:          5m
+  Release Name:      soperator-controller
+  Target Namespace:  soperator-system
+  Timeout:           5m
+  Upgrade:
+    Crds:  CreateReplace
+    Remediation:
+      Remediate Last Failure:  true
+      Retries:                 3
+  Values:
+    Cert Manager:
+      Enabled:  true
+    Controller Manager:
+      Kube Rbac Proxy:
+        Image:
+          Repository:  registry.k8s.io/kubebuilder/kube-rbac-proxy
+          Tag:         v0.15.0
+      Manager:
+        Resources:
+          Limits:
+            Memory:  2Gi
+          Requests:
+            Cpu:     1000m
+            Memory:  2Gi
+    Service Monitor:
+      Enabled:  true
+  Values From:
+    Kind:        ConfigMap
+    Name:        terraform-soperator
+    Optional:    true
+    Values Key:  values.yaml
+    Kind:        ConfigMap
+    Name:        soperator
+    Optional:    true
+    Values Key:  values.yaml
+Status:
+  Conditions:
+    Last Transition Time:  2026-10-11T16:42:37Z
+    Message:               Running 'install' action with timeout of 5m0s
+    Observed Generation:   1
+    Reason:                Progressing
+    Status:                True
+    Type:                  Reconciling
+    Last Transition Time:  2026-10-11T16:42:40Z
+    Message:               Helm install failed for release soperator-system/soperator-controller with chart helm-soperator@4.1.13: unable to build kubernetes objects from release manifest: resource mapping not found for name: "soperator-controller-manager-servicemonitor" namespace: "" from "": no matches for kind "ServiceMonitor" in version "monitoring.coreos.com/v1"
+ensure CRDs are installed first
+    Observed Generation:   1
+    Reason:                InstallFailed
+    Status:                False
+    Type:                  Ready
+    Last Transition Time:  2026-10-11T16:16:24Z
+    Message:               Helm install failed for release soperator-system/soperator-controller with chart helm-soperator@4.1.13: unable to build kubernetes objects from release manifest: resource mapping not found for name: "soperator-controller-manager-servicemonitor" namespace: "" from "": no matches for kind "ServiceMonitor" in version "monitoring.coreos.com/v1"
+ensure CRDs are installed first
+    Observed Generation:                   1
+    Reason:                                InstallFailed
+    Status:                                False
+    Type:                                  Released
+  Failures:                                12
+  Helm Chart:                              flux-system/flux-system-flux-system-soperator-fluxcd-soperator
+  Last Attempted Config Digest:            sha256:cdf0438a13066d634c61be6a6564f3052b6fdbfd256abe05b9e22143eb58b047
+  Last Attempted Generation:               1
+  Last Attempted Release Action:           install
+  Last Attempted Release Action Duration:  3.303960158s
+  Last Attempted Revision:                 4.1.13
+  Observed Generation:                     -1
+  Storage Namespace:                       flux-system
+Events:
+  Type     Reason              Age                From             Message
+  ----     ------              ----               ----             -------
+  Normal   HelmChartCreated    31m                helm-controller  Created HelmChart/flux-system/flux-system-flux-system-soperator-fluxcd-soperator with SourceRef 'HelmRepository/flux-system/flux-system-soperator-fluxcd-soperator'
+  Normal   DependencyNotReady  31m                helm-controller  dependency 'flux-system/flux-system-soperator-fluxcd-ns' is not ready
+  Normal   DependencyNotReady  30m (x3 over 31m)  helm-controller  dependency 'flux-system/flux-system-soperator-fluxcd-kruise' is not ready
+  Warning  InstallFailed       30m                helm-controller  Helm install failed for release soperator-system/soperator-controller with chart helm-soperator@4.1.13: unable to build kubernetes objects from release manifest: resource mapping not found for name: "soperator-controller-manager-servicemonitor" namespace: "" from "": no matches for kind "ServiceMonitor" in version "monitoring.coreos.com/v1"
+ensure CRDs are installed first
+
+Last Helm logs:
+
+2026-10-11T16:16:17.59964607Z: Created a new CustomResourceDefinition called "activechecks.slurm.nebius.ai" in
+
+2026-10-11T16:16:17.636157866Z: Created a new CustomResourceDefinition called "jailedconfigs.slurm.nebius.ai" in
+
+2026-10-11T16:16:17.78687536Z: Created a new CustomResourceDefinition called "nodeconfigurators.slurm.nebius.ai" in
+
+2026-10-11T16:16:17.882819933Z: Created a new CustomResourceDefinition called "nodesetpowerstates.slurm.nebius.ai" in
+
+2026-10-11T16:16:18.425400328Z: Created a new CustomResourceDefinition called "nodesets.slurm.nebius.ai" in
+
+2026-10-11T16:16:19.892905877Z: Created a new CustomResourceDefinition called "slurmclusters.slurm.nebius.ai" in
+
+2026-10-11T16:16:19.893060773Z: beginning wait for 6 resources with timeout of 1m0s
+2026-10-11T16:16:21.128405816Z: wait for resources succeeded within 1s
+2026-10-11T16:16:21.128412497Z: successfully applied 6 CustomResourceDefinition(s)
+2026-10-11T16:16:21.12841468Z: clearing REST mapper cache
+  Warning  InstallFailed  30m  helm-controller  Helm install failed for release soperator-system/soperator-controller with chart helm-soperator@4.1.13: unable to build kubernetes objects from release manifest: resource mapping not found for name: "soperator-controller-manager-servicemonitor" namespace: "" from "": no matches for kind "ServiceMonitor" in version "monitoring.coreos.com/v1"
+ensure CRDs are installed first
+
+Last Helm logs:
+
+2026-10-11T16:16:25.970804405Z: Replaced "activechecks.slurm.nebius.ai" with kind  for kind CustomResourceDefinition
+2026-10-11T16:16:25.989019401Z: Replaced "jailedconfigs.slurm.nebius.ai" with kind  for kind CustomResourceDefinition
+2026-10-11T16:16:26.188519062Z: Replaced "nodeconfigurators.slurm.nebius.ai" with kind  for kind CustomResourceDefinition
+2026-10-11T16:16:26.206043305Z: Replaced "nodesetpowerstates.slurm.nebius.ai" with kind  for kind CustomResourceDefinition
+2026-10-11T16:16:26.505142914Z: Replaced "nodesets.slurm.nebius.ai" with kind  for kind CustomResourceDefinition
+2026-10-11T16:16:27.449871308Z: Replaced "slurmclusters.slurm.nebius.ai" with kind  for kind CustomResourceDefinition
+2026-10-11T16:16:27.45004313Z: beginning wait for 6 resources with timeout of 1m0s
+2026-10-11T16:16:27.720267561Z: wait for resources succeeded within 0s
+2026-10-11T16:16:27.720276094Z: successfully applied 6 CustomResourceDefinition(s)
+2026-10-11T16:16:27.720278377Z: clearing REST mapper cache
+  Warning  InstallFailed  30m  helm-controller  Helm install failed for release soperator-system/soperator-controller with chart helm-soperator@4.1.13: unable to build kubernetes objects from release manifest: resource mapping not found for name: "soperator-controller-manager-servicemonitor" namespace: "" from "": no matches for kind "ServiceMonitor" in version "monitoring.coreos.com/v1"
+ensure CRDs are installed first
+
+Last Helm logs:
+
+2026-10-11T16:16:31.035283519Z: Replaced "activechecks.slurm.nebius.ai" with kind  for kind CustomResourceDefinition
+2026-10-11T16:16:31.049918523Z: Replaced "jailedconfigs.slurm.nebius.ai" with kind  for kind CustomResourceDefinition
+2026-10-11T16:16:31.199173579Z: Replaced "nodeconfigurators.slurm.nebius.ai" with kind  for kind CustomResourceDefinition
+2026-10-11T16:16:31.218437331Z: Replaced "nodesetpowerstates.slurm.nebius.ai" with kind  for kind CustomResourceDefinition
+2026-10-11T16:16:31.540677514Z: Replaced "nodesets.slurm.nebius.ai" with kind  for kind CustomResourceDefinition
+2026-10-11T16:16:32.437045865Z: Replaced "slurmclusters.slurm.nebius.ai" with kind  for kind CustomResourceDefinition
+2026-10-11T16:16:32.437221462Z: beginning wait for 6 resources with timeout of 1m0s
+2026-10-11T16:16:32.713708944Z: wait for resources succeeded within 0s
+2026-10-11T16:16:32.713717246Z: successfully applied 6 CustomResourceDefinition(s)
+2026-10-11T16:16:32.71371987Z: clearing REST mapper cache
+  Warning  InstallFailed  29m  helm-controller  Helm install failed for release soperator-system/soperator-controller with chart helm-soperator@4.1.13: unable to build kubernetes objects from release manifest: resource mapping not found for name: "soperator-controller-manager-servicemonitor" namespace: "" from "": no matches for kind "ServiceMonitor" in version "monitoring.coreos.com/v1"
+ensure CRDs are installed first
+
+Last Helm logs:
+
+2026-10-11T16:16:37.473070654Z: Replaced "activechecks.slurm.nebius.ai" with kind  for kind CustomResourceDefinition
+2026-10-11T16:16:37.491558225Z: Replaced "jailedconfigs.slurm.nebius.ai" with kind  for kind CustomResourceDefinition
+2026-10-11T16:16:37.632278957Z: Replaced "nodeconfigurators.slurm.nebius.ai" with kind  for kind CustomResourceDefinition
+2026-10-11T16:16:37.64802276Z: Replaced "nodesetpowerstates.slurm.nebius.ai" with kind  for kind CustomResourceDefinition
+2026-10-11T16:16:37.940406987Z: Replaced "nodesets.slurm.nebius.ai" with kind  for kind CustomResourceDefinition
+2026-10-11T16:16:38.85016055Z: Replaced "slurmclusters.slurm.nebius.ai" with kind  for kind CustomResourceDefinition
+2026-10-11T16:16:38.850334706Z: beginning wait for 6 resources with timeout of 1m0s
+2026-10-11T16:16:39.127690069Z: wait for resources succeeded within 0s
+2026-10-11T16:16:39.127697831Z: successfully applied 6 CustomResourceDefinition(s)
+2026-10-11T16:16:39.127699704Z: clearing REST mapper cache
+  Warning  InstallFailed  29m  helm-controller  Helm install failed for release soperator-system/soperator-controller with chart helm-soperator@4.1.13: unable to build kubernetes objects from release manifest: resource mapping not found for name: "soperator-controller-manager-servicemonitor" namespace: "" from "": no matches for kind "ServiceMonitor" in version "monitoring.coreos.com/v1"
+ensure CRDs are installed first
+
+Last Helm logs:
+
+2026-10-11T16:16:46.790394031Z: Replaced "activechecks.slurm.nebius.ai" with kind  for kind CustomResourceDefinition
+2026-10-11T16:16:46.824089688Z: Replaced "jailedconfigs.slurm.nebius.ai" with kind  for kind CustomResourceDefinition
+2026-10-11T16:16:47.119662581Z: Replaced "nodeconfigurators.slurm.nebius.ai" with kind  for kind CustomResourceDefinition
+2026-10-11T16:16:47.137941664Z: Replaced "nodesetpowerstates.slurm.nebius.ai" with kind  for kind CustomResourceDefinition
+2026-10-11T16:16:47.46398859Z: Replaced "nodesets.slurm.nebius.ai" with kind  for kind CustomResourceDefinition
+2026-10-11T16:16:48.426965636Z: Replaced "slurmclusters.slurm.nebius.ai" with kind  for kind CustomResourceDefinition
+2026-10-11T16:16:48.427141654Z: beginning wait for 6 resources with timeout of 1m0s
+2026-10-11T16:16:48.699456051Z: wait for resources succeeded within 0s
+2026-10-11T16:16:48.699462301Z: successfully applied 6 CustomResourceDefinition(s)
+2026-10-11T16:16:48.699464003Z: clearing REST mapper cache
+  Warning  InstallFailed  29m  helm-controller  Helm install failed for release soperator-system/soperator-controller with chart helm-soperator@4.1.13: unable to build kubernetes objects from release manifest: resource mapping not found for name: "soperator-controller-manager-servicemonitor" namespace: "" from "": no matches for kind "ServiceMonitor" in version "monitoring.coreos.com/v1"
+ensure CRDs are installed first
+
+Last Helm logs:
+
+2026-10-11T16:17:02.242075636Z: Replaced "activechecks.slurm.nebius.ai" with kind  for kind CustomResourceDefinition
+2026-10-11T16:17:02.273560548Z: Replaced "jailedconfigs.slurm.nebius.ai" with kind  for kind CustomResourceDefinition
+2026-10-11T16:17:02.546916371Z: Replaced "nodeconfigurators.slurm.nebius.ai" with kind  for kind CustomResourceDefinition
+2026-10-11T16:17:02.567636151Z: Replaced "nodesetpowerstates.slurm.nebius.ai" with kind  for kind CustomResourceDefinition
+2026-10-11T16:17:02.868324422Z: Replaced "nodesets.slurm.nebius.ai" with kind  for kind CustomResourceDefinition
+2026-10-11T16:17:03.797906607Z: Replaced "slurmclusters.slurm.nebius.ai" with kind  for kind CustomResourceDefinition
+2026-10-11T16:17:03.798095885Z: beginning wait for 6 resources with timeout of 1m0s
+2026-10-11T16:17:04.070021671Z: wait for resources succeeded within 0s
+2026-10-11T16:17:04.070029813Z: successfully applied 6 CustomResourceDefinition(s)
+2026-10-11T16:17:04.070031976Z: clearing REST mapper cache
+  Warning  InstallFailed  29m  helm-controller  Helm install failed for release soperator-system/soperator-controller with chart helm-soperator@4.1.13: unable to build kubernetes objects from release manifest: resource mapping not found for name: "soperator-controller-manager-servicemonitor" namespace: "" from "": no matches for kind "ServiceMonitor" in version "monitoring.coreos.com/v1"
+ensure CRDs are installed first
+
+Last Helm logs:
+
+2026-10-11T16:17:29.688438051Z: Replaced "activechecks.slurm.nebius.ai" with kind  for kind CustomResourceDefinition
+2026-10-11T16:17:29.705146212Z: Replaced "jailedconfigs.slurm.nebius.ai" with kind  for kind CustomResourceDefinition
+2026-10-11T16:17:29.838078435Z: Replaced "nodeconfigurators.slurm.nebius.ai" with kind  for kind CustomResourceDefinition
+2026-10-11T16:17:29.870011037Z: Replaced "nodesetpowerstates.slurm.nebius.ai" with kind  for kind CustomResourceDefinition
+2026-10-11T16:17:30.385097085Z: Replaced "nodesets.slurm.nebius.ai" with kind  for kind CustomResourceDefinition
+2026-10-11T16:17:31.317092139Z: Replaced "slurmclusters.slurm.nebius.ai" with kind  for kind CustomResourceDefinition
+2026-10-11T16:17:31.317271993Z: beginning wait for 6 resources with timeout of 1m0s
+2026-10-11T16:17:31.583842102Z: wait for resources succeeded within 0s
+2026-10-11T16:17:31.583849504Z: successfully applied 6 CustomResourceDefinition(s)
+2026-10-11T16:17:31.583851457Z: clearing REST mapper cache
+  Warning  InstallFailed  28m  helm-controller  Helm install failed for release soperator-system/soperator-controller with chart helm-soperator@4.1.13: unable to build kubernetes objects from release manifest: resource mapping not found for name: "soperator-controller-manager-servicemonitor" namespace: "" from "": no matches for kind "ServiceMonitor" in version "monitoring.coreos.com/v1"
+ensure CRDs are installed first
+
+Last Helm logs:
+
+2026-10-11T16:18:21.269651931Z: Replaced "activechecks.slurm.nebius.ai" with kind  for kind CustomResourceDefinition
+2026-10-11T16:18:21.28572137Z: Replaced "jailedconfigs.slurm.nebius.ai" with kind  for kind CustomResourceDefinition
+2026-10-11T16:18:21.420920815Z: Replaced "nodeconfigurators.slurm.nebius.ai" with kind  for kind CustomResourceDefinition
+2026-10-11T16:18:21.440316329Z: Replaced "nodesetpowerstates.slurm.nebius.ai" with kind  for kind CustomResourceDefinition
+2026-10-11T16:18:21.997183678Z: Replaced "nodesets.slurm.nebius.ai" with kind  for kind CustomResourceDefinition
+2026-10-11T16:18:22.845963917Z: Replaced "slurmclusters.slurm.nebius.ai" with kind  for kind CustomResourceDefinition
+2026-10-11T16:18:22.846135358Z: beginning wait for 6 resources with timeout of 1m0s
+2026-10-11T16:18:23.126199546Z: wait for resources succeeded within 0s
+2026-10-11T16:18:23.12620829Z: successfully applied 6 CustomResourceDefinition(s)
+2026-10-11T16:18:23.126211585Z: clearing REST mapper cache
+  Warning  InstallFailed  26m  helm-controller  Helm install failed for release soperator-system/soperator-controller with chart helm-soperator@4.1.13: unable to build kubernetes objects from release manifest: resource mapping not found for name: "soperator-controller-manager-servicemonitor" namespace: "" from "": no matches for kind "ServiceMonitor" in version "monitoring.coreos.com/v1"
+ensure CRDs are installed first
+
+Last Helm logs:
+
+2026-10-11T16:20:03.092479857Z: Replaced "activechecks.slurm.nebius.ai" with kind  for kind CustomResourceDefinition
+2026-10-11T16:20:03.110277677Z: Replaced "jailedconfigs.slurm.nebius.ai" with kind  for kind CustomResourceDefinition
+2026-10-11T16:20:03.399920169Z: Replaced "nodeconfigurators.slurm.nebius.ai" with kind  for kind CustomResourceDefinition
+2026-10-11T16:20:03.441654737Z: Replaced "nodesetpowerstates.slurm.nebius.ai" with kind  for kind CustomResourceDefinition
+2026-10-11T16:20:03.832693513Z: Replaced "nodesets.slurm.nebius.ai" with kind  for kind CustomResourceDefinition
+2026-10-11T16:20:04.796420287Z: Replaced "slurmclusters.slurm.nebius.ai" with kind  for kind CustomResourceDefinition
+2026-10-11T16:20:04.796601774Z: beginning wait for 6 resources with timeout of 1m0s
+2026-10-11T16:20:05.108335754Z: wait for resources succeeded within 0s
+2026-10-11T16:20:05.108359791Z: successfully applied 6 CustomResourceDefinition(s)
+2026-10-11T16:20:05.108361864Z: clearing REST mapper cache
+  Warning  InstallFailed  16m (x2 over 23m)  helm-controller  (combined from similar events): Helm install failed for release soperator-system/soperator-controller with chart helm-soperator@4.1.13: unable to build kubernetes objects from release manifest: resource mapping not found for name: "soperator-controller-manager-servicemonitor" namespace: "" from "": no matches for kind "ServiceMonitor" in version "monitoring.coreos.com/v1"
+ensure CRDs are installed first
+
+Last Helm logs:
+
+2026-10-11T16:29:46.67299539Z: Replaced "activechecks.slurm.nebius.ai" with kind  for kind CustomResourceDefinition
+2026-10-11T16:29:46.690672667Z: Replaced "jailedconfigs.slurm.nebius.ai" with kind  for kind CustomResourceDefinition
+2026-10-11T16:29:46.828563631Z: Replaced "nodeconfigurators.slurm.nebius.ai" with kind  for kind CustomResourceDefinition
+2026-10-11T16:29:46.857910837Z: Replaced "nodesetpowerstates.slurm.nebius.ai" with kind  for kind CustomResourceDefinition
+2026-10-11T16:29:47.181649537Z: Replaced "nodesets.slurm.nebius.ai" with kind  for kind CustomResourceDefinition
+2026-10-11T16:29:48.169570191Z: Replaced "slurmclusters.slurm.nebius.ai" with kind  for kind CustomResourceDefinition
+2026-10-11T16:29:48.169797747Z: beginning wait for 6 resources with timeout of 1m0s
+2026-10-11T16:29:48.458479706Z: wait for resources succeeded within 0s
+2026-10-11T16:29:48.458487288Z: successfully applied 6 CustomResourceDefinition(s)
+2026-10-11T16:29:48.458489742Z: clearing REST mapper cache
+  Warning  InstallFailed  3m57s  helm-controller  Helm install failed for release soperator-system/soperator-controller with chart helm-soperator@4.1.13: unable to build kubernetes objects from release manifest: resource mapping not found for name: "soperator-controller-manager-servicemonitor" namespace: "" from "": no matches for kind "ServiceMonitor" in version "monitoring.coreos.com/v1"
+ensure CRDs are installed first
+
+Last Helm logs:
+
+2026-10-11T16:42:38.236812362Z: Replaced "activechecks.slurm.nebius.ai" with kind  for kind CustomResourceDefinition
+2026-10-11T16:42:38.255710168Z: Replaced "jailedconfigs.slurm.nebius.ai" with kind  for kind CustomResourceDefinition
+2026-10-11T16:42:38.38851759Z: Replaced "nodeconfigurators.slurm.nebius.ai" with kind  for kind CustomResourceDefinition
+2026-10-11T16:42:38.407626046Z: Replaced "nodesetpowerstates.slurm.nebius.ai" with kind  for kind CustomResourceDefinition
+2026-10-11T16:42:38.694356595Z: Replaced "nodesets.slurm.nebius.ai" with kind  for kind CustomResourceDefinition
+2026-10-11T16:42:39.591500456Z: Replaced "slurmclusters.slurm.nebius.ai" with kind  for kind CustomResourceDefinition
+2026-10-11T16:42:39.591673901Z: beginning wait for 6 resources with timeout of 1m0s
+2026-10-11T16:42:39.873258043Z: wait for resources succeeded within 0s
+2026-10-11T16:42:39.873264903Z: successfully applied 6 CustomResourceDefinition(s)
+2026-10-11T16:42:39.873266806Z: clearing REST mapper cache
+
+
+kubectl get crd | grep -i monitoring.coreos.com
+No cdr found
+
+
