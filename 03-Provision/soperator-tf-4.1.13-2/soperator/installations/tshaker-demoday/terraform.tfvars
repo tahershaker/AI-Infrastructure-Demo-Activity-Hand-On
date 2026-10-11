@@ -135,7 +135,7 @@ nfs_in_k8s = {
   enabled         = true
   version         = "1.2.2"
   use_stable_repo = true
-  size_gibibytes  = 1024
+  size_gibibytes  = 64
   disk_type       = "NETWORK_SSD"
   filesystem_type = "ext4"
   threads         = 4 # to match preset in slurm_nodeset_nfs
@@ -249,7 +249,7 @@ slurm_nodeset_system = {
   }
   boot_disk = {
     type                 = "NETWORK_SSD"
-    size_gibibytes       = 192
+    size_gibibytes       = 96
     block_size_kibibytes = 4
   }
 }
@@ -264,7 +264,7 @@ slurm_nodeset_controller = {
   }
   boot_disk = {
     type                 = "NETWORK_SSD"
-    size_gibibytes       = 256
+    size_gibibytes       = 96
     block_size_kibibytes = 4
   }
 }
@@ -289,12 +289,12 @@ slurm_nodeset_workers = [
     size = 2
     # Autoscaling configuration. Set enabled = false to use fixed node count instead.
     autoscaling = {
-      enabled = true
+      enabled = false
       # min_size options:
       # - null: min=max, no scale-down (default, recommended - saves ~10 min on initial provisioning)
       #   it can be changed to a number later if needed.
       # - N: can scale down to N nodes
-      min_size = 0
+      min_size = null
     }
     resource = {
       platform = "gpu-h100-sxm"
@@ -302,7 +302,7 @@ slurm_nodeset_workers = [
     }
     boot_disk = {
       type                 = "NETWORK_SSD"
-      size_gibibytes       = 512
+      size_gibibytes       = 192
       block_size_kibibytes = 4
     }
     # The 1-GPU preset cannot join an InfiniBand GPU cluster, so none is set.
@@ -397,7 +397,7 @@ slurm_nodeset_login = {
   }
   boot_disk = {
     type                 = "NETWORK_SSD"
-    size_gibibytes       = 256
+    size_gibibytes       = 64
     block_size_kibibytes = 4
   }
 }
@@ -413,7 +413,7 @@ slurm_nodeset_accounting = {
   }
   boot_disk = {
     type                 = "NETWORK_SSD"
-    size_gibibytes       = 128
+    size_gibibytes       = 64
     block_size_kibibytes = 4
   }
 }
@@ -428,7 +428,7 @@ slurm_nodeset_nfs = {
   }
   boot_disk = {
     type                 = "NETWORK_SSD"
-    size_gibibytes       = 128
+    size_gibibytes       = 64
     block_size_kibibytes = 4
   }
 }
