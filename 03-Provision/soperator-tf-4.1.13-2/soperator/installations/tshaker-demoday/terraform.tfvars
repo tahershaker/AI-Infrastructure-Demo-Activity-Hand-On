@@ -329,8 +329,8 @@ slurm_nodeset_workers = [
     # Whether to enable ephemeral nodes behavior for this worker nodeset.
     # When true, nodes will use dynamic topology injection and power management.
     # By default, false.
-    ephemeral_nodes                = true
-    initial_number_ephemeral_nodes = 2
+    ephemeral_nodes                = false
+    initial_number_ephemeral_nodes = 1
     # Optional PersistentVolumeClaim retention policy for PVCs created by the worker nodeset StatefulSet.
     # Supported values: `Retain` or `Delete`.
     persistent_volume_claim_retention_policy = {

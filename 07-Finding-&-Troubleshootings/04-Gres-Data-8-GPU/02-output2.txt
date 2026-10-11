@@ -1,0 +1,1596 @@
+module.slurm.terraform_data.wait_for_soperator_activechecks_hr (local-exec): The NEBIUS_IAM_TOKEN environment variable likely contains an expired token.
+module.slurm.terraform_data.wait_for_soperator_activechecks_hr (local-exec): Try starting a new terminal session or unsetting the variable (unset NEBIUS_IAM_TOKEN) in the current session.
+
+module.slurm.terraform_data.wait_for_soperator_activechecks_hr (local-exec): This issue may be linked to API request calls. The following information may be helpful while debugging the issue:
+module.slurm.terraform_data.wait_for_soperator_activechecks_hr (local-exec):   Trace ID: aa9864a667a5d9df30c452c95c492731
+module.slurm.terraform_data.wait_for_soperator_activechecks_hr (local-exec): E1011 23:49:57.259644   96137 memcache.go:265] "Unhandled Error" err="couldn't get current server API group list: Get \"https://pu.mk8scluster-e00y1cge9zgsz44hep.mk8s.eu-north1.nebius.cloud:443/api?timeout=32s\": getting credentials: exec: executable /Users/tshaker/.nebius/bin/nebius failed with exit code 7"
+module.slurm.terraform_data.wait_for_soperator_activechecks_hr (local-exec): token from NEBIUS_IAM_TOKEN env is used
+module.slurm.terraform_data.wait_for_soperator_activechecks_hr (local-exec): Error: rpc error: code = Unauthenticated desc = Invalid token
+module.slurm.terraform_data.wait_for_soperator_activechecks_hr (local-exec): request = f011a5de-61d5-4de7-a7d5-b8f2d6a7d4df
+module.slurm.terraform_data.wait_for_soperator_activechecks_hr (local-exec): caused by service error:
+module.slurm.terraform_data.wait_for_soperator_activechecks_hr (local-exec):   Service iam error Unauthenticated
+
+module.slurm.terraform_data.wait_for_soperator_activechecks_hr (local-exec): The NEBIUS_IAM_TOKEN environment variable likely contains an expired token.
+module.slurm.terraform_data.wait_for_soperator_activechecks_hr (local-exec): Try starting a new terminal session or unsetting the variable (unset NEBIUS_IAM_TOKEN) in the current session.
+
+module.slurm.terraform_data.wait_for_soperator_activechecks_hr (local-exec): This issue may be linked to API request calls. The following information may be helpful while debugging the issue:
+module.slurm.terraform_data.wait_for_soperator_activechecks_hr (local-exec):   Trace ID: a898f712634ca235e71894905b9a4a6f
+module.slurm.terraform_data.wait_for_soperator_activechecks_hr (local-exec): E1011 23:49:57.540641   96137 memcache.go:265] "Unhandled Error" err="couldn't get current server API group list: Get \"https://pu.mk8scluster-e00y1cge9zgsz44hep.mk8s.eu-north1.nebius.cloud:443/api?timeout=32s\": getting credentials: exec: executable /Users/tshaker/.nebius/bin/nebius failed with exit code 7"
+module.slurm.terraform_data.wait_for_soperator_activechecks_hr (local-exec): Unable to connect to the server: getting credentials: exec: executable /Users/tshaker/.nebius/bin/nebius failed with exit code 7
+module.slurm.terraform_data.wait_for_soperator_activechecks_hr: Still creating... [19m00s elapsed]
+
+
+
+kubectl get nodes -o wide
+NAME                                 STATUS   ROLES    AGE   VERSION   INTERNAL-IP   EXTERNAL-IP   OS-IMAGE             KERNEL-VERSION       CONTAINER-RUNTIME
+computeinstance-e00akrhgtxvkemj6r6   Ready    <none>   17m   v1.35.7   10.0.0.32     <none>        Ubuntu 24.04.5 LTS   6.11.0-1016-nvidia   containerd://2.2.6
+computeinstance-e00eq2hy482bkg7j1q   Ready    <none>   18m   v1.35.7   10.3.0.17     <none>        Ubuntu 24.04.5 LTS   6.11.0-1016-nvidia   containerd://2.2.6
+computeinstance-e00jft45ykdvkp7t31   Ready    <none>   17m   v1.35.7   10.0.0.31     <none>        Ubuntu 24.04.4 LTS   6.11.0-1016-nvidia   containerd://2.2.6
+computeinstance-e00kawjy5wgej619kf   Ready    <none>   17m   v1.35.7   10.0.0.13     <none>        Ubuntu 24.04.5 LTS   6.11.0-1016-nvidia   containerd://2.2.6
+computeinstance-e00p289p5k5qxtgf1b   Ready    <none>   17m   v1.35.7   10.0.31.18    <none>        Ubuntu 24.04.4 LTS   6.11.0-1016-nvidia   containerd://2.2.6
+computeinstance-e00rh1hztz1nrmz1m1   Ready    <none>   17m   v1.35.7   10.0.31.24    <none>        Ubuntu 24.04.5 LTS   6.11.0-1016-nvidia   containerd://2.2.6
+computeinstance-e00w5h8h47scbht9v7   Ready    <none>   17m   v1.35.7   10.3.0.84     <none>        Ubuntu 24.04.5 LTS   6.11.0-1016-nvidia   containerd://2.2.6
+computeinstance-e00xggvm1vj5mrev4e   Ready    <none>   17m   v1.35.7   10.0.0.0      <none>        Ubuntu 24.04.5 LTS   6.11.0-1016-nvidia   containerd://2.2.6
+
+kubectl -n flux-system get helmrelease
+NAME                                                             AGE   READY     STATUS
+flux-system-soperator-fluxcd-cert-manager                        16m   True      Helm install succeeded for release cert-manager-system/cert-manager.v1 with chart cert-manager@v1.19.6
+flux-system-soperator-fluxcd-csi-driver-nfs                      16m   True      Helm install succeeded for release nfs-system/csi-driver-nfs.v1 with chart csi-driver-nfs@4.11.0
+flux-system-soperator-fluxcd-custom-configmaps                   16m   True      Helm install succeeded for release soperator/soperator-custom-configmaps.v1 with chart helm-soperator-custom-configmaps@4.1.13
+flux-system-soperator-fluxcd-dcgm-exporter                       16m   True      Helm install succeeded for release soperator/soperator-dcgm-exporter.v1 with chart helm-soperator-dcgm-exporter@4.1.13
+flux-system-soperator-fluxcd-kruise                              16m   True      Helm install succeeded for release soperator/soperator-kruise.v1 with chart kruise@1.8.0
+flux-system-soperator-fluxcd-monitoring-dashboards               16m   True      Helm install succeeded for release monitoring-system/soperator-monitoring-dashboards.v1 with chart helm-soperator-monitoring-dashboards@4.1.13
+flux-system-soperator-fluxcd-nfs-server                          16m   True      Helm install succeeded for release nfs-system/nfs-server.v1 with chart helm-nfs-server@1.2.2
+flux-system-soperator-fluxcd-nodeconfigurator                    16m   True      Helm install succeeded for release soperator-system/soperator-node-configurator.v1 with chart helm-nodeconfigurator@4.1.13
+flux-system-soperator-fluxcd-nodesets                            16m   True      Helm install succeeded for release soperator/soperator-nodesets.v1 with chart helm-nodesets@4.1.13
+flux-system-soperator-fluxcd-ns                                  16m   True      Helm install succeeded for release flux-system/flux-system-soperator-fluxcd-ns.v1 with chart raw@2.0.0
+flux-system-soperator-fluxcd-opentelemetry-collector-events      16m   True      Helm install succeeded for release logs-system/opentelemetry-collector-events.v1 with chart opentelemetry-collector@0.149.0
+flux-system-soperator-fluxcd-opentelemetry-collector-jail-logs   16m   Unknown   Running 'install' action with timeout of 15m0s
+flux-system-soperator-fluxcd-opentelemetry-collector-logs        16m   True      Helm install succeeded for release logs-system/opentelemetry-collector-logs.v1 with chart opentelemetry-collector@0.149.0
+flux-system-soperator-fluxcd-prometheus-operator-crds            16m   True      Helm install succeeded for release flux-system/flux-system-soperator-fluxcd-prometheus-operator-crds.v1 with chart prometheus-operator-crds@19.1.0
+flux-system-soperator-fluxcd-security-profiles-operator          16m   True      Helm install succeeded for release security-profiles-operator-system/security-profiles-operator.v1 with chart security-profiles-operator@0.8.5-soperator
+flux-system-soperator-fluxcd-slurm-cluster                       16m   True      Helm install succeeded for release soperator/soperator.v1 with chart helm-slurm-cluster@4.1.13
+flux-system-soperator-fluxcd-slurm-cluster-storage               16m   True      Helm install succeeded for release soperator/slurm-cluster-storage.v1 with chart helm-slurm-cluster-storage@4.1.13
+flux-system-soperator-fluxcd-soperator                           16m   True      Helm install succeeded for release soperator-system/soperator-controller.v1 with chart helm-soperator@4.1.13
+flux-system-soperator-fluxcd-soperator-activechecks              16m   Unknown   Running 'install' action with timeout of 2h0m0s
+flux-system-soperator-fluxcd-soperatorchecks                     16m   True      Helm install succeeded for release soperator-system/soperator-checks.v1 with chart helm-soperatorchecks@4.1.13
+flux-system-soperator-fluxcd-storageclasses                      16m   True      Helm install succeeded for release storage-system/soperator-storageclasses.v1 with chart helm-storageclasses@4.1.13
+flux-system-soperator-fluxcd-victoria-metrics-operator-crds      16m   True      Helm install succeeded for release flux-system/flux-system-soperator-fluxcd-victoria-me-6b4d61dd349d.v1 with chart victoria-metrics-operator-crds@0.0.3
+flux-system-soperator-fluxcd-vm-logs                             16m   True      Helm install succeeded for release logs-system/vm-logs.v1 with chart victoria-logs-single@0.9.8
+flux-system-soperator-fluxcd-vm-stack                            16m   True      Helm install succeeded for release monitoring-system/metrics.v1 with chart victoria-metrics-k8s-stack@0.39.4
+soperator-fluxcd                                                 17m   True      Helm install succeeded for release flux-system/flux-system-soperator-fluxcd.v1 with chart helm-soperator-fluxcd@4.1.13
+
+kubectl -n soperator get pods
+NAME                                                 READY   STATUS      RESTARTS      AGE
+controller-0                                         2/2     Running     0             5m52s
+controller-placeholder-flxdc                         3/3     Running     0             5m52s
+controller-spool-mount-n8wjb                         1/1     Running     0             14m
+helm-soperator-dcgm-exporter-ds-gksh4                1/1     Running     0             17m
+helm-soperator-dcgm-exporter-ds-qk9fh                1/1     Running     0             17m
+jail-mount-7k6mc                                     1/1     Running     0             14m
+jail-mount-rdjxc                                     1/1     Running     0             14m
+jail-mount-t992h                                     1/1     Running     0             14m
+jail-mount-xbk7p                                     1/1     Running     0             14m
+jail-mount-xh9d6                                     1/1     Running     0             14m
+jail-mount-xv7d2                                     1/1     Running     0             14m
+jail-mount-zkwm7                                     1/1     Running     0             14m
+jail-submount-data-mount-559l5                       1/1     Running     0             14m
+jail-submount-data-mount-7pm4q                       1/1     Running     0             14m
+jail-submount-data-mount-fk65x                       1/1     Running     0             14m
+jail-submount-data-mount-ml99t                       1/1     Running     0             14m
+jail-submount-data-mount-t2vhw                       1/1     Running     0             14m
+jail-submount-data-mount-vmlxf                       1/1     Running     0             14m
+jail-submount-data-mount-vwmd6                       1/1     Running     0             14m
+login-0                                              0/2     Pending     0             5m52s
+run-extensive-check-on-reservations-29862455-wllzt   0/2     Completed   0             10m
+run-extensive-check-on-reservations-29862460-wvn4x   0/2     Completed   0             100s
+run-extensive-check-on-reservations-29862465-jch6n   0/2     Completed   0             12s
+sconfigcontroller-7b868fdf86-m5ht5                   1/1     Running     0             5m53s
+sconfigcontroller-7b868fdf86-vjgd7                   1/1     Running     0             5m53s
+slurm-exporter-6cf785fbd7-vj9c7                      1/1     Running     0             5m52s
+soperator-populate-jail-xvsqk                        0/1     Completed   0             14m
+wait-for-active-checks-brbxl                         1/1     Running     0             13m
+worker-0                                             1/2     Init:3/4    1 (57s ago)   5m52s
+worker-1                                             1/2     Init:3/4    1 (57s ago)   5m52s
+
+kubectl -n flux-system get helmrelease
+NAME                                                             AGE   READY     STATUS
+flux-system-soperator-fluxcd-cert-manager                        17m   True      Helm install succeeded for release cert-manager-system/cert-manager.v1 with chart cert-manager@v1.19.6
+flux-system-soperator-fluxcd-csi-driver-nfs                      17m   True      Helm install succeeded for release nfs-system/csi-driver-nfs.v1 with chart csi-driver-nfs@4.11.0
+flux-system-soperator-fluxcd-custom-configmaps                   17m   True      Helm install succeeded for release soperator/soperator-custom-configmaps.v1 with chart helm-soperator-custom-configmaps@4.1.13
+flux-system-soperator-fluxcd-dcgm-exporter                       17m   True      Helm install succeeded for release soperator/soperator-dcgm-exporter.v1 with chart helm-soperator-dcgm-exporter@4.1.13
+flux-system-soperator-fluxcd-kruise                              17m   True      Helm install succeeded for release soperator/soperator-kruise.v1 with chart kruise@1.8.0
+flux-system-soperator-fluxcd-monitoring-dashboards               17m   True      Helm install succeeded for release monitoring-system/soperator-monitoring-dashboards.v1 with chart helm-soperator-monitoring-dashboards@4.1.13
+flux-system-soperator-fluxcd-nfs-server                          17m   True      Helm install succeeded for release nfs-system/nfs-server.v1 with chart helm-nfs-server@1.2.2
+flux-system-soperator-fluxcd-nodeconfigurator                    17m   True      Helm install succeeded for release soperator-system/soperator-node-configurator.v1 with chart helm-nodeconfigurator@4.1.13
+flux-system-soperator-fluxcd-nodesets                            17m   True      Helm install succeeded for release soperator/soperator-nodesets.v1 with chart helm-nodesets@4.1.13
+flux-system-soperator-fluxcd-ns                                  17m   True      Helm install succeeded for release flux-system/flux-system-soperator-fluxcd-ns.v1 with chart raw@2.0.0
+flux-system-soperator-fluxcd-opentelemetry-collector-events      17m   True      Helm install succeeded for release logs-system/opentelemetry-collector-events.v1 with chart opentelemetry-collector@0.149.0
+flux-system-soperator-fluxcd-opentelemetry-collector-jail-logs   17m   Unknown   Running 'install' action with timeout of 15m0s
+flux-system-soperator-fluxcd-opentelemetry-collector-logs        17m   True      Helm install succeeded for release logs-system/opentelemetry-collector-logs.v1 with chart opentelemetry-collector@0.149.0
+flux-system-soperator-fluxcd-prometheus-operator-crds            17m   True      Helm install succeeded for release flux-system/flux-system-soperator-fluxcd-prometheus-operator-crds.v1 with chart prometheus-operator-crds@19.1.0
+flux-system-soperator-fluxcd-security-profiles-operator          17m   True      Helm install succeeded for release security-profiles-operator-system/security-profiles-operator.v1 with chart security-profiles-operator@0.8.5-soperator
+flux-system-soperator-fluxcd-slurm-cluster                       17m   True      Helm install succeeded for release soperator/soperator.v1 with chart helm-slurm-cluster@4.1.13
+flux-system-soperator-fluxcd-slurm-cluster-storage               17m   True      Helm install succeeded for release soperator/slurm-cluster-storage.v1 with chart helm-slurm-cluster-storage@4.1.13
+flux-system-soperator-fluxcd-soperator                           17m   True      Helm install succeeded for release soperator-system/soperator-controller.v1 with chart helm-soperator@4.1.13
+flux-system-soperator-fluxcd-soperator-activechecks              17m   Unknown   Running 'install' action with timeout of 2h0m0s
+flux-system-soperator-fluxcd-soperatorchecks                     17m   True      Helm install succeeded for release soperator-system/soperator-checks.v1 with chart helm-soperatorchecks@4.1.13
+flux-system-soperator-fluxcd-storageclasses                      17m   True      Helm install succeeded for release storage-system/soperator-storageclasses.v1 with chart helm-storageclasses@4.1.13
+flux-system-soperator-fluxcd-victoria-metrics-operator-crds      17m   True      Helm install succeeded for release flux-system/flux-system-soperator-fluxcd-victoria-me-6b4d61dd349d.v1 with chart victoria-metrics-operator-crds@0.0.3
+flux-system-soperator-fluxcd-vm-logs                             17m   True      Helm install succeeded for release logs-system/vm-logs.v1 with chart victoria-logs-single@0.9.8
+flux-system-soperator-fluxcd-vm-stack                            17m   True      Helm install succeeded for release monitoring-system/metrics.v1 with chart victoria-metrics-k8s-stack@0.39.4
+soperator-fluxcd                                                 17m   True      Helm install succeeded for release flux-system/flux-system-soperator-fluxcd.v1 with chart helm-soperator-fluxcd@4.1.13
+
+
+kubectl -n flux-system describe helmrelease  flux-system-soperator-fluxcd-soperator-activechecks
+Name:         flux-system-soperator-fluxcd-soperator-activechecks
+Namespace:    flux-system
+Labels:       app.kubernetes.io/instance=flux-system-soperator-fluxcd
+              app.kubernetes.io/managed-by=Helm
+              app.kubernetes.io/name=helm-soperator-fluxcd
+              app.kubernetes.io/version=4.1.13
+              helm.sh/chart=helm-soperator-fluxcd-4.1.13
+              helm.toolkit.fluxcd.io/name=soperator-fluxcd
+              helm.toolkit.fluxcd.io/namespace=flux-system
+Annotations:  meta.helm.sh/release-name: flux-system-soperator-fluxcd
+              meta.helm.sh/release-namespace: flux-system
+API Version:  helm.toolkit.fluxcd.io/v2
+Kind:         HelmRelease
+Metadata:
+  Creation Timestamp:  2026-10-11T19:27:43Z
+  Finalizers:
+    finalizers.fluxcd.io
+  Generation:        1
+  Resource Version:  12904
+  UID:               146477a4-db74-4418-9a68-1ab8410497c6
+Spec:
+  Chart:
+    Spec:
+      Chart:               helm-soperator-activechecks
+      Interval:            5m
+      Reconcile Strategy:  ChartVersion
+      Source Ref:
+        Kind:   HelmRepository
+        Name:   flux-system-soperator-fluxcd-soperator
+      Version:  4.1.13
+  Depends On:
+    Name:  flux-system-soperator-fluxcd-slurm-cluster
+    Name:  flux-system-soperator-fluxcd-soperatorchecks
+  Drift Detection:
+    Mode:  warn
+  Install:
+    Crds:  Skip
+    Remediation:
+      Retries:       3
+  Interval:          5m
+  Release Name:      soperator-activechecks
+  Target Namespace:  soperator
+  Timeout:           120m
+  Upgrade:
+    Crds:  Skip
+    Remediation:
+      Remediate Last Failure:  true
+      Retries:                 3
+  Values:
+    Checks:
+      All - Reduce - Perf - Nccl - In - Docker:
+        Run After Creation:  false
+      All - Reduce - Perf - Nccl - With - Ib:
+        Run After Creation:  false
+      All - Reduce - Perf - Nccl - Without - Ib:
+        Run After Creation:  false
+      Cuda - Samples:
+        Run After Creation:  false
+      dcgmi-diag-r2:
+        Run After Creation:  false
+      dcgmi-diag-r3:
+        Run After Creation:  false
+      Ensure - Dir - Snccld - Logs:
+        Enabled:  true
+      Gpu - Fryer:
+        Run After Creation:  false
+      Ib - Gpu - Perf:
+        Comment Prefix:       [node_problem]
+        Drain Reason Prefix:  <nil>
+        Run After Creation:   false
+      Manage - Jail - State:
+        Run After Creation:  false
+      Mem - Perf:
+        Run After Creation:  false
+      Prepull - Container - Image:
+        Run After Creation:  false
+      Ssh - Check:
+        k8sJobSpec:
+          Job Container:
+            Env:
+              Name:          NUM_OF_LOGIN_NODES
+              Value:         1
+    Cuda Version:            13.0.2
+    Slurm Cluster Ref Name:  soperator
+    Slurm Job:
+      Gpus Per Node:  1
+  Values From:
+    Kind:        ConfigMap
+    Name:        terraform-soperator-activechecks
+    Optional:    true
+    Values Key:  values.yaml
+    Kind:        ConfigMap
+    Name:        soperator-activechecks
+    Optional:    true
+    Values Key:  values.yaml
+Status:
+  Conditions:
+    Last Transition Time:        2026-10-11T19:31:19Z
+    Message:                     Running 'install' action with timeout of 2h0m0s
+    Observed Generation:         1
+    Reason:                      Progressing
+    Status:                      True
+    Type:                        Reconciling
+    Last Transition Time:        2026-10-11T19:31:19Z
+    Message:                     Running 'install' action with timeout of 2h0m0s
+    Observed Generation:         1
+    Reason:                      Progressing
+    Status:                      Unknown
+    Type:                        Ready
+  Helm Chart:                    flux-system/flux-system-flux-system-soperator-fluxcd-soperator-activechecks
+  Last Attempted Config Digest:  sha256:9ae9b615df59ece0bc647f5f710d569c69cd2f353e5376d7244036fe965645fd
+  Last Attempted Generation:     1
+  Last Attempted Revision:       4.1.13
+  Observed Generation:           -1
+  Storage Namespace:             flux-system
+Events:
+  Type    Reason              Age                From             Message
+  ----    ------              ----               ----             -------
+  Normal  HelmChartCreated    19m                helm-controller  Created HelmChart/flux-system/flux-system-flux-system-soperator-fluxcd-soperator-activechecks with SourceRef 'HelmRepository/flux-system/flux-system-soperator-fluxcd-soperator'
+  Normal  DependencyNotReady  16m (x8 over 19m)  helm-controller  dependency 'flux-system/flux-system-soperator-fluxcd-slurm-cluster' is not ready
+
+
+kubectl -n flux-system describe helmrelease  flux-system-soperator-fluxcd-opentelemetry-collector-jail-logs
+Name:         flux-system-soperator-fluxcd-opentelemetry-collector-jail-logs
+Namespace:    flux-system
+Labels:       app.kubernetes.io/instance=flux-system-soperator-fluxcd
+              app.kubernetes.io/managed-by=Helm
+              app.kubernetes.io/name=helm-soperator-fluxcd
+              app.kubernetes.io/version=4.1.13
+              helm.sh/chart=helm-soperator-fluxcd-4.1.13
+              helm.toolkit.fluxcd.io/name=soperator-fluxcd
+              helm.toolkit.fluxcd.io/namespace=flux-system
+Annotations:  meta.helm.sh/release-name: flux-system-soperator-fluxcd
+              meta.helm.sh/release-namespace: flux-system
+API Version:  helm.toolkit.fluxcd.io/v2
+Kind:         HelmRelease
+Metadata:
+  Creation Timestamp:  2026-10-11T19:27:43Z
+  Finalizers:
+    finalizers.fluxcd.io
+  Generation:        1
+  Resource Version:  23192
+  UID:               931f204c-8b7c-42bb-b5b8-8fbbd0253a52
+Spec:
+  Chart:
+    Spec:
+      Chart:               opentelemetry-collector
+      Interval:            15m
+      Reconcile Strategy:  ChartVersion
+      Source Ref:
+        Kind:   HelmRepository
+        Name:   flux-system-soperator-fluxcd-opentelemetry-collector
+      Version:  0.149.*
+  Depends On:
+    Name:  flux-system-soperator-fluxcd-ns
+    Name:  flux-system-soperator-fluxcd-vm-logs
+    Name:  flux-system-soperator-fluxcd-nodesets
+  Drift Detection:
+    Mode:  warn
+  Install:
+    Remediation:
+      Retries:       3
+  Interval:          15m
+  Release Name:      opentelemetry-collector-jail-logs
+  Target Namespace:  logs-system
+  Timeout:           15m
+  Upgrade:
+    Remediation:
+      Remediate Last Failure:  true
+      Retries:                 3
+  Values:
+    Affinity:
+      Node Affinity:
+        Required During Scheduling Ignored During Execution:
+          Node Selector Terms:
+            Match Expressions:
+              Key:       slurm.nebius.ai/nodeset
+              Operator:  In
+              Values:
+                system
+    Cluster Role:
+      Create:  true
+      Rules:
+        API Groups:
+
+        Resources:
+          pods
+          namespaces
+        Verbs:
+          get
+          watch
+          list
+    Command:
+      Extra Args:
+        --feature-gates=-telemetry.UseLocalHostAsDefaultMetricsAddress
+    Config:
+      Exporters:
+        otlp_http/victorialogs:
+          Compression:    gzip
+          Encoding:       proto
+          logs_endpoint:  http://vm-logs-victoria-logs-single-server:9428/insert/opentelemetry/v1/logs
+          retry_on_failure:
+            initial_interval:  200ms
+          Timeout:             5s
+      Extensions:
+        file_storage:
+          Directory:  /var/lib/otelcol-jail
+        health_check:
+          Endpoint:  0.0.0.0:13133
+      Processors:
+        Batch:
+          send_batch_max_size:  700
+          send_batch_size:      250
+          Timeout:              1s
+        k8s_attributes:
+          Extract:
+            Labels:
+              From:      pod
+              Key:       external-o11y
+              tag_name:  external_o11y
+              From:      namespace
+              Key:       o11y_resource_id
+              tag_name:  resource_id
+              From:      namespace
+              Key:       o11y_service_provider
+              tag_name:  service_provider
+            Metadata:
+              k8s.namespace.name
+              k8s.node.name
+              k8s.pod.name
+              k8s.pod.uid
+              k8s.pod.start_time
+          Passthrough:  false
+          pod_association:
+            Sources:
+              From:                   resource_attribute
+              Name:                   k8s.pod.name
+              From:                   resource_attribute
+              Name:                   k8s.namespace.name
+          wait_for_metadata:          true
+          wait_for_metadata_timeout:  30s
+        memory_limiter:
+          check_interval:          5s
+          limit_percentage:        80
+          spike_limit_percentage:  25
+        Transform:
+          log_statements:
+            Context:     log
+            error_mode:  ignore
+            Statements:
+              set(attributes["cluster"], "tshaker-demoday")
+      Receivers:
+        Filelog:
+          Exclude:
+            /mnt/jail/opt/soperator-outputs/health_checker_cmd_stdout/*.out
+          Include:
+            /mnt/jail/opt/soperator-outputs/*/*.out
+          include_file_name:  true
+          include_file_path:  true
+          Operators:
+            Id:                          extract_base_name_and_pod
+            parse_from:                  attributes["log.file.name"]
+            Regex:                       ^(?P<slurm_node_name>[^.]+)\.(?P<base_name>.+)\.out$
+            Type:                        regex_parser
+            From:                        attributes.slurm_node_name
+            To:                          resource["slurm_node_name"]
+            Type:                        copy
+            From:                        attributes.slurm_node_name
+            To:                          resource["k8s.pod.name"]
+            Type:                        move
+            Field:                       resource["k8s.namespace.name"]
+            Type:                        add
+            Value:                       soperator
+            Field:                       resource["region"]
+            Type:                        add
+            Value:                       eu-north1
+            Id:                          extract_directory
+            parse_from:                  attributes["log.file.path"]
+            Regex:                       ^.*/(?P<log_directory>nccl_logs|slurm_jobs|slurm_scripts)/.*$
+            Type:                        regex_parser
+            From:                        attributes.log_directory
+            To:                          resource["log_type"]
+            Type:                        move
+            Id:                          parse_nccl_log_base_name
+            If:                          resource["log_type"] == "nccl_logs"
+            parse_from:                  attributes.base_name
+            Regex:                       ^(?P<job_id>\d+)\.(?P<job_step_id>\d+)$
+            Type:                        regex_parser
+            From:                        attributes.job_id
+            If:                          resource["log_type"] == "nccl_logs" and attributes["job_id"] != nil
+            To:                          resource["job_id"]
+            Type:                        move
+            From:                        attributes.job_step_id
+            If:                          resource["log_type"] == "nccl_logs" and attributes["job_step_id"] != nil
+            To:                          resource["job_step_id"]
+            Type:                        move
+            Id:                          parse_slurm_job_log_base_name
+            If:                          resource["log_type"] == "slurm_jobs"
+            parse_from:                  attributes.base_name
+            Regex:                       ^(?P<job_name>[^.]+)\.(?P<job_id>\d+)(?:\.(?P<job_array_id>\d+))?$
+            Type:                        regex_parser
+            From:                        attributes.job_name
+            If:                          resource["log_type"] == "slurm_jobs" and attributes["job_name"] != nil
+            To:                          resource["job_name"]
+            Type:                        move
+            From:                        attributes.job_id
+            If:                          resource["log_type"] == "slurm_jobs" and attributes["job_id"] != nil
+            To:                          resource["job_id"]
+            Type:                        move
+            From:                        attributes.job_array_id
+            If:                          resource["log_type"] == "slurm_jobs" and attributes["job_array_id"] != nil
+            To:                          resource["job_array_id"]
+            Type:                        move
+            Id:                          parse_script_log_base_name
+            If:                          resource["log_type"] == "slurm_scripts"
+            parse_from:                  attributes.base_name
+            Regex:                       ^(?P<script_name>[^.]+)\.(?P<script_context>[^.]+)$
+            Type:                        regex_parser
+            From:                        attributes.script_name
+            If:                          resource["log_type"] == "slurm_scripts" and attributes["script_name"] != nil
+            To:                          resource["slurm_script_name"]
+            Type:                        move
+            From:                        attributes.script_context
+            If:                          resource["log_type"] == "slurm_scripts" and attributes["script_context"] != nil
+            To:                          resource["slurm_script_context"]
+            Type:                        move
+            Field:                       attributes.base_name
+            Type:                        remove
+            Id:                          parse_json_body
+            If:                          body matches "^\\s*\\{"
+            parse_from:                  body
+            parse_to:                    attributes.hc_json
+            Type:                        json_parser
+            From:                        attributes.hc_json.status
+            If:                          attributes.hc_json != nil && attributes.hc_json["status"] != nil
+            To:                          resource["slurm_run_status"]
+            Type:                        move
+            From:                        attributes.hc_json.resolution
+            If:                          attributes.hc_json != nil && attributes.hc_json["resolution"] != nil
+            To:                          resource["slurm_run_resolution"]
+            Type:                        move
+            Field:                       attributes.hc_json
+            If:                          attributes.hc_json != nil
+            Type:                        remove
+          poll_interval:                 30s
+          preserve_leading_whitespaces:  true
+          retry_on_failure:
+            Enabled:  true
+          start_at:   end
+          Storage:    file_storage
+        filelog/health_checker:
+          Include:
+            /mnt/jail/opt/soperator-outputs/health_checker_cmd_stdout/*.out
+          include_file_name:  true
+          include_file_path:  true
+          Operators:
+            Id:                          extract_check_name_and_run_id
+            parse_from:                  attributes["log.file.name"]
+            Regex:                       ^(?P<check_name>.+)\.(?P<run_id>[0-9a-fA-F-]+)\.out$
+            Type:                        regex_parser
+            From:                        attributes.check_name
+            To:                          resource["health_checker.check_name"]
+            Type:                        copy
+            From:                        attributes.run_id
+            To:                          resource["health_checker.run_id"]
+            Type:                        copy
+            Field:                       resource["k8s.namespace.name"]
+            Type:                        add
+            Value:                       soperator
+            Field:                       resource["region"]
+            Type:                        add
+            Value:                       eu-north1
+            Field:                       resource["log_type"]
+            Type:                        add
+            Value:                       health_checker_cmd_stdout
+          poll_interval:                 30s
+          preserve_leading_whitespaces:  true
+          retry_on_failure:
+            Enabled:  true
+          start_at:   end
+          Storage:    file_storage
+        Jaeger:       <nil>
+        Otlp:         <nil>
+        Prometheus:   <nil>
+        Zipkin:       <nil>
+      Service:
+
+        Extensions:
+          health_check
+          file_storage
+        Pipelines:
+          Logs:
+            Exporters:
+              otlp_http/victorialogs
+            Processors:
+              k8s_attributes
+              transform
+              memory_limiter
+              batch
+            Receivers:
+              filelog
+              filelog/health_checker
+          Metrics:  <nil>
+          Traces:   <nil>
+        Telemetry:
+          Metrics:
+            Readers:
+              Pull:
+                Exporter:
+                  Prometheus:
+                    Host:  0.0.0.0
+                    Port:  8888
+    Extra Envs:
+      Name:   GOMAXPROCS
+      Value:  1
+    Extra Volume Mounts:
+      Mount Path:  /var/lib/otelcol-jail
+      Name:        varlibotelcol
+      Mount Path:  /mnt/jail
+      Name:        jail
+      Read Only:   true
+    Extra Volumes:
+      Host Path:
+        Path:  /mnt/jail
+        Type:  Directory
+      Name:    jail
+      Host Path:
+        Path:  /var/lib/otelcol-jail
+        Type:  DirectoryOrCreate
+      Name:    varlibotelcol
+    Image:
+      Pull Policy:  IfNotPresent
+      Repository:   cr.nebius.cloud/observability/nebius-o11y-agent
+      Tag:          2.0.10
+    Init Containers:
+      Command:
+        sh
+        -c
+        chown -R 10001: /var/lib/otelcol-jail
+      Image:  cr.nebius.cloud/soperator/busybox:latest
+      Name:   init-fs
+      Security Context:
+        Run As Group:  0
+        Run As User:   0
+      Volume Mounts:
+        Mount Path:  /var/lib/otelcol-jail
+        Name:        varlibotelcol
+      Command:
+        sh
+        -c
+        until [ -d /mnt/jail/opt/soperator-outputs ]; do
+  echo "Waiting for /mnt/jail/opt/soperator-outputs to be created by a worker or login pod"
+  sleep 5
+done
+
+      Image:  cr.nebius.cloud/soperator/busybox:latest
+      Name:   wait-soperator-outputs
+      Volume Mounts:
+        Mount Path:  /mnt/jail
+        Name:        jail
+        Read Only:   true
+    Mode:            deployment
+    Pod Monitor:
+      Enabled:  true
+      Metrics Endpoints:
+        Interval:  30s
+        Port:      metrics
+        Relabelings:
+          Source Labels:
+            __meta_kubernetes_pod_name
+          Target Label:  pod
+          Replacement:   otel-collector-jail-logs
+          Target Label:  collector
+        Scrape Timeout:  10s
+    Ports:
+      Jaeger - Compact:
+        Enabled:  false
+      Jaeger - Grpc:
+        Enabled:  false
+      Jaeger - Thrift:
+        Enabled:  false
+      Metrics:
+        Enabled:  true
+      Otlp:
+        Enabled:  false
+      Otlp - Http:
+        Enabled:  false
+      Zipkin:
+        Enabled:    false
+    Replica Count:  1
+    Resources:
+      Limits:
+        Memory:  1Gi
+      Requests:
+        Cpu:     1000m
+        Memory:  1Gi
+    Rollout:
+      Strategy:  Recreate
+    Security Context:
+      Run As Group:  0
+      Run As User:   10001
+    Service:
+      Enabled:  false
+    Service Account:
+      Create:        true
+    Use GOMEMLIMIT:  true
+  Values From:
+    Kind:        ConfigMap
+    Name:        terraform-opentelemetry-collector-jail-logs
+    Optional:    true
+    Values Key:  values.yaml
+    Kind:        ConfigMap
+    Name:        opentelemetry-collector-jail-logs
+    Optional:    true
+    Values Key:  values.yaml
+Status:
+  Conditions:
+    Last Transition Time:  2026-10-11T19:46:34Z
+    Message:               Running 'install' action with timeout of 15m0s
+    Observed Generation:   1
+    Reason:                Progressing
+    Status:                True
+    Type:                  Reconciling
+    Last Transition Time:  2026-10-11T19:46:34Z
+    Message:               Running 'install' action with timeout of 15m0s
+    Observed Generation:   1
+    Reason:                Progressing
+    Status:                Unknown
+    Type:                  Ready
+    Last Transition Time:  2026-10-11T19:46:22Z
+    Message:               Helm install failed for release logs-system/opentelemetry-collector-jail-logs with chart opentelemetry-collector@0.149.0: context deadline exceeded
+    Observed Generation:   1
+    Reason:                InstallFailed
+    Status:                False
+    Type:                  Released
+    Last Transition Time:  2026-10-11T19:46:23Z
+    Message:               Helm uninstall remediation for release logs-system/opentelemetry-collector-jail-logs.v1 with chart opentelemetry-collector@0.149.0 succeeded
+    Observed Generation:   1
+    Reason:                UninstallSucceeded
+    Status:                True
+    Type:                  Remediated
+  Failures:                1
+  Helm Chart:              flux-system/flux-system-flux-system-soperator-fluxcd-opentelemetry-collector-jail-logs
+  History:
+    App Version:                           0.149.0
+    Chart Name:                            opentelemetry-collector
+    Chart Version:                         0.149.0
+    Config Digest:                         sha256:11b900f27ae4072fa3573592787d586d27e792dbe9f7ab53b9e3ae9c5e713888
+    Deleted:                               2026-10-11T19:46:23Z
+    Digest:                                sha256:31e833440b75087f74145ff7c0d8196cf580b484012fc8e49ea17f061ce0a213
+    First Deployed:                        2026-10-11T19:31:22Z
+    Last Deployed:                         2026-10-11T19:31:22Z
+    Name:                                  opentelemetry-collector-jail-logs
+    Namespace:                             logs-system
+    Status:                                uninstalling
+    Version:                               1
+  Install Failures:                        1
+  Last Attempted Config Digest:            sha256:11b900f27ae4072fa3573592787d586d27e792dbe9f7ab53b9e3ae9c5e713888
+  Last Attempted Generation:               1
+  Last Attempted Release Action:           install
+  Last Attempted Release Action Duration:  15m0.35845166s
+  Last Attempted Revision:                 0.149.0
+  Observed Generation:                     -1
+  Storage Namespace:                       flux-system
+Events:
+  Type     Reason              Age                From             Message
+  ----     ------              ----               ----             -------
+  Normal   HelmChartCreated    20m                helm-controller  Created HelmChart/flux-system/flux-system-flux-system-soperator-fluxcd-opentelemetry-collector-jail-logs with SourceRef 'HelmRepository/flux-system/flux-system-soperator-fluxcd-opentelemetry-collector'
+  Normal   DependencyNotReady  20m                helm-controller  dependency 'flux-system/flux-system-soperator-fluxcd-ns' is not ready
+  Normal   DependencyNotReady  19m (x2 over 20m)  helm-controller  dependency 'flux-system/flux-system-soperator-fluxcd-vm-logs' is not ready
+  Normal   DependencyNotReady  17m (x5 over 19m)  helm-controller  dependency 'flux-system/flux-system-soperator-fluxcd-nodesets' is not ready
+  Warning  InstallFailed       91s                helm-controller  Helm install failed for release logs-system/opentelemetry-collector-jail-logs with chart opentelemetry-collector@0.149.0: context deadline exceeded
+
+Last Helm logs:
+
+2026-10-11T19:31:22.810558623Z: creating 6 resource(s)
+2026-10-11T19:31:22.847230664Z: beginning wait for 6 resources with timeout of 15m0s
+2026-10-11T19:31:22.865375616Z: ReplicaSet is not ready: logs-system/opentelemetry-collector-jail-logs-56cf85d4dc. observedGeneration (0) does not match spec generation (1).
+2026-10-11T19:31:24.85524212Z: Deployment is not ready: logs-system/opentelemetry-collector-jail-logs. 0 out of 1 expected pods are ready
+2026-10-11T19:46:20.85598628Z: Deployment is not ready: logs-system/opentelemetry-collector-jail-logs. 0 out of 1 expected pods are ready (447 duplicate lines omitted)
+2026-10-11T19:46:22.84817708Z: Error received when checking status of resource opentelemetry-collector-jail-logs. Error: 'client rate limiter Wait returned an error: context deadline exceeded', Resource details: 'Resource: "apps/v1, Resource=deployments", GroupVersionKind: "apps/v1, Kind=Deployment"
+Name: "opentelemetry-collector-jail-logs", Namespace: "logs-system"'
+2026-10-11T19:46:22.848182237Z: Retryable error? true
+2026-10-11T19:46:22.848183599Z: Retrying as current number of retries 0 less than max number of retries 30
+2026-10-11T19:46:22.848188076Z: wait for resources failed after 15m0s: context deadline exceeded
+  Normal  UninstallSucceeded  90s  helm-controller  Helm uninstall remediation for release logs-system/opentelemetry-collector-jail-logs.v1 with chart opentelemetry-collector@0.149.0 succeeded
+
+kubectl -n flux-system get pods
+NAME                                           READY   STATUS    RESTARTS   AGE
+helm-controller-b654b75f8-bf2cm                1/1     Running   0          20m
+image-automation-controller-86497776cd-bccw6   1/1     Running   0          20m
+image-reflector-controller-684c57479b-mjfmb    1/1     Running   0          20m
+kustomize-controller-6f87798dcc-tbghh          1/1     Running   0          20m
+notification-controller-6966dcb565-dsrx2       1/1     Running   0          20m
+source-controller-c7c5b47d6-4fhjd              1/1     Running   0          20m
+
+
+
+kubectl -n soperator describe pod worker-0
+Name:                 worker-0
+Namespace:            soperator
+Priority:             10000000
+Priority Class Name:  soperator-worker-high-priority
+Service Account:      soperator-worker-sa
+Node:                 computeinstance-e00jft45ykdvkp7t31/10.0.0.31
+Start Time:           Sun, 11 Oct 2026 23:39:20 +0400
+Labels:               app.kubernetes.io/component=nodeset
+                      app.kubernetes.io/instance=soperator
+                      app.kubernetes.io/managed-by=slurm-operator
+                      app.kubernetes.io/name=slurmcluster
+                      app.kubernetes.io/part-of=slurm-operator
+                      apps.kubernetes.io/pod-index=0
+                      controller-revision-hash=worker-6698d97cdf
+                      lifecycle.apps.kruise.io/state=Normal
+                      slurm.nebius.ai/nodeset=worker
+                      slurm.nebius.ai/worker=true
+                      statefulset.kubernetes.io/pod-name=worker-0
+                      topology.kubernetes.io/region=eu-north1
+Annotations:          kubectl.kubernetes.io/default-container: slurmd
+                      lifecycle.apps.kruise.io/timestamp: 2026-10-11T19:39:20Z
+                      versions:
+                        soperator.custom-supervisord-config: "8974"
+                        soperator.soperator-munge: "18012"
+                        soperator.soperator-ssh-configs-worker: "13318"
+Status:               Pending
+IP:                   10.3.24.114
+IPs:
+  IP:           10.3.24.114
+Controlled By:  StatefulSet/worker
+Init Containers:
+  ensure-jail-virtiofs:
+    Container ID:  containerd://cd01ab95b752b52565bd182645e47efe114609c7da6a2ff1754b27c4fa85b2f0
+    Image:         cr.nebius.cloud/soperator/busybox
+    Image ID:      cr.nebius.cloud/soperator/busybox@sha256:e22b7c1e77bda9f6028d20860ab53257697a9153115f30fd6997df7422e4e845
+    Port:          <none>
+    Host Port:     <none>
+    Command:
+      grep
+       /volume-mount virtiofs
+      /proc/mounts
+    State:          Terminated
+      Reason:       Completed
+      Exit Code:    0
+      Started:      Sun, 11 Oct 2026 23:39:22 +0400
+      Finished:     Sun, 11 Oct 2026 23:39:22 +0400
+    Ready:          True
+    Restart Count:  0
+    Environment:    <none>
+    Mounts:
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-frcq2 (ro)
+      /volume-mount from jail (rw)
+  ensure-jail-submount-data-virtiofs:
+    Container ID:  containerd://f1d59b7572e390a42f2cb4baeaeee7c0499f1a8c28226b7aac78fbb6081fa802
+    Image:         cr.nebius.cloud/soperator/busybox
+    Image ID:      cr.nebius.cloud/soperator/busybox@sha256:e22b7c1e77bda9f6028d20860ab53257697a9153115f30fd6997df7422e4e845
+    Port:          <none>
+    Host Port:     <none>
+    Command:
+      grep
+       /volume-mount virtiofs
+      /proc/mounts
+    State:          Terminated
+      Reason:       Completed
+      Exit Code:    0
+      Started:      Sun, 11 Oct 2026 23:39:22 +0400
+      Finished:     Sun, 11 Oct 2026 23:39:22 +0400
+    Ready:          True
+    Restart Count:  0
+    Environment:    <none>
+    Mounts:
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-frcq2 (ro)
+      /volume-mount from data (rw)
+  munge:
+    Container ID:   containerd://f0c7c1e1942a6e74619e4641bf267ef3c639a53bfe91d3e5780c333fa66008bb
+    Image:          cr.nebius.cloud/soperator/munge:4.1.13-slurm25.11.8
+    Image ID:       cr.nebius.cloud/soperator/munge@sha256:49b715bcd3df30c5ef5a9f1d04da01512305769c0ad1bd5adbed551cdd1d1f2f
+    Port:           <none>
+    Host Port:      <none>
+    State:          Running
+      Started:      Sun, 11 Oct 2026 23:39:36 +0400
+    Ready:          True
+    Restart Count:  0
+    Limits:
+      ephemeral-storage:  5Gi
+      memory:             512Mi
+    Requests:
+      cpu:                100m
+      ephemeral-storage:  5Gi
+      memory:             512Mi
+    Environment:          <none>
+    Mounts:
+      /mnt/munge-key from munge-key (ro)
+      /run/munge from munge-socket (rw)
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-frcq2 (ro)
+  worker-init:
+    Container ID:  containerd://2c057ae7c7d4c44f8853039ac92881448fe894e2c927a551ac055d9de3cde055
+    Image:         cr.nebius.cloud/soperator/worker_slurmd:4.1.13-slurm25.11.8
+    Image ID:      cr.nebius.cloud/soperator/worker_slurmd@sha256:3162824f0d3ebbfc488abeb0449c21c4b6e2dbc90003c715b195f9ae4ec96557
+    Port:          <none>
+    Host Port:     <none>
+    Command:
+      python3
+      /opt/bin/slurm/worker_init.py
+      wait-controller
+      wait-topology
+    State:          Running
+      Started:      Sun, 11 Oct 2026 23:50:56 +0400
+    Last State:     Terminated
+      Reason:       Error
+      Exit Code:    1
+      Started:      Sun, 11 Oct 2026 23:47:29 +0400
+      Finished:     Sun, 11 Oct 2026 23:50:30 +0400
+    Ready:          False
+    Restart Count:  3
+    Environment:
+      K8S_NODE_NAME:              (v1:spec.nodeName)
+      K8S_POD_NAME:              worker-0 (v1:metadata.name)
+      K8S_POD_NAMESPACE:         soperator (v1:metadata.namespace)
+      CONTROLLER_MAX_ATTEMPTS:   60
+      CONTROLLER_POLL_INTERVAL:  5
+      K8S_SERVICE_NAME:          soperator-nodeset-svc
+      NODESET_GPU_ENABLED:       true
+      TOPOLOGY_CONFIGMAP_PATH:   /tmp/slurm/topology-node-labels
+      TOPOLOGY_WAIT_TIMEOUT:     180
+      TOPOLOGY_POLL_INTERVAL:    5
+      SLURM_TOPOLOGY_PLUGIN:     topology/tree
+    Mounts:
+      /mnt/jail from jail (rw)
+      /run/munge from munge-socket (rw)
+      /tmp/slurm/topology-node-labels from topology-node-labels (ro)
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-frcq2 (ro)
+Containers:
+  slurmd:
+    Container ID:
+    Image:           cr.nebius.cloud/soperator/worker_slurmd:4.1.13-slurm25.11.8
+    Image ID:
+    Port:            6818/TCP (slurmd)
+    Host Port:       0/TCP (slurmd)
+    SeccompProfile:  Unconfined
+    State:           Waiting
+      Reason:        PodInitializing
+    Ready:           False
+    Restart Count:   0
+    Limits:
+      cpu:                13950m
+      ephemeral-storage:  382Gi
+      memory:             176Gi
+      nvidia.com/gpu:     1
+    Requests:
+      cpu:                13950m
+      ephemeral-storage:  382Gi
+      memory:             176Gi
+      nvidia.com/gpu:     1
+    Environment:
+      INSTANCE_ID:                  (v1:spec.nodeName)
+      SLURM_CLUSTER_WITH_GPU:      true
+      NODESET_GPU_ENABLED:         true
+      SLURM_NODE_EXTRA:            "{ \"ib_pod\": \"$TOPO_SWITCH_TIER2\", \"ib_su\": \"$TOPO_SWITCH_TIER1\" }"
+      CGROUP_V2:                   true
+      NVIDIA_GDRCOPY:              enabled
+      NVIDIA_DRIVER_CAPABILITIES:  compute,graphics,utility,video
+    Mounts:
+      /boot from boot (rw)
+      /dev/shm from dev-shm (rw)
+      /etc/nvidia-imex from nvidia-imex-config (ro)
+      /etc/security/limits.conf from security-limits (rw,path="limits.conf")
+      /etc/ssh/sshd_keys from sshd-keys (ro)
+      /etc/supervisor/conf.d/ from supervisord-config (ro)
+      /etc/sysctl.conf from sysctl (rw,path="sysctl.conf")
+      /mnt/jail from jail (rw)
+      /mnt/jail.upper/etc/nvidia-imex from nvidia-imex-config-jail (ro)
+      /mnt/jail.upper/home from home-dir (rw)
+      /mnt/jail.upper/mnt/data from data (rw)
+      /mnt/jail.upper/mnt/memory from in-memory (rw)
+      /mnt/jail.upper/opt/slurm_scripts from slurm-scripts-jail (rw)
+      /mnt/jail.upper/sys-host from sys-host (ro)
+      /mnt/jail.upper/usr/bin/nvidia-imex-ctl from nvidia-imex-cli-jail (ro)
+      /mnt/ssh-configs from ssh-configs-worker (ro)
+      /opt/slurm_scripts from slurm-scripts (rw)
+      /root/.ssh/authorized_keys from ssh-root-keys (ro,path="authorized_keys")
+      /run/munge from munge-socket (rw)
+      /run/nvidia from nvidia (rw)
+      /run/nvidia/driver from nvidia-driver-root (rw)
+      /tmp from tmp-disk (rw)
+      /tmp/slurm/topology-node-labels from topology-node-labels (ro)
+      /usr/bin/nvidia-imex-ctl from nvidia-imex-cli (ro)
+      /var/run/nebius/slurm from hpc-jobs-dir (rw)
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-frcq2 (ro)
+      /var/spool/slurmd from worker-spool (rw)
+Readiness Gates:
+  Type                 Status
+  InPlaceUpdateReady   True
+  KruisePodReady       True
+Conditions:
+  Type                        Status
+  KruisePodReady              True
+  InPlaceUpdateReady          True
+  PodReadyToStartContainers   True
+  Initialized                 False
+  Ready                       False
+  ContainersReady             False
+  PodScheduled                True
+Volumes:
+  munge-key:
+    Type:        Secret (a volume populated by a Secret)
+    SecretName:  soperator-munge
+    Optional:    false
+  munge-socket:
+    Type:       EmptyDir (a temporary directory that shares a pod's lifetime)
+    Medium:
+    SizeLimit:  <unset>
+  security-limits:
+    Type:      ConfigMap (a volume populated by a ConfigMap)
+    Name:      soperator-nodeset-worker-security-limits
+    Optional:  false
+  sshd-keys:
+    Type:        Secret (a volume populated by a Secret)
+    SecretName:  soperator-sshd-keys
+    Optional:    false
+  ssh-root-keys:
+    Type:      ConfigMap (a volume populated by a ConfigMap)
+    Name:      soperator-ssh-root-keys
+    Optional:  false
+  in-memory:
+    Type:       EmptyDir (a temporary directory that shares a pod's lifetime)
+    Medium:     Memory
+    SizeLimit:  176Gi
+  tmp-disk:
+    Type:       EmptyDir (a temporary directory that shares a pod's lifetime)
+    Medium:
+    SizeLimit:  <unset>
+  boot:
+    Type:          HostPath (bare host directory volume)
+    Path:          /boot
+    HostPathType:
+  dev-shm:
+    Type:       EmptyDir (a temporary directory that shares a pod's lifetime)
+    Medium:     Memory
+    SizeLimit:  64Gi
+  sysctl:
+    Type:      ConfigMap (a volume populated by a ConfigMap)
+    Name:      soperator-sysctl
+    Optional:  false
+  supervisord-config:
+    Type:      ConfigMap (a volume populated by a ConfigMap)
+    Name:      custom-supervisord-config
+    Optional:  false
+  ssh-configs-worker:
+    Type:      ConfigMap (a volume populated by a ConfigMap)
+    Name:      soperator-ssh-configs-worker
+    Optional:  false
+  nvidia:
+    Type:          HostPath (bare host directory volume)
+    Path:          /run/nvidia
+    HostPathType:
+  nvidia-imex-cli:
+    Type:          HostPath (bare host directory volume)
+    Path:          /usr/bin/nvidia-imex-ctl
+    HostPathType:  FileOrCreate
+  nvidia-imex-cli-jail:
+    Type:          HostPath (bare host directory volume)
+    Path:          /usr/bin/nvidia-imex-ctl
+    HostPathType:  FileOrCreate
+  nvidia-imex-config:
+    Type:          HostPath (bare host directory volume)
+    Path:          /etc/nvidia-imex
+    HostPathType:  DirectoryOrCreate
+  nvidia-imex-config-jail:
+    Type:          HostPath (bare host directory volume)
+    Path:          /etc/nvidia-imex
+    HostPathType:  DirectoryOrCreate
+  worker-spool:
+    Type:       EmptyDir (a temporary directory that shares a pod's lifetime)
+    Medium:
+    SizeLimit:  <unset>
+  jail:
+    Type:       PersistentVolumeClaim (a reference to a PersistentVolumeClaim in the same namespace)
+    ClaimName:  jail-pvc
+    ReadOnly:   false
+  home-dir:
+    Type:       PersistentVolumeClaim (a reference to a PersistentVolumeClaim in the same namespace)
+    ClaimName:  home-dir
+    ReadOnly:   false
+  data:
+    Type:       PersistentVolumeClaim (a reference to a PersistentVolumeClaim in the same namespace)
+    ClaimName:  jail-submount-data-pvc
+    ReadOnly:   false
+  slurm-scripts:
+    Type:      ConfigMap (a volume populated by a ConfigMap)
+    Name:      slurm-scripts
+    Optional:  false
+  slurm-scripts-jail:
+    Type:      ConfigMap (a volume populated by a ConfigMap)
+    Name:      slurm-scripts
+    Optional:  false
+  sys-host:
+    Type:          HostPath (bare host directory volume)
+    Path:          /sys
+    HostPathType:  Directory
+  hpc-jobs-dir:
+    Type:          HostPath (bare host directory volume)
+    Path:          /var/run/nebius/slurm
+    HostPathType:  DirectoryOrCreate
+  nvidia-driver-root:
+    Type:          HostPath (bare host directory volume)
+    Path:          /
+    HostPathType:
+  topology-node-labels:
+    Type:      ConfigMap (a volume populated by a ConfigMap)
+    Name:      topology-node-labels
+    Optional:  true
+  kube-api-access-frcq2:
+    Type:                    Projected (a volume that contains injected data from multiple sources)
+    TokenExpirationSeconds:  3607
+    ConfigMapName:           kube-root-ca.crt
+    Optional:                false
+    DownwardAPI:             true
+QoS Class:                   Burstable
+Node-Selectors:              slurm.nebius.ai/nodeset-name=worker
+Tolerations:                 node.kubernetes.io/not-ready:NoExecute op=Exists for 300s
+                             node.kubernetes.io/unreachable:NoExecute op=Exists for 300s
+                             nvidia.com/gpu:NoSchedule op=Exists
+Events:
+  Type     Reason     Age                  From               Message
+  ----     ------     ----                 ----               -------
+  Normal   Scheduled  12m                  default-scheduler  Successfully assigned soperator/worker-0 to computeinstance-e00jft45ykdvkp7t31
+  Normal   Pulling    12m                  kubelet            spec.initContainers{ensure-jail-virtiofs}: Pulling image "cr.nebius.cloud/soperator/busybox"
+  Normal   Started    12m                  kubelet            spec.initContainers{ensure-jail-submount-data-virtiofs}: Container started
+  Normal   Created    12m                  kubelet            spec.initContainers{ensure-jail-virtiofs}: Container created
+  Normal   Started    12m                  kubelet            spec.initContainers{ensure-jail-virtiofs}: Container started
+  Normal   Pulling    12m                  kubelet            spec.initContainers{ensure-jail-submount-data-virtiofs}: Pulling image "cr.nebius.cloud/soperator/busybox"
+  Normal   Pulled     12m                  kubelet            spec.initContainers{ensure-jail-submount-data-virtiofs}: Successfully pulled image "cr.nebius.cloud/soperator/busybox" in 295ms (295ms including waiting). Image size: 2146963 bytes.
+  Normal   Created    12m                  kubelet            spec.initContainers{ensure-jail-submount-data-virtiofs}: Container created
+  Normal   Pulled     12m                  kubelet            spec.initContainers{ensure-jail-virtiofs}: Successfully pulled image "cr.nebius.cloud/soperator/busybox" in 307ms (307ms including waiting). Image size: 2146963 bytes.
+  Normal   Pulling    12m                  kubelet            spec.initContainers{munge}: Pulling image "cr.nebius.cloud/soperator/munge:4.1.13-slurm25.11.8"
+  Normal   Created    12m                  kubelet            spec.initContainers{munge}: Container created
+  Normal   Pulled     12m                  kubelet            spec.initContainers{munge}: Successfully pulled image "cr.nebius.cloud/soperator/munge:4.1.13-slurm25.11.8" in 12.845s (12.845s including waiting). Image size: 529058300 bytes.
+  Normal   Started    12m                  kubelet            spec.initContainers{munge}: Container started
+  Normal   Pulling    12m                  kubelet            spec.initContainers{worker-init}: Pulling image "cr.nebius.cloud/soperator/worker_slurmd:4.1.13-slurm25.11.8"
+  Normal   Pulled     12m                  kubelet            spec.initContainers{worker-init}: Successfully pulled image "cr.nebius.cloud/soperator/worker_slurmd:4.1.13-slurm25.11.8" in 24.142s (24.142s including waiting). Image size: 1126733350 bytes.
+  Warning  BackOff    96s (x6 over 4m52s)  kubelet            spec.initContainers{worker-init}: Back-off restarting failed container worker-init in pod worker-0_soperator(2bc81a00-b828-497c-97f0-eb1cf4a17049)
+  Normal   Created    72s (x4 over 12m)    kubelet            spec.initContainers{worker-init}: Container created
+  Normal   Started    72s (x4 over 12m)    kubelet            spec.initContainers{worker-init}: Container started
+  Normal   Pulled     72s (x3 over 7m52s)  kubelet            spec.initContainers{worker-init}: Container image "cr.nebius.cloud/soperator/worker_slurmd:4.1.13-slurm25.11.8" already present on machine and can be accessed by the pod
+
+kubectl -n soperator describe pod worker-1
+Name:                 worker-1
+Namespace:            soperator
+Priority:             10000000
+Priority Class Name:  soperator-worker-high-priority
+Service Account:      soperator-worker-sa
+Node:                 computeinstance-e00p289p5k5qxtgf1b/10.0.31.18
+Start Time:           Sun, 11 Oct 2026 23:39:20 +0400
+Labels:               app.kubernetes.io/component=nodeset
+                      app.kubernetes.io/instance=soperator
+                      app.kubernetes.io/managed-by=slurm-operator
+                      app.kubernetes.io/name=slurmcluster
+                      app.kubernetes.io/part-of=slurm-operator
+                      apps.kubernetes.io/pod-index=1
+                      controller-revision-hash=worker-6698d97cdf
+                      lifecycle.apps.kruise.io/state=Normal
+                      slurm.nebius.ai/nodeset=worker
+                      slurm.nebius.ai/worker=true
+                      statefulset.kubernetes.io/pod-name=worker-1
+                      topology.kubernetes.io/region=eu-north1
+Annotations:          kubectl.kubernetes.io/default-container: slurmd
+                      lifecycle.apps.kruise.io/timestamp: 2026-10-11T19:39:20Z
+                      versions:
+                        soperator.custom-supervisord-config: "8974"
+                        soperator.soperator-munge: "18012"
+                        soperator.soperator-ssh-configs-worker: "13318"
+Status:               Pending
+IP:                   10.3.85.12
+IPs:
+  IP:           10.3.85.12
+Controlled By:  StatefulSet/worker
+Init Containers:
+  ensure-jail-virtiofs:
+    Container ID:  containerd://332e63633bf22c838a9794764f4b62f27090c87edeeb17d1c8237f6272b048aa
+    Image:         cr.nebius.cloud/soperator/busybox
+    Image ID:      cr.nebius.cloud/soperator/busybox@sha256:e22b7c1e77bda9f6028d20860ab53257697a9153115f30fd6997df7422e4e845
+    Port:          <none>
+    Host Port:     <none>
+    Command:
+      grep
+       /volume-mount virtiofs
+      /proc/mounts
+    State:          Terminated
+      Reason:       Completed
+      Exit Code:    0
+      Started:      Sun, 11 Oct 2026 23:39:22 +0400
+      Finished:     Sun, 11 Oct 2026 23:39:22 +0400
+    Ready:          True
+    Restart Count:  0
+    Environment:    <none>
+    Mounts:
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-f8w45 (ro)
+      /volume-mount from jail (rw)
+  ensure-jail-submount-data-virtiofs:
+    Container ID:  containerd://152f52d07a2c9efd00ae4bbec10e6c960b4cb704c30976bf994b76649e3ba739
+    Image:         cr.nebius.cloud/soperator/busybox
+    Image ID:      cr.nebius.cloud/soperator/busybox@sha256:e22b7c1e77bda9f6028d20860ab53257697a9153115f30fd6997df7422e4e845
+    Port:          <none>
+    Host Port:     <none>
+    Command:
+      grep
+       /volume-mount virtiofs
+      /proc/mounts
+    State:          Terminated
+      Reason:       Completed
+      Exit Code:    0
+      Started:      Sun, 11 Oct 2026 23:39:22 +0400
+      Finished:     Sun, 11 Oct 2026 23:39:22 +0400
+    Ready:          True
+    Restart Count:  0
+    Environment:    <none>
+    Mounts:
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-f8w45 (ro)
+      /volume-mount from data (rw)
+  munge:
+    Container ID:   containerd://93be0807bb69a62bde7b25c378c2c83020f9b78021f837ad68a01d8cc7a575ec
+    Image:          cr.nebius.cloud/soperator/munge:4.1.13-slurm25.11.8
+    Image ID:       cr.nebius.cloud/soperator/munge@sha256:49b715bcd3df30c5ef5a9f1d04da01512305769c0ad1bd5adbed551cdd1d1f2f
+    Port:           <none>
+    Host Port:      <none>
+    State:          Running
+      Started:      Sun, 11 Oct 2026 23:39:35 +0400
+    Ready:          True
+    Restart Count:  0
+    Limits:
+      ephemeral-storage:  5Gi
+      memory:             512Mi
+    Requests:
+      cpu:                100m
+      ephemeral-storage:  5Gi
+      memory:             512Mi
+    Environment:          <none>
+    Mounts:
+      /mnt/munge-key from munge-key (ro)
+      /run/munge from munge-socket (rw)
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-f8w45 (ro)
+  worker-init:
+    Container ID:  containerd://1ed506206c1b369e5e5f925d898e5965867c94977617e5d47d8531a4a2379a20
+    Image:         cr.nebius.cloud/soperator/worker_slurmd:4.1.13-slurm25.11.8
+    Image ID:      cr.nebius.cloud/soperator/worker_slurmd@sha256:3162824f0d3ebbfc488abeb0449c21c4b6e2dbc90003c715b195f9ae4ec96557
+    Port:          <none>
+    Host Port:     <none>
+    Command:
+      python3
+      /opt/bin/slurm/worker_init.py
+      wait-controller
+      wait-topology
+    State:          Running
+      Started:      Sun, 11 Oct 2026 23:50:49 +0400
+    Last State:     Terminated
+      Reason:       Error
+      Exit Code:    1
+      Started:      Sun, 11 Oct 2026 23:47:28 +0400
+      Finished:     Sun, 11 Oct 2026 23:50:28 +0400
+    Ready:          False
+    Restart Count:  3
+    Environment:
+      K8S_NODE_NAME:              (v1:spec.nodeName)
+      K8S_POD_NAME:              worker-1 (v1:metadata.name)
+      K8S_POD_NAMESPACE:         soperator (v1:metadata.namespace)
+      CONTROLLER_MAX_ATTEMPTS:   60
+      CONTROLLER_POLL_INTERVAL:  5
+      K8S_SERVICE_NAME:          soperator-nodeset-svc
+      NODESET_GPU_ENABLED:       true
+      TOPOLOGY_CONFIGMAP_PATH:   /tmp/slurm/topology-node-labels
+      TOPOLOGY_WAIT_TIMEOUT:     180
+      TOPOLOGY_POLL_INTERVAL:    5
+      SLURM_TOPOLOGY_PLUGIN:     topology/tree
+    Mounts:
+      /mnt/jail from jail (rw)
+      /run/munge from munge-socket (rw)
+      /tmp/slurm/topology-node-labels from topology-node-labels (ro)
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-f8w45 (ro)
+Containers:
+  slurmd:
+    Container ID:
+    Image:           cr.nebius.cloud/soperator/worker_slurmd:4.1.13-slurm25.11.8
+    Image ID:
+    Port:            6818/TCP (slurmd)
+    Host Port:       0/TCP (slurmd)
+    SeccompProfile:  Unconfined
+    State:           Waiting
+      Reason:        PodInitializing
+    Ready:           False
+    Restart Count:   0
+    Limits:
+      cpu:                13950m
+      ephemeral-storage:  382Gi
+      memory:             176Gi
+      nvidia.com/gpu:     1
+    Requests:
+      cpu:                13950m
+      ephemeral-storage:  382Gi
+      memory:             176Gi
+      nvidia.com/gpu:     1
+    Environment:
+      INSTANCE_ID:                  (v1:spec.nodeName)
+      SLURM_CLUSTER_WITH_GPU:      true
+      NODESET_GPU_ENABLED:         true
+      SLURM_NODE_EXTRA:            "{ \"ib_pod\": \"$TOPO_SWITCH_TIER2\", \"ib_su\": \"$TOPO_SWITCH_TIER1\" }"
+      CGROUP_V2:                   true
+      NVIDIA_GDRCOPY:              enabled
+      NVIDIA_DRIVER_CAPABILITIES:  compute,graphics,utility,video
+    Mounts:
+      /boot from boot (rw)
+      /dev/shm from dev-shm (rw)
+      /etc/nvidia-imex from nvidia-imex-config (ro)
+      /etc/security/limits.conf from security-limits (rw,path="limits.conf")
+      /etc/ssh/sshd_keys from sshd-keys (ro)
+      /etc/supervisor/conf.d/ from supervisord-config (ro)
+      /etc/sysctl.conf from sysctl (rw,path="sysctl.conf")
+      /mnt/jail from jail (rw)
+      /mnt/jail.upper/etc/nvidia-imex from nvidia-imex-config-jail (ro)
+      /mnt/jail.upper/home from home-dir (rw)
+      /mnt/jail.upper/mnt/data from data (rw)
+      /mnt/jail.upper/mnt/memory from in-memory (rw)
+      /mnt/jail.upper/opt/slurm_scripts from slurm-scripts-jail (rw)
+      /mnt/jail.upper/sys-host from sys-host (ro)
+      /mnt/jail.upper/usr/bin/nvidia-imex-ctl from nvidia-imex-cli-jail (ro)
+      /mnt/ssh-configs from ssh-configs-worker (ro)
+      /opt/slurm_scripts from slurm-scripts (rw)
+      /root/.ssh/authorized_keys from ssh-root-keys (ro,path="authorized_keys")
+      /run/munge from munge-socket (rw)
+      /run/nvidia from nvidia (rw)
+      /run/nvidia/driver from nvidia-driver-root (rw)
+      /tmp from tmp-disk (rw)
+      /tmp/slurm/topology-node-labels from topology-node-labels (ro)
+      /usr/bin/nvidia-imex-ctl from nvidia-imex-cli (ro)
+      /var/run/nebius/slurm from hpc-jobs-dir (rw)
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-f8w45 (ro)
+      /var/spool/slurmd from worker-spool (rw)
+Readiness Gates:
+  Type                 Status
+  InPlaceUpdateReady   True
+  KruisePodReady       True
+Conditions:
+  Type                        Status
+  KruisePodReady              True
+  InPlaceUpdateReady          True
+  PodReadyToStartContainers   True
+  Initialized                 False
+  Ready                       False
+  ContainersReady             False
+  PodScheduled                True
+Volumes:
+  munge-key:
+    Type:        Secret (a volume populated by a Secret)
+    SecretName:  soperator-munge
+    Optional:    false
+  munge-socket:
+    Type:       EmptyDir (a temporary directory that shares a pod's lifetime)
+    Medium:
+    SizeLimit:  <unset>
+  security-limits:
+    Type:      ConfigMap (a volume populated by a ConfigMap)
+    Name:      soperator-nodeset-worker-security-limits
+    Optional:  false
+  sshd-keys:
+    Type:        Secret (a volume populated by a Secret)
+    SecretName:  soperator-sshd-keys
+    Optional:    false
+  ssh-root-keys:
+    Type:      ConfigMap (a volume populated by a ConfigMap)
+    Name:      soperator-ssh-root-keys
+    Optional:  false
+  in-memory:
+    Type:       EmptyDir (a temporary directory that shares a pod's lifetime)
+    Medium:     Memory
+    SizeLimit:  176Gi
+  tmp-disk:
+    Type:       EmptyDir (a temporary directory that shares a pod's lifetime)
+    Medium:
+    SizeLimit:  <unset>
+  boot:
+    Type:          HostPath (bare host directory volume)
+    Path:          /boot
+    HostPathType:
+  dev-shm:
+    Type:       EmptyDir (a temporary directory that shares a pod's lifetime)
+    Medium:     Memory
+    SizeLimit:  64Gi
+  sysctl:
+    Type:      ConfigMap (a volume populated by a ConfigMap)
+    Name:      soperator-sysctl
+    Optional:  false
+  supervisord-config:
+    Type:      ConfigMap (a volume populated by a ConfigMap)
+    Name:      custom-supervisord-config
+    Optional:  false
+  ssh-configs-worker:
+    Type:      ConfigMap (a volume populated by a ConfigMap)
+    Name:      soperator-ssh-configs-worker
+    Optional:  false
+  nvidia:
+    Type:          HostPath (bare host directory volume)
+    Path:          /run/nvidia
+    HostPathType:
+  nvidia-imex-cli:
+    Type:          HostPath (bare host directory volume)
+    Path:          /usr/bin/nvidia-imex-ctl
+    HostPathType:  FileOrCreate
+  nvidia-imex-cli-jail:
+    Type:          HostPath (bare host directory volume)
+    Path:          /usr/bin/nvidia-imex-ctl
+    HostPathType:  FileOrCreate
+  nvidia-imex-config:
+    Type:          HostPath (bare host directory volume)
+    Path:          /etc/nvidia-imex
+    HostPathType:  DirectoryOrCreate
+  nvidia-imex-config-jail:
+    Type:          HostPath (bare host directory volume)
+    Path:          /etc/nvidia-imex
+    HostPathType:  DirectoryOrCreate
+  worker-spool:
+    Type:       EmptyDir (a temporary directory that shares a pod's lifetime)
+    Medium:
+    SizeLimit:  <unset>
+  jail:
+    Type:       PersistentVolumeClaim (a reference to a PersistentVolumeClaim in the same namespace)
+    ClaimName:  jail-pvc
+    ReadOnly:   false
+  home-dir:
+    Type:       PersistentVolumeClaim (a reference to a PersistentVolumeClaim in the same namespace)
+    ClaimName:  home-dir
+    ReadOnly:   false
+  data:
+    Type:       PersistentVolumeClaim (a reference to a PersistentVolumeClaim in the same namespace)
+    ClaimName:  jail-submount-data-pvc
+    ReadOnly:   false
+  slurm-scripts:
+    Type:      ConfigMap (a volume populated by a ConfigMap)
+    Name:      slurm-scripts
+    Optional:  false
+  slurm-scripts-jail:
+    Type:      ConfigMap (a volume populated by a ConfigMap)
+    Name:      slurm-scripts
+    Optional:  false
+  sys-host:
+    Type:          HostPath (bare host directory volume)
+    Path:          /sys
+    HostPathType:  Directory
+  hpc-jobs-dir:
+    Type:          HostPath (bare host directory volume)
+    Path:          /var/run/nebius/slurm
+    HostPathType:  DirectoryOrCreate
+  nvidia-driver-root:
+    Type:          HostPath (bare host directory volume)
+    Path:          /
+    HostPathType:
+  topology-node-labels:
+    Type:      ConfigMap (a volume populated by a ConfigMap)
+    Name:      topology-node-labels
+    Optional:  true
+  kube-api-access-f8w45:
+    Type:                    Projected (a volume that contains injected data from multiple sources)
+    TokenExpirationSeconds:  3607
+    ConfigMapName:           kube-root-ca.crt
+    Optional:                false
+    DownwardAPI:             true
+QoS Class:                   Burstable
+Node-Selectors:              slurm.nebius.ai/nodeset-name=worker
+Tolerations:                 node.kubernetes.io/not-ready:NoExecute op=Exists for 300s
+                             node.kubernetes.io/unreachable:NoExecute op=Exists for 300s
+                             nvidia.com/gpu:NoSchedule op=Exists
+Events:
+  Type     Reason     Age                 From               Message
+  ----     ------     ----                ----               -------
+  Normal   Scheduled  12m                 default-scheduler  Successfully assigned soperator/worker-1 to computeinstance-e00p289p5k5qxtgf1b
+  Normal   Pulling    12m                 kubelet            spec.initContainers{ensure-jail-virtiofs}: Pulling image "cr.nebius.cloud/soperator/busybox"
+  Normal   Started    12m                 kubelet            spec.initContainers{ensure-jail-submount-data-virtiofs}: Container started
+  Normal   Created    12m                 kubelet            spec.initContainers{ensure-jail-virtiofs}: Container created
+  Normal   Started    12m                 kubelet            spec.initContainers{ensure-jail-virtiofs}: Container started
+  Normal   Pulling    12m                 kubelet            spec.initContainers{ensure-jail-submount-data-virtiofs}: Pulling image "cr.nebius.cloud/soperator/busybox"
+  Normal   Pulled     12m                 kubelet            spec.initContainers{ensure-jail-submount-data-virtiofs}: Successfully pulled image "cr.nebius.cloud/soperator/busybox" in 312ms (312ms including waiting). Image size: 2146963 bytes.
+  Normal   Created    12m                 kubelet            spec.initContainers{ensure-jail-submount-data-virtiofs}: Container created
+  Normal   Pulled     12m                 kubelet            spec.initContainers{ensure-jail-virtiofs}: Successfully pulled image "cr.nebius.cloud/soperator/busybox" in 301ms (301ms including waiting). Image size: 2146963 bytes.
+  Normal   Pulling    12m                 kubelet            spec.initContainers{munge}: Pulling image "cr.nebius.cloud/soperator/munge:4.1.13-slurm25.11.8"
+  Normal   Created    12m                 kubelet            spec.initContainers{munge}: Container created
+  Normal   Pulled     12m                 kubelet            spec.initContainers{munge}: Successfully pulled image "cr.nebius.cloud/soperator/munge:4.1.13-slurm25.11.8" in 12.417s (12.417s including waiting). Image size: 529058300 bytes.
+  Normal   Started    12m                 kubelet            spec.initContainers{munge}: Container started
+  Normal   Pulling    12m                 kubelet            spec.initContainers{worker-init}: Pulling image "cr.nebius.cloud/soperator/worker_slurmd:4.1.13-slurm25.11.8"
+  Normal   Pulled     12m                 kubelet            spec.initContainers{worker-init}: Successfully pulled image "cr.nebius.cloud/soperator/worker_slurmd:4.1.13-slurm25.11.8" in 24.084s (24.084s including waiting). Image size: 1126733350 bytes.
+  Warning  BackOff    105s (x6 over 5m)   kubelet            spec.initContainers{worker-init}: Back-off restarting failed container worker-init in pod worker-1_soperator(fec71c81-11ba-4bae-92a3-40a8cf503323)
+  Normal   Created    87s (x4 over 12m)   kubelet            spec.initContainers{worker-init}: Container created
+  Normal   Started    87s (x4 over 12m)   kubelet            spec.initContainers{worker-init}: Container started
+  Normal   Pulled     87s (x3 over 8m1s)  kubelet            spec.initContainers{worker-init}: Container image "cr.nebius.cloud/soperator/worker_slurmd:4.1.13-slurm25.11.8" already present on machine and can be accessed by the pod
+  
+kubectl -n soperator logs worker-0
+Error from server (BadRequest): container "slurmd" in pod "worker-0" is waiting to start: PodInitializing
+
+kubectl -n soperator logs worker-1
+Error from server (BadRequest): container "slurmd" in pod "worker-1" is waiting to start: PodInitializing
+
+kubectl -n soperator get pod worker-0 -o jsonpath='{range .status.initContainerStatuses[*]}{.name}{"\t"}{.state}{"\t"}{.lastState}{"\n"}{end}'
+ensure-jail-virtiofs	{"terminated":{"containerID":"containerd://cd01ab95b752b52565bd182645e47efe114609c7da6a2ff1754b27c4fa85b2f0","exitCode":0,"finishedAt":"2026-10-11T19:39:22Z","reason":"Completed","startedAt":"2026-10-11T19:39:22Z"}}	{}
+ensure-jail-submount-data-virtiofs	{"terminated":{"containerID":"containerd://f1d59b7572e390a42f2cb4baeaeee7c0499f1a8c28226b7aac78fbb6081fa802","exitCode":0,"finishedAt":"2026-10-11T19:39:22Z","reason":"Completed","startedAt":"2026-10-11T19:39:22Z"}}	{}
+munge	{"running":{"startedAt":"2026-10-11T19:39:36Z"}}	{}
+worker-init	{"running":{"startedAt":"2026-10-11T19:50:56Z"}}	{"terminated":{"containerID":"containerd://51d9312496b83b4ee5f65f4220d3be14dd186bc23fc7b8c28d8fffc0bf2cf993","exitCode":1,"finishedAt":"2026-10-11T19:50:30Z","reason":"Error","startedAt":"2026-10-11T19:47:29Z"}}
+
+
+kubectl -n soperator logs worker-0 -c worker-init --previous
+
+2026-10-11 19:50:57 - INFO - Waiting for Slurm controller to be ready...
+2026-10-11 19:50:57 - INFO - Max attempts: 60, Poll interval: 5s
+2026-10-11 19:50:57 - INFO - Creating symlink to slurm configs: /etc/slurm -> /mnt/jail/etc/slurm
+2026-10-11 19:50:57 - INFO - Checking slurmctld readiness...
+2026-10-11 19:50:57 - INFO - Attempt 1/60: Checking controller readiness...
+2026-10-11 19:50:57 - INFO - Controller is ready!
+2026-10-11 19:50:57 - INFO - scontrol ping output:
+[
+  {
+    "hostname": "controller-0",
+    "pinged": "UP",
+    "responding": true,
+    "latency": 5360,
+    "mode": "primary",
+    "primary": true
+  }
+]
+2026-10-11 19:50:57 - INFO - Waiting for topology data for node: computeinstance-e00jft45ykdvkp7t31
+2026-10-11 19:50:57 - INFO - Topology ConfigMap path: /tmp/slurm/topology-node-labels
+2026-10-11 19:50:57 - INFO - Timeout: 180s, Poll interval: 5s
+2026-10-11 19:50:57 - INFO - Node computeinstance-e00jft45ykdvkp7t31 not found in topology ConfigMap, retrying... (0s elapsed)
+2026-10-11 19:51:02 - INFO - Node computeinstance-e00jft45ykdvkp7t31 not found in topology ConfigMap, retrying... (5s elapsed)
+2026-10-11 19:51:07 - INFO - Node computeinstance-e00jft45ykdvkp7t31 not found in topology ConfigMap, retrying... (10s elapsed)
+2026-10-11 19:51:12 - INFO - Node computeinstance-e00jft45ykdvkp7t31 not found in topology ConfigMap, retrying... (15s elapsed)
+2026-10-11 19:51:17 - INFO - Node computeinstance-e00jft45ykdvkp7t31 not found in topology ConfigMap, retrying... (20s elapsed)
+2026-10-11 19:51:22 - INFO - Node computeinstance-e00jft45ykdvkp7t31 not found in topology ConfigMap, retrying... (25s elapsed)
+2026-10-11 19:51:27 - INFO - Node computeinstance-e00jft45ykdvkp7t31 not found in topology ConfigMap, retrying... (30s elapsed)
+2026-10-11 19:51:32 - INFO - Node computeinstance-e00jft45ykdvkp7t31 not found in topology ConfigMap, retrying... (35s elapsed)
+2026-10-11 19:51:37 - INFO - Node computeinstance-e00jft45ykdvkp7t31 not found in topology ConfigMap, retrying... (40s elapsed)
+2026-10-11 19:51:42 - INFO - Node computeinstance-e00jft45ykdvkp7t31 not found in topology ConfigMap, retrying... (45s elapsed)
+2026-10-11 19:51:47 - INFO - Node computeinstance-e00jft45ykdvkp7t31 not found in topology ConfigMap, retrying... (50s elapsed)
+2026-10-11 19:51:52 - INFO - Node computeinstance-e00jft45ykdvkp7t31 not found in topology ConfigMap, retrying... (55s elapsed)
+2026-10-11 19:51:57 - INFO - Node computeinstance-e00jft45ykdvkp7t31 not found in topology ConfigMap, retrying... (60s elapsed)
+2026-10-11 19:52:02 - INFO - Node computeinstance-e00jft45ykdvkp7t31 not found in topology ConfigMap, retrying... (65s elapsed)
+2026-10-11 19:52:07 - INFO - Node computeinstance-e00jft45ykdvkp7t31 not found in topology ConfigMap, retrying... (70s elapsed)
+2026-10-11 19:52:12 - INFO - Node computeinstance-e00jft45ykdvkp7t31 not found in topology ConfigMap, retrying... (75s elapsed)
+2026-10-11 19:52:17 - INFO - Node computeinstance-e00jft45ykdvkp7t31 not found in topology ConfigMap, retrying... (80s elapsed)
+2026-10-11 19:52:22 - INFO - Node computeinstance-e00jft45ykdvkp7t31 not found in topology ConfigMap, retrying... (85s elapsed)
+2026-10-11 19:52:27 - INFO - Node computeinstance-e00jft45ykdvkp7t31 not found in topology ConfigMap, retrying... (90s elapsed)
+2026-10-11 19:52:32 - INFO - Node computeinstance-e00jft45ykdvkp7t31 not found in topology ConfigMap, retrying... (95s elapsed)
+2026-10-11 19:52:37 - INFO - Node computeinstance-e00jft45ykdvkp7t31 not found in topology ConfigMap, retrying... (100s elapsed)
+2026-10-11 19:52:42 - INFO - Node computeinstance-e00jft45ykdvkp7t31 not found in topology ConfigMap, retrying... (105s elapsed)
+2026-10-11 19:52:47 - INFO - Node computeinstance-e00jft45ykdvkp7t31 not found in topology ConfigMap, retrying... (110s elapsed)
+2026-10-11 19:52:52 - INFO - Node computeinstance-e00jft45ykdvkp7t31 not found in topology ConfigMap, retrying... (115s elapsed)
+2026-10-11 19:52:57 - INFO - Node computeinstance-e00jft45ykdvkp7t31 not found in topology ConfigMap, retrying... (120s elapsed)
+2026-10-11 19:53:02 - INFO - Node computeinstance-e00jft45ykdvkp7t31 not found in topology ConfigMap, retrying... (125s elapsed)
+2026-10-11 19:53:07 - INFO - Node computeinstance-e00jft45ykdvkp7t31 not found in topology ConfigMap, retrying... (130s elapsed)
+2026-10-11 19:53:12 - INFO - Node computeinstance-e00jft45ykdvkp7t31 not found in topology ConfigMap, retrying... (135s elapsed)
+2026-10-11 19:53:17 - INFO - Node computeinstance-e00jft45ykdvkp7t31 not found in topology ConfigMap, retrying... (140s elapsed)
+2026-10-11 19:53:22 - INFO - Node computeinstance-e00jft45ykdvkp7t31 not found in topology ConfigMap, retrying... (145s elapsed)
+2026-10-11 19:53:27 - INFO - Node computeinstance-e00jft45ykdvkp7t31 not found in topology ConfigMap, retrying... (150s elapsed)
+2026-10-11 19:53:32 - INFO - Node computeinstance-e00jft45ykdvkp7t31 not found in topology ConfigMap, retrying... (155s elapsed)
+2026-10-11 19:53:37 - INFO - Node computeinstance-e00jft45ykdvkp7t31 not found in topology ConfigMap, retrying... (160s elapsed)
+2026-10-11 19:53:42 - INFO - Node computeinstance-e00jft45ykdvkp7t31 not found in topology ConfigMap, retrying... (165s elapsed)
+2026-10-11 19:53:47 - INFO - Node computeinstance-e00jft45ykdvkp7t31 not found in topology ConfigMap, retrying... (170s elapsed)
+2026-10-11 19:53:52 - INFO - Node computeinstance-e00jft45ykdvkp7t31 not found in topology ConfigMap, retrying... (175s elapsed)
+2026-10-11 19:53:57 - ERROR - Topology for node computeinstance-e00jft45ykdvkp7t31 not found after 180s
+2026-10-11 19:53:57 - ERROR - Available nodes in ConfigMap: []
+
+
+
+kubectl -n soperator logs worker-0 -c worker-init --previous
+
+2026-10-11 19:50:57 - INFO - Waiting for Slurm controller to be ready...
+2026-10-11 19:50:57 - INFO - Max attempts: 60, Poll interval: 5s
+2026-10-11 19:50:57 - INFO - Creating symlink to slurm configs: /etc/slurm -> /mnt/jail/etc/slurm
+2026-10-11 19:50:57 - INFO - Checking slurmctld readiness...
+2026-10-11 19:50:57 - INFO - Attempt 1/60: Checking controller readiness...
+2026-10-11 19:50:57 - INFO - Controller is ready!
+2026-10-11 19:50:57 - INFO - scontrol ping output:
+[
+  {
+    "hostname": "controller-0",
+    "pinged": "UP",
+    "responding": true,
+    "latency": 5360,
+    "mode": "primary",
+    "primary": true
+  }
+]
+2026-10-11 19:50:57 - INFO - Waiting for topology data for node: computeinstance-e00jft45ykdvkp7t31
+2026-10-11 19:50:57 - INFO - Topology ConfigMap path: /tmp/slurm/topology-node-labels
+2026-10-11 19:50:57 - INFO - Timeout: 180s, Poll interval: 5s
+2026-10-11 19:50:57 - INFO - Node computeinstance-e00jft45ykdvkp7t31 not found in topology ConfigMap, retrying... (0s elapsed)
+2026-10-11 19:51:02 - INFO - Node computeinstance-e00jft45ykdvkp7t31 not found in topology ConfigMap, retrying... (5s elapsed)
+2026-10-11 19:51:07 - INFO - Node computeinstance-e00jft45ykdvkp7t31 not found in topology ConfigMap, retrying... (10s elapsed)
+2026-10-11 19:51:12 - INFO - Node computeinstance-e00jft45ykdvkp7t31 not found in topology ConfigMap, retrying... (15s elapsed)
+2026-10-11 19:51:17 - INFO - Node computeinstance-e00jft45ykdvkp7t31 not found in topology ConfigMap, retrying... (20s elapsed)
+2026-10-11 19:51:22 - INFO - Node computeinstance-e00jft45ykdvkp7t31 not found in topology ConfigMap, retrying... (25s elapsed)
+2026-10-11 19:51:27 - INFO - Node computeinstance-e00jft45ykdvkp7t31 not found in topology ConfigMap, retrying... (30s elapsed)
+2026-10-11 19:51:32 - INFO - Node computeinstance-e00jft45ykdvkp7t31 not found in topology ConfigMap, retrying... (35s elapsed)
+2026-10-11 19:51:37 - INFO - Node computeinstance-e00jft45ykdvkp7t31 not found in topology ConfigMap, retrying... (40s elapsed)
+2026-10-11 19:51:42 - INFO - Node computeinstance-e00jft45ykdvkp7t31 not found in topology ConfigMap, retrying... (45s elapsed)
+2026-10-11 19:51:47 - INFO - Node computeinstance-e00jft45ykdvkp7t31 not found in topology ConfigMap, retrying... (50s elapsed)
+2026-10-11 19:51:52 - INFO - Node computeinstance-e00jft45ykdvkp7t31 not found in topology ConfigMap, retrying... (55s elapsed)
+2026-10-11 19:51:57 - INFO - Node computeinstance-e00jft45ykdvkp7t31 not found in topology ConfigMap, retrying... (60s elapsed)
+2026-10-11 19:52:02 - INFO - Node computeinstance-e00jft45ykdvkp7t31 not found in topology ConfigMap, retrying... (65s elapsed)
+2026-10-11 19:52:07 - INFO - Node computeinstance-e00jft45ykdvkp7t31 not found in topology ConfigMap, retrying... (70s elapsed)
+2026-10-11 19:52:12 - INFO - Node computeinstance-e00jft45ykdvkp7t31 not found in topology ConfigMap, retrying... (75s elapsed)
+2026-10-11 19:52:17 - INFO - Node computeinstance-e00jft45ykdvkp7t31 not found in topology ConfigMap, retrying... (80s elapsed)
+2026-10-11 19:52:22 - INFO - Node computeinstance-e00jft45ykdvkp7t31 not found in topology ConfigMap, retrying... (85s elapsed)
+2026-10-11 19:52:27 - INFO - Node computeinstance-e00jft45ykdvkp7t31 not found in topology ConfigMap, retrying... (90s elapsed)
+2026-10-11 19:52:32 - INFO - Node computeinstance-e00jft45ykdvkp7t31 not found in topology ConfigMap, retrying... (95s elapsed)
+2026-10-11 19:52:37 - INFO - Node computeinstance-e00jft45ykdvkp7t31 not found in topology ConfigMap, retrying... (100s elapsed)
+2026-10-11 19:52:42 - INFO - Node computeinstance-e00jft45ykdvkp7t31 not found in topology ConfigMap, retrying... (105s elapsed)
+2026-10-11 19:52:47 - INFO - Node computeinstance-e00jft45ykdvkp7t31 not found in topology ConfigMap, retrying... (110s elapsed)
+2026-10-11 19:52:52 - INFO - Node computeinstance-e00jft45ykdvkp7t31 not found in topology ConfigMap, retrying... (115s elapsed)
+2026-10-11 19:52:57 - INFO - Node computeinstance-e00jft45ykdvkp7t31 not found in topology ConfigMap, retrying... (120s elapsed)
+2026-10-11 19:53:02 - INFO - Node computeinstance-e00jft45ykdvkp7t31 not found in topology ConfigMap, retrying... (125s elapsed)
+2026-10-11 19:53:07 - INFO - Node computeinstance-e00jft45ykdvkp7t31 not found in topology ConfigMap, retrying... (130s elapsed)
+2026-10-11 19:53:12 - INFO - Node computeinstance-e00jft45ykdvkp7t31 not found in topology ConfigMap, retrying... (135s elapsed)
+2026-10-11 19:53:17 - INFO - Node computeinstance-e00jft45ykdvkp7t31 not found in topology ConfigMap, retrying... (140s elapsed)
+2026-10-11 19:53:22 - INFO - Node computeinstance-e00jft45ykdvkp7t31 not found in topology ConfigMap, retrying... (145s elapsed)
+2026-10-11 19:53:27 - INFO - Node computeinstance-e00jft45ykdvkp7t31 not found in topology ConfigMap, retrying... (150s elapsed)
+2026-10-11 19:53:32 - INFO - Node computeinstance-e00jft45ykdvkp7t31 not found in topology ConfigMap, retrying... (155s elapsed)
+2026-10-11 19:53:37 - INFO - Node computeinstance-e00jft45ykdvkp7t31 not found in topology ConfigMap, retrying... (160s elapsed)
+2026-10-11 19:53:42 - INFO - Node computeinstance-e00jft45ykdvkp7t31 not found in topology ConfigMap, retrying... (165s elapsed)
+2026-10-11 19:53:47 - INFO - Node computeinstance-e00jft45ykdvkp7t31 not found in topology ConfigMap, retrying... (170s elapsed)
+2026-10-11 19:53:52 - INFO - Node computeinstance-e00jft45ykdvkp7t31 not found in topology ConfigMap, retrying... (175s elapsed)
+2026-10-11 19:53:57 - ERROR - Topology for node computeinstance-e00jft45ykdvkp7t31 not found after 180s
+2026-10-11 19:53:57 - ERROR - Available nodes in ConfigMap: []
+
+kubectl -n soperator get configmap | grep -i topo
+topology-config                            1      25m
+topology-node-labels                       0      25m
+
+kubectl -n soperator describe configmap topology-node-labels
+Name:         topology-node-labels
+Namespace:    soperator
+Labels:       <none>
+Annotations:  kruise.io/resourcedistribution.resource.from: topology-soperator
+              kruise.io/resourcedistribution.resource.hashcode: be92a688da96cc26ecc0e5afb493f418bb10944189dd0b7926bf4cba06f8167f
+
+Data
+====
+
+BinaryData
+====
+
+Events:  <none>
+
+kubectl -n soperator describe configmap topology-config
+Name:         topology-config
+Namespace:    soperator
+Labels:       <none>
+Annotations:  <none>
+
+Data
+====
+topology.conf:
+----
+SwitchName=root Switches=unknown
+SwitchName=unknown Nodes=worker-0,worker-1
+
+
+
+BinaryData
+====
+
+Events:  <none>
+
+
+kubectl get nodes --show-labels | tr ',' '\n' | grep -i -E 'tier|switch|topology' | sort | uniq -c
+   8 topology.kubernetes.io/region=eu-north1
