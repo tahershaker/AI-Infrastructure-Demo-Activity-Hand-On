@@ -1,0 +1,4 @@
+kubectl get pvc -A | grep -v Bound                                                                                                                                                  
+NAMESPACE           NAME                                                  STATUS    VOLUME                                     CAPACITY   ACCESS MODES   STORAGECLASS                   VOLUMEATTRIBUTESCLASS   AGE
+monitoring-system   vmsingle-metrics-victoria-metrics-k8s-stack           Pending                                                                        compute-csi-default-sc         <unset>                 77m
+nfs-system          nfs-server-storage                                    Pending                                                                        compute-csi-network-ssd-ext4   <unset>                 62m

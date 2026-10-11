@@ -1,0 +1,79 @@
+kubectl -n nfs-system describe pvc nfs-server-storage                                                                                                                                ─╯
+Name:          nfs-server-storage
+Namespace:     nfs-system
+StorageClass:  compute-csi-network-ssd-ext4
+Status:        Pending
+Volume:
+Labels:        app.kubernetes.io/instance=nfs-server
+               app.kubernetes.io/managed-by=Helm
+               app.kubernetes.io/name=nfs-server
+               app.kubernetes.io/version=1.2.2
+               helm.sh/chart=helm-nfs-server-1.2.2
+               helm.toolkit.fluxcd.io/name=flux-system-soperator-fluxcd-nfs-server
+               helm.toolkit.fluxcd.io/namespace=flux-system
+Annotations:   meta.helm.sh/release-name: nfs-server
+               meta.helm.sh/release-namespace: nfs-system
+               volume.beta.kubernetes.io/storage-provisioner: compute.csi.nebius.com
+               volume.kubernetes.io/storage-provisioner: compute.csi.nebius.com
+Finalizers:    [kubernetes.io/pvc-protection]
+Capacity:
+Access Modes:
+VolumeMode:    Filesystem
+Used By:       nfs-server-0
+Events:
+  Type     Reason              Age   From                                                                                            Message
+  ----     ------              ----  ----                                                                                            -------
+  Warning  ProvisioningFailed  53m   compute.csi.nebius.com_computeinstance-e00c1n7gpx7da8yvb4_24475925-13c2-4374-a48f-fa607b8d06a5  failed to provision volume with StorageClass "compute-csi-network-ssd-ext4": rpc error: code = ResourceExhausted desc = rpc error: code = ResourceExhausted desc = Quota limit exceeded. Exceeded limit for container project-e00hq8rdpr00cb57ha9dkd, quota compute.disk.size.network-ssd.
+request = 7dbbf72a-62bf-4b4d-bdd8-e89a79ecd0f4
+caused by service error:
+  Quota failure QuotaFailure: service compute, violations:
+    compute.disk.size.network-ssd (limit 2199023255552, requested 3229815406592): Exceeded limit for container project-e00hq8rdpr00cb57ha9dkd
+  Normal   WaitForFirstConsumer  53m  persistentvolume-controller                                                                     waiting for first consumer to be created before binding
+  Warning  ProvisioningFailed    53m  compute.csi.nebius.com_computeinstance-e00c1n7gpx7da8yvb4_24475925-13c2-4374-a48f-fa607b8d06a5  failed to provision volume with StorageClass "compute-csi-network-ssd-ext4": rpc error: code = ResourceExhausted desc = rpc error: code = ResourceExhausted desc = Quota limit exceeded. Exceeded limit for container project-e00hq8rdpr00cb57ha9dkd, quota compute.disk.size.network-ssd.
+request = 1b7d5884-8da2-4dcf-a9b4-c27a6dbbd1d8
+caused by service error:
+  Quota failure QuotaFailure: service compute, violations:
+    compute.disk.size.network-ssd (limit 2199023255552, requested 3229815406592): Exceeded limit for container project-e00hq8rdpr00cb57ha9dkd
+  Warning  ProvisioningFailed  53m  compute.csi.nebius.com_computeinstance-e00c1n7gpx7da8yvb4_24475925-13c2-4374-a48f-fa607b8d06a5  failed to provision volume with StorageClass "compute-csi-network-ssd-ext4": rpc error: code = ResourceExhausted desc = rpc error: code = ResourceExhausted desc = Quota limit exceeded. Exceeded limit for container project-e00hq8rdpr00cb57ha9dkd, quota compute.disk.size.network-ssd.
+request = 02e847fe-e9d1-4e89-b532-c848b52fd4d5
+caused by service error:
+  Quota failure QuotaFailure: service compute, violations:
+    compute.disk.size.network-ssd (limit 2199023255552, requested 3229815406592): Exceeded limit for container project-e00hq8rdpr00cb57ha9dkd
+  Warning  ProvisioningFailed  53m  compute.csi.nebius.com_computeinstance-e00c1n7gpx7da8yvb4_24475925-13c2-4374-a48f-fa607b8d06a5  failed to provision volume with StorageClass "compute-csi-network-ssd-ext4": rpc error: code = ResourceExhausted desc = rpc error: code = ResourceExhausted desc = Quota limit exceeded. Exceeded limit for container project-e00hq8rdpr00cb57ha9dkd, quota compute.disk.size.network-ssd.
+request = 76f2d1b2-37db-40b3-befe-85cfecfea869
+caused by service error:
+  Quota failure QuotaFailure: service compute, violations:
+    compute.disk.size.network-ssd (limit 2199023255552, requested 3229815406592): Exceeded limit for container project-e00hq8rdpr00cb57ha9dkd
+  Warning  ProvisioningFailed  53m  compute.csi.nebius.com_computeinstance-e00c1n7gpx7da8yvb4_24475925-13c2-4374-a48f-fa607b8d06a5  failed to provision volume with StorageClass "compute-csi-network-ssd-ext4": rpc error: code = ResourceExhausted desc = rpc error: code = ResourceExhausted desc = Quota limit exceeded. Exceeded limit for container project-e00hq8rdpr00cb57ha9dkd, quota compute.disk.size.network-ssd.
+request = 6031c1fd-4f53-4073-9058-c6d1f15fe2c8
+caused by service error:
+  Quota failure QuotaFailure: service compute, violations:
+    compute.disk.size.network-ssd (limit 2199023255552, requested 3229815406592): Exceeded limit for container project-e00hq8rdpr00cb57ha9dkd
+  Warning  ProvisioningFailed  53m  compute.csi.nebius.com_computeinstance-e00c1n7gpx7da8yvb4_24475925-13c2-4374-a48f-fa607b8d06a5  failed to provision volume with StorageClass "compute-csi-network-ssd-ext4": rpc error: code = ResourceExhausted desc = rpc error: code = ResourceExhausted desc = Quota limit exceeded. Exceeded limit for container project-e00hq8rdpr00cb57ha9dkd, quota compute.disk.size.network-ssd.
+request = c740323c-3eba-45d6-8643-fc123d6fce22
+caused by service error:
+  Quota failure QuotaFailure: service compute, violations:
+    compute.disk.size.network-ssd (limit 2199023255552, requested 3229815406592): Exceeded limit for container project-e00hq8rdpr00cb57ha9dkd
+  Warning  ProvisioningFailed  52m  compute.csi.nebius.com_computeinstance-e00c1n7gpx7da8yvb4_24475925-13c2-4374-a48f-fa607b8d06a5  failed to provision volume with StorageClass "compute-csi-network-ssd-ext4": rpc error: code = ResourceExhausted desc = rpc error: code = ResourceExhausted desc = Quota limit exceeded. Exceeded limit for container project-e00hq8rdpr00cb57ha9dkd, quota compute.disk.size.network-ssd.
+request = a64dd253-10d2-48e0-a4a1-b52c946e76d8
+caused by service error:
+  Quota failure QuotaFailure: service compute, violations:
+    compute.disk.size.network-ssd (limit 2199023255552, requested 3229815406592): Exceeded limit for container project-e00hq8rdpr00cb57ha9dkd
+  Warning  ProvisioningFailed  52m  compute.csi.nebius.com_computeinstance-e00c1n7gpx7da8yvb4_24475925-13c2-4374-a48f-fa607b8d06a5  failed to provision volume with StorageClass "compute-csi-network-ssd-ext4": rpc error: code = ResourceExhausted desc = rpc error: code = ResourceExhausted desc = Quota limit exceeded. Exceeded limit for container project-e00hq8rdpr00cb57ha9dkd, quota compute.disk.size.network-ssd.
+request = 69423a02-a113-42dd-bb4d-5d00432cae7c
+caused by service error:
+  Quota failure QuotaFailure: service compute, violations:
+    compute.disk.size.network-ssd (limit 2199023255552, requested 3229815406592): Exceeded limit for container project-e00hq8rdpr00cb57ha9dkd
+  Normal   ExternalProvisioning  52m (x10 over 53m)  persistentvolume-controller                                                                     Waiting for a volume to be created either by the external provisioner 'compute.csi.nebius.com' or manually by the system administrator. If volume creation is delayed, please verify that the provisioner is running and correctly registered.
+  Warning  ProvisioningFailed    52m                 compute.csi.nebius.com_computeinstance-e00c1n7gpx7da8yvb4_24475925-13c2-4374-a48f-fa607b8d06a5  failed to provision volume with StorageClass "compute-csi-network-ssd-ext4": rpc error: code = ResourceExhausted desc = rpc error: code = ResourceExhausted desc = Quota limit exceeded. Exceeded limit for container project-e00hq8rdpr00cb57ha9dkd, quota compute.disk.size.network-ssd.
+request = 4c1267af-8a38-40c5-9759-a8668187fc60
+caused by service error:
+  Quota failure QuotaFailure: service compute, violations:
+    compute.disk.size.network-ssd (limit 2199023255552, requested 3229815406592): Exceeded limit for container project-e00hq8rdpr00cb57ha9dkd
+  Warning  ProvisioningFailed  51m (x3 over 52m)  compute.csi.nebius.com_computeinstance-e00c1n7gpx7da8yvb4_24475925-13c2-4374-a48f-fa607b8d06a5  (combined from similar events): failed to provision volume with StorageClass "compute-csi-network-ssd-ext4": rpc error: code = ResourceExhausted desc = rpc error: code = ResourceExhausted desc = Quota limit exceeded. Exceeded limit for container project-e00hq8rdpr00cb57ha9dkd, quota compute.disk.size.network-ssd.
+request = 76087546-225f-41c8-a746-8e647f940c04
+caused by service error:
+  Quota failure QuotaFailure: service compute, violations:
+    compute.disk.size.network-ssd (limit 2199023255552, requested 3229815406592): Exceeded limit for container project-e00hq8rdpr00cb57ha9dkd
+  Normal  WaitForPodScheduled  3m32s (x454 over 53m)  persistentvolume-controller                                                                     waiting for pod nfs-server-0 to be scheduled
+  Normal  Provisioning         3m25s (x254 over 53m)  compute.csi.nebius.com_computeinstance-e00c1n7gpx7da8yvb4_24475925-13c2-4374-a48f-fa607b8d06a5  External provisioner is provisioning volume for claim "nfs-system/nfs-server-storage"

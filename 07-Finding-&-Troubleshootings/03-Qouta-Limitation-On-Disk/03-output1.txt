@@ -1,0 +1,29 @@
+kubectl get helmreleases -n flux-system                                                                                                                                              ─╯
+NAME                                                             AGE   READY   STATUS
+flux-system-soperator-fluxcd-cert-manager                        77m   True    Helm install succeeded for release cert-manager-system/cert-manager.v1 with chart cert-manager@v1.19.6
+flux-system-soperator-fluxcd-csi-driver-nfs                      77m   True    Helm install succeeded for release nfs-system/csi-driver-nfs.v1 with chart csi-driver-nfs@4.11.0
+flux-system-soperator-fluxcd-custom-configmaps                   77m   True    Helm install succeeded for release soperator/soperator-custom-configmaps.v1 with chart helm-soperator-custom-configmaps@4.1.13
+flux-system-soperator-fluxcd-dcgm-exporter                       77m   True    Helm install succeeded for release soperator/soperator-dcgm-exporter.v1 with chart helm-soperator-dcgm-exporter@4.1.13
+flux-system-soperator-fluxcd-kruise                              77m   True    Helm install succeeded for release soperator/soperator-kruise.v1 with chart kruise@1.8.0
+flux-system-soperator-fluxcd-mariadb-operator                    77m   True    Helm install succeeded for release mariadb-operator-system/mariadb-operator.v1 with chart mariadb-operator@25.10.2
+flux-system-soperator-fluxcd-mariadb-operator-crds               77m   True    Helm install succeeded for release flux-system/flux-system-soperator-fluxcd-mariadb-operator-crds.v1 with chart mariadb-operator-crds@25.10.2
+flux-system-soperator-fluxcd-monitoring-dashboards               77m   True    Helm install succeeded for release monitoring-system/soperator-monitoring-dashboards.v1 with chart helm-soperator-monitoring-dashboards@4.1.13
+flux-system-soperator-fluxcd-nfs-server                          77m   False   Helm install failed for release nfs-system/nfs-server with chart helm-nfs-server@1.2.2: context deadline exceeded
+flux-system-soperator-fluxcd-nodeconfigurator                    77m   True    Helm install succeeded for release soperator-system/soperator-node-configurator.v1 with chart helm-nodeconfigurator@4.1.13
+flux-system-soperator-fluxcd-nodesets                            77m   False   dependency 'flux-system/flux-system-soperator-fluxcd-slurm-cluster' is not ready
+flux-system-soperator-fluxcd-ns                                  77m   True    Helm install succeeded for release flux-system/flux-system-soperator-fluxcd-ns.v1 with chart raw@2.0.0
+flux-system-soperator-fluxcd-opentelemetry-collector-events      77m   True    Helm install succeeded for release logs-system/opentelemetry-collector-events.v1 with chart opentelemetry-collector@0.149.0
+flux-system-soperator-fluxcd-opentelemetry-collector-jail-logs   77m   False   dependency 'flux-system/flux-system-soperator-fluxcd-nodesets' is not ready
+flux-system-soperator-fluxcd-opentelemetry-collector-logs        77m   True    Helm install succeeded for release logs-system/opentelemetry-collector-logs.v1 with chart opentelemetry-collector@0.149.0
+flux-system-soperator-fluxcd-prometheus-operator-crds            77m   True    Helm install succeeded for release flux-system/flux-system-soperator-fluxcd-prometheus-operator-crds.v1 with chart prometheus-operator-crds@19.1.0
+flux-system-soperator-fluxcd-security-profiles-operator          77m   True    Helm install succeeded for release security-profiles-operator-system/security-profiles-operator.v1 with chart security-profiles-operator@0.8.5-soperator
+flux-system-soperator-fluxcd-slurm-cluster                       77m   False   dependency 'flux-system/flux-system-soperator-fluxcd-nfs-server' is not ready
+flux-system-soperator-fluxcd-slurm-cluster-storage               77m   True    Helm install succeeded for release soperator/slurm-cluster-storage.v1 with chart helm-slurm-cluster-storage@4.1.13
+flux-system-soperator-fluxcd-soperator                           77m   True    Helm install succeeded for release soperator-system/soperator-controller.v1 with chart helm-soperator@4.1.13
+flux-system-soperator-fluxcd-soperator-activechecks              77m   False   dependency 'flux-system/flux-system-soperator-fluxcd-slurm-cluster' is not ready
+flux-system-soperator-fluxcd-soperatorchecks                     77m   True    Helm install succeeded for release soperator-system/soperator-checks.v1 with chart helm-soperatorchecks@4.1.13
+flux-system-soperator-fluxcd-storageclasses                      77m   True    Helm install succeeded for release storage-system/soperator-storageclasses.v1 with chart helm-storageclasses@4.1.13
+flux-system-soperator-fluxcd-victoria-metrics-operator-crds      77m   True    Helm install succeeded for release flux-system/flux-system-soperator-fluxcd-victoria-me-6b4d61dd349d.v1 with chart victoria-metrics-operator-crds@0.0.3
+flux-system-soperator-fluxcd-vm-logs                             77m   True    Helm install succeeded for release logs-system/vm-logs.v1 with chart victoria-logs-single@0.9.8
+flux-system-soperator-fluxcd-vm-stack                            77m   True    Helm install succeeded for release monitoring-system/metrics.v1 with chart victoria-metrics-k8s-stack@0.39.4
+soperator-fluxcd                                                 77m   True    Helm install succeeded for release flux-system/flux-system-soperator-fluxcd.v1 with chart helm-soperator-fluxcd@4.1.13
