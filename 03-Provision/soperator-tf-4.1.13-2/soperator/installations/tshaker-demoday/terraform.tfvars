@@ -466,7 +466,7 @@ slurm_sssd_ldap_ca_config_map_ref_name = ""
 # Authorized keys accepted for connecting to Slurm login nodes via SSH as 'root' user.
 # ---
 slurm_login_ssh_root_public_keys = [
-  "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIItDOtUYYxlZwNxzqTmg6K7TE6SAE7FSGbvWIccNjEns tshaker-demoday",
+  "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDt1mT6H6VdX60cJHk35Jwu5DHNwVcw9qltQ1UDu66hJ tshaker-demoday",
 ]
 
 # endregion Login

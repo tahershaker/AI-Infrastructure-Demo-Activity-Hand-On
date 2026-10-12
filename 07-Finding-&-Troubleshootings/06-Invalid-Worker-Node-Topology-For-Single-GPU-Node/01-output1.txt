@@ -1594,3 +1594,891 @@ Events:  <none>
 
 kubectl get nodes --show-labels | tr ',' '\n' | grep -i -E 'tier|switch|topology' | sort | uniq -c
    8 topology.kubernetes.io/region=eu-north1
+
+
+kubectl -n soperator describe pod worker-0                                                                                                                                                                                      ─╯
+Name:                 worker-0
+Namespace:            soperator
+Priority:             10000000
+Priority Class Name:  soperator-worker-high-priority
+Service Account:      soperator-worker-sa
+Node:                 computeinstance-e00md5edqrbbxfh3tg/10.2.0.24
+Start Time:           Mon, 12 Oct 2026 00:48:48 +0400
+Labels:               app.kubernetes.io/component=nodeset
+                      app.kubernetes.io/instance=soperator
+                      app.kubernetes.io/managed-by=slurm-operator
+                      app.kubernetes.io/name=slurmcluster
+                      app.kubernetes.io/part-of=slurm-operator
+                      apps.kubernetes.io/pod-index=0
+                      controller-revision-hash=worker-8495666574
+                      lifecycle.apps.kruise.io/state=Normal
+                      slurm.nebius.ai/nodeset=worker
+                      slurm.nebius.ai/worker=true
+                      statefulset.kubernetes.io/pod-name=worker-0
+                      topology.kubernetes.io/region=eu-north1
+Annotations:          kubectl.kubernetes.io/default-container: slurmd
+                      lifecycle.apps.kruise.io/timestamp: 2026-10-11T20:48:48Z
+                      versions:
+                        soperator.custom-supervisord-config: "5324"
+                        soperator.soperator-munge: "15723"
+                        soperator.soperator-ssh-configs-worker: "10103"
+Status:               Pending
+IP:                   10.2.2.135
+IPs:
+  IP:           10.2.2.135
+Controlled By:  StatefulSet/worker
+Init Containers:
+  ensure-jail-virtiofs:
+    Container ID:  containerd://91347cae4eb00e6c12d82f1e0ac5c25e07905d84b443ae2bb0d5234e13af07df
+    Image:         cr.nebius.cloud/soperator/busybox
+    Image ID:      cr.nebius.cloud/soperator/busybox@sha256:e22b7c1e77bda9f6028d20860ab53257697a9153115f30fd6997df7422e4e845
+    Port:          <none>
+    Host Port:     <none>
+    Command:
+      grep
+       /volume-mount virtiofs
+      /proc/mounts
+    State:          Terminated
+      Reason:       Completed
+      Exit Code:    0
+      Started:      Mon, 12 Oct 2026 00:48:49 +0400
+      Finished:     Mon, 12 Oct 2026 00:48:49 +0400
+    Ready:          True
+    Restart Count:  0
+    Environment:    <none>
+    Mounts:
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-pz6lc (ro)
+      /volume-mount from jail (rw)
+  ensure-jail-submount-data-virtiofs:
+    Container ID:  containerd://ca77d34dd02d7be076885ac4be5952e80992cdf7fdc20fd2a1dfa1545389b453
+    Image:         cr.nebius.cloud/soperator/busybox
+    Image ID:      cr.nebius.cloud/soperator/busybox@sha256:e22b7c1e77bda9f6028d20860ab53257697a9153115f30fd6997df7422e4e845
+    Port:          <none>
+    Host Port:     <none>
+    Command:
+      grep
+       /volume-mount virtiofs
+      /proc/mounts
+    State:          Terminated
+      Reason:       Completed
+      Exit Code:    0
+      Started:      Mon, 12 Oct 2026 00:48:50 +0400
+      Finished:     Mon, 12 Oct 2026 00:48:50 +0400
+    Ready:          True
+    Restart Count:  0
+    Environment:    <none>
+    Mounts:
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-pz6lc (ro)
+      /volume-mount from data (rw)
+  munge:
+    Container ID:   containerd://5fbd80b4e5dc937d0a87437af309c71993cf227ad7b343fe41572ff5306688ec
+    Image:          cr.nebius.cloud/soperator/munge:4.1.13-slurm25.11.8
+    Image ID:       cr.nebius.cloud/soperator/munge@sha256:49b715bcd3df30c5ef5a9f1d04da01512305769c0ad1bd5adbed551cdd1d1f2f
+    Port:           <none>
+    Host Port:      <none>
+    State:          Running
+      Started:      Mon, 12 Oct 2026 00:49:04 +0400
+    Ready:          True
+    Restart Count:  0
+    Limits:
+      ephemeral-storage:  5Gi
+      memory:             512Mi
+    Requests:
+      cpu:                100m
+      ephemeral-storage:  5Gi
+      memory:             512Mi
+    Environment:          <none>
+    Mounts:
+      /mnt/munge-key from munge-key (ro)
+      /run/munge from munge-socket (rw)
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-pz6lc (ro)
+  worker-init:
+    Container ID:  containerd://35eaf6e8b67958b91f215db1b94221550364e3f6b4d6ed6f13a82062b81d49fe
+    Image:         cr.nebius.cloud/soperator/worker_slurmd:4.1.13-slurm25.11.8
+    Image ID:      cr.nebius.cloud/soperator/worker_slurmd@sha256:3162824f0d3ebbfc488abeb0449c21c4b6e2dbc90003c715b195f9ae4ec96557
+    Port:          <none>
+    Host Port:     <none>
+    Command:
+      python3
+      /opt/bin/slurm/worker_init.py
+      wait-controller
+      wait-topology
+    State:          Running
+      Started:      Mon, 12 Oct 2026 01:00:21 +0400
+    Last State:     Terminated
+      Reason:       Error
+      Exit Code:    1
+      Started:      Mon, 12 Oct 2026 00:56:52 +0400
+      Finished:     Mon, 12 Oct 2026 00:59:52 +0400
+    Ready:          False
+    Restart Count:  3
+    Environment:
+      K8S_NODE_NAME:              (v1:spec.nodeName)
+      K8S_POD_NAME:              worker-0 (v1:metadata.name)
+      K8S_POD_NAMESPACE:         soperator (v1:metadata.namespace)
+      CONTROLLER_MAX_ATTEMPTS:   60
+      CONTROLLER_POLL_INTERVAL:  5
+      K8S_SERVICE_NAME:          soperator-nodeset-svc
+      NODESET_GPU_ENABLED:       true
+      TOPOLOGY_CONFIGMAP_PATH:   /tmp/slurm/topology-node-labels
+      TOPOLOGY_WAIT_TIMEOUT:     180
+      TOPOLOGY_POLL_INTERVAL:    5
+      SLURM_TOPOLOGY_PLUGIN:     topology/tree
+    Mounts:
+      /mnt/jail from jail (rw)
+      /run/munge from munge-socket (rw)
+      /tmp/slurm/topology-node-labels from topology-node-labels (ro)
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-pz6lc (ro)
+Containers:
+  slurmd:
+    Container ID:
+    Image:           cr.nebius.cloud/soperator/worker_slurmd:4.1.13-slurm25.11.8
+    Image ID:
+    Port:            6818/TCP (slurmd)
+    Host Port:       0/TCP (slurmd)
+    SeccompProfile:  Unconfined
+    State:           Waiting
+      Reason:        PodInitializing
+    Ready:           False
+    Restart Count:   0
+    Limits:
+      cpu:                13950m
+      ephemeral-storage:  382Gi
+      memory:             176Gi
+      nvidia.com/gpu:     1
+    Requests:
+      cpu:                13950m
+      ephemeral-storage:  382Gi
+      memory:             176Gi
+      nvidia.com/gpu:     1
+    Environment:
+      INSTANCE_ID:                  (v1:spec.nodeName)
+      SLURM_CLUSTER_WITH_GPU:      true
+      NODESET_GPU_ENABLED:         true
+      SLURM_NODE_EXTRA:            "{ \"ib_pod\": \"$TOPO_SWITCH_TIER2\", \"ib_su\": \"$TOPO_SWITCH_TIER1\" }"
+      CGROUP_V2:                   true
+      NVIDIA_GDRCOPY:              enabled
+      NVIDIA_DRIVER_CAPABILITIES:  compute,graphics,utility,video
+    Mounts:
+      /boot from boot (rw)
+      /dev/shm from dev-shm (rw)
+      /etc/nvidia-imex from nvidia-imex-config (ro)
+      /etc/security/limits.conf from security-limits (rw,path="limits.conf")
+      /etc/ssh/sshd_keys from sshd-keys (ro)
+      /etc/supervisor/conf.d/ from supervisord-config (ro)
+      /etc/sysctl.conf from sysctl (rw,path="sysctl.conf")
+      /mnt/jail from jail (rw)
+      /mnt/jail.upper/etc/nvidia-imex from nvidia-imex-config-jail (ro)
+      /mnt/jail.upper/home from home-dir (rw)
+      /mnt/jail.upper/mnt/data from data (rw)
+      /mnt/jail.upper/mnt/memory from in-memory (rw)
+      /mnt/jail.upper/opt/slurm_scripts from slurm-scripts-jail (rw)
+      /mnt/jail.upper/sys-host from sys-host (ro)
+      /mnt/jail.upper/usr/bin/nvidia-imex-ctl from nvidia-imex-cli-jail (ro)
+      /mnt/ssh-configs from ssh-configs-worker (ro)
+      /opt/slurm_scripts from slurm-scripts (rw)
+      /root/.ssh/authorized_keys from ssh-root-keys (ro,path="authorized_keys")
+      /run/munge from munge-socket (rw)
+      /run/nvidia from nvidia (rw)
+      /run/nvidia/driver from nvidia-driver-root (rw)
+      /tmp from tmp-disk (rw)
+      /tmp/slurm/topology-node-labels from topology-node-labels (ro)
+      /usr/bin/nvidia-imex-ctl from nvidia-imex-cli (ro)
+      /var/run/nebius/slurm from hpc-jobs-dir (rw)
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-pz6lc (ro)
+      /var/spool/slurmd from worker-spool (rw)
+Readiness Gates:
+  Type                 Status
+  InPlaceUpdateReady   True
+  KruisePodReady       True
+Conditions:
+  Type                        Status
+  KruisePodReady              True
+  InPlaceUpdateReady          True
+  PodReadyToStartContainers   True
+  Initialized                 False
+  Ready                       False
+  ContainersReady             False
+  PodScheduled                True
+Volumes:
+  munge-key:
+    Type:        Secret (a volume populated by a Secret)
+    SecretName:  soperator-munge
+    Optional:    false
+  munge-socket:
+    Type:       EmptyDir (a temporary directory that shares a pod's lifetime)
+    Medium:
+    SizeLimit:  <unset>
+  security-limits:
+    Type:      ConfigMap (a volume populated by a ConfigMap)
+    Name:      soperator-nodeset-worker-security-limits
+    Optional:  false
+  sshd-keys:
+    Type:        Secret (a volume populated by a Secret)
+    SecretName:  soperator-sshd-keys
+    Optional:    false
+  ssh-root-keys:
+    Type:      ConfigMap (a volume populated by a ConfigMap)
+    Name:      soperator-ssh-root-keys
+    Optional:  false
+  in-memory:
+    Type:       EmptyDir (a temporary directory that shares a pod's lifetime)
+    Medium:     Memory
+    SizeLimit:  176Gi
+  tmp-disk:
+    Type:       EmptyDir (a temporary directory that shares a pod's lifetime)
+    Medium:
+    SizeLimit:  <unset>
+  boot:
+    Type:          HostPath (bare host directory volume)
+    Path:          /boot
+    HostPathType:
+  dev-shm:
+    Type:       EmptyDir (a temporary directory that shares a pod's lifetime)
+    Medium:     Memory
+    SizeLimit:  64Gi
+  sysctl:
+    Type:      ConfigMap (a volume populated by a ConfigMap)
+    Name:      soperator-sysctl
+    Optional:  false
+  supervisord-config:
+    Type:      ConfigMap (a volume populated by a ConfigMap)
+    Name:      custom-supervisord-config
+    Optional:  false
+  ssh-configs-worker:
+    Type:      ConfigMap (a volume populated by a ConfigMap)
+    Name:      soperator-ssh-configs-worker
+    Optional:  false
+  nvidia:
+    Type:          HostPath (bare host directory volume)
+    Path:          /run/nvidia
+    HostPathType:
+  nvidia-imex-cli:
+    Type:          HostPath (bare host directory volume)
+    Path:          /usr/bin/nvidia-imex-ctl
+    HostPathType:  FileOrCreate
+  nvidia-imex-cli-jail:
+    Type:          HostPath (bare host directory volume)
+    Path:          /usr/bin/nvidia-imex-ctl
+    HostPathType:  FileOrCreate
+  nvidia-imex-config:
+    Type:          HostPath (bare host directory volume)
+    Path:          /etc/nvidia-imex
+    HostPathType:  DirectoryOrCreate
+  nvidia-imex-config-jail:
+    Type:          HostPath (bare host directory volume)
+    Path:          /etc/nvidia-imex
+    HostPathType:  DirectoryOrCreate
+  worker-spool:
+    Type:       EmptyDir (a temporary directory that shares a pod's lifetime)
+    Medium:
+    SizeLimit:  <unset>
+  jail:
+    Type:       PersistentVolumeClaim (a reference to a PersistentVolumeClaim in the same namespace)
+    ClaimName:  jail-pvc
+    ReadOnly:   false
+  home-dir:
+    Type:       PersistentVolumeClaim (a reference to a PersistentVolumeClaim in the same namespace)
+    ClaimName:  home-dir
+    ReadOnly:   false
+  data:
+    Type:       PersistentVolumeClaim (a reference to a PersistentVolumeClaim in the same namespace)
+    ClaimName:  jail-submount-data-pvc
+    ReadOnly:   false
+  slurm-scripts:
+    Type:      ConfigMap (a volume populated by a ConfigMap)
+    Name:      slurm-scripts
+    Optional:  false
+  slurm-scripts-jail:
+    Type:      ConfigMap (a volume populated by a ConfigMap)
+    Name:      slurm-scripts
+    Optional:  false
+  sys-host:
+    Type:          HostPath (bare host directory volume)
+    Path:          /sys
+    HostPathType:  Directory
+  hpc-jobs-dir:
+    Type:          HostPath (bare host directory volume)
+    Path:          /var/run/nebius/slurm
+    HostPathType:  DirectoryOrCreate
+  nvidia-driver-root:
+    Type:          HostPath (bare host directory volume)
+    Path:          /
+    HostPathType:
+  topology-node-labels:
+    Type:      ConfigMap (a volume populated by a ConfigMap)
+    Name:      topology-node-labels
+    Optional:  true
+  kube-api-access-pz6lc:
+    Type:                    Projected (a volume that contains injected data from multiple sources)
+    TokenExpirationSeconds:  3607
+    ConfigMapName:           kube-root-ca.crt
+    Optional:                false
+    DownwardAPI:             true
+QoS Class:                   Burstable
+Node-Selectors:              slurm.nebius.ai/nodeset-name=worker
+Tolerations:                 node.kubernetes.io/not-ready:NoExecute op=Exists for 300s
+                             node.kubernetes.io/unreachable:NoExecute op=Exists for 300s
+                             nvidia.com/gpu:NoSchedule op=Exists
+Events:
+  Type     Reason     Age                    From               Message
+  ----     ------     ----                   ----               -------
+  Normal   Scheduled  14m                    default-scheduler  Successfully assigned soperator/worker-0 to computeinstance-e00md5edqrbbxfh3tg
+  Normal   Pulling    14m                    kubelet            spec.initContainers{ensure-jail-virtiofs}: Pulling image "cr.nebius.cloud/soperator/busybox"
+  Normal   Pulled     14m                    kubelet            spec.initContainers{ensure-jail-virtiofs}: Successfully pulled image "cr.nebius.cloud/soperator/busybox" in 419ms (419ms including waiting). Image size: 2146963 bytes.
+  Normal   Created    14m                    kubelet            spec.initContainers{ensure-jail-virtiofs}: Container created
+  Normal   Started    14m                    kubelet            spec.initContainers{ensure-jail-virtiofs}: Container started
+  Normal   Started    14m                    kubelet            spec.initContainers{ensure-jail-submount-data-virtiofs}: Container started
+  Normal   Pulled     14m                    kubelet            spec.initContainers{ensure-jail-submount-data-virtiofs}: Successfully pulled image "cr.nebius.cloud/soperator/busybox" in 222ms (222ms including waiting). Image size: 2146963 bytes.
+  Normal   Created    14m                    kubelet            spec.initContainers{ensure-jail-submount-data-virtiofs}: Container created
+  Normal   Pulling    14m                    kubelet            spec.initContainers{ensure-jail-submount-data-virtiofs}: Pulling image "cr.nebius.cloud/soperator/busybox"
+  Normal   Pulling    14m                    kubelet            spec.initContainers{munge}: Pulling image "cr.nebius.cloud/soperator/munge:4.1.13-slurm25.11.8"
+  Normal   Started    14m                    kubelet            spec.initContainers{munge}: Container started
+  Normal   Created    14m                    kubelet            spec.initContainers{munge}: Container created
+  Normal   Pulled     14m                    kubelet            spec.initContainers{munge}: Successfully pulled image "cr.nebius.cloud/soperator/munge:4.1.13-slurm25.11.8" in 13.071s (13.071s including waiting). Image size: 529058300 bytes.
+  Normal   Pulling    14m                    kubelet            spec.initContainers{worker-init}: Pulling image "cr.nebius.cloud/soperator/worker_slurmd:4.1.13-slurm25.11.8"
+  Normal   Pulled     13m                    kubelet            spec.initContainers{worker-init}: Successfully pulled image "cr.nebius.cloud/soperator/worker_slurmd:4.1.13-slurm25.11.8" in 23.263s (23.263s including waiting). Image size: 1126733350 bytes.
+  Warning  BackOff    3m11s (x6 over 6m26s)  kubelet            spec.initContainers{worker-init}: Back-off restarting failed container worker-init in pod worker-0_soperator(59be02b5-af86-43e2-90d3-ee4ac89bc4f7)
+  Normal   Created    2m45s (x4 over 13m)    kubelet            spec.initContainers{worker-init}: Container created
+  Normal   Started    2m45s (x4 over 13m)    kubelet            spec.initContainers{worker-init}: Container started
+  Normal   Pulled     2m45s (x3 over 9m27s)  kubelet            spec.initContainers{worker-init}: Container image "cr.nebius.cloud/soperator/worker_slurmd:4.1.13-slurm25.11.8" already present on machine and can be accessed by the pod
+  
+kubectl -n soperator logs worker-0 -c slurmd --previous                                                                                                                                                                         ─╯
+Error from server (BadRequest): previous terminated container "slurmd" in pod "worker-0" not found
+
+╭─    ~ ···························································································································· 1 ✘  at nebius-mk8s-soperator-tshaker-demoday-e00qndd6ztyptrncxb 󱃾  at 01:07:07 a.m.  ─╮
+╰─ kubectl -n soperator logs worker-0 -c slurmd                                                                                                                                                                                    ─╯
+Error from server (BadRequest): container "slurmd" in pod "worker-0" is waiting to start: PodInitializing
+
+kubectl -n soperator describe pod login-0 | sed -n '/Events:/,$p'                                                                                                                                                               ─╯
+Events:
+  Type     Reason             Age                  From                Message
+  ----     ------             ----                 ----                -------
+  Warning  FailedScheduling   4m5s (x4 over 19m)   default-scheduler   0/8 nodes are available: 4 node(s) didn't match Pod's node affinity/selector, 4 node(s) had untolerated taint(s). no new claims to deallocate, preemption: 0/8 nodes are available: 8 Preemption is not helpful for scheduling.
+  Normal   NotTriggerScaleUp  4m2s (x91 over 19m)  cluster-autoscaler  pod didn't trigger scale-up: 1 node(s) didn't match Pod's node affinity/selector
+
+
+kubectl -n soperator logs worker-0 -c worker-init --previous                                                                                                                                                                    ─╯
+
+2026-10-11 21:04:16 - INFO - Waiting for Slurm controller to be ready...
+2026-10-11 21:04:16 - INFO - Max attempts: 60, Poll interval: 5s
+2026-10-11 21:04:16 - INFO - Creating symlink to slurm configs: /etc/slurm -> /mnt/jail/etc/slurm
+2026-10-11 21:04:16 - INFO - Checking slurmctld readiness...
+2026-10-11 21:04:16 - INFO - Attempt 1/60: Checking controller readiness...
+2026-10-11 21:04:16 - INFO - Controller is ready!
+2026-10-11 21:04:16 - INFO - scontrol ping output:
+[
+  {
+    "hostname": "controller-0",
+    "pinged": "UP",
+    "responding": true,
+    "latency": 10428,
+    "mode": "primary",
+    "primary": true
+  }
+]
+2026-10-11 21:04:16 - INFO - Waiting for topology data for node: computeinstance-e00md5edqrbbxfh3tg
+2026-10-11 21:04:16 - INFO - Topology ConfigMap path: /tmp/slurm/topology-node-labels
+2026-10-11 21:04:16 - INFO - Timeout: 180s, Poll interval: 5s
+2026-10-11 21:04:16 - INFO - Node computeinstance-e00md5edqrbbxfh3tg not found in topology ConfigMap, retrying... (0s elapsed)
+2026-10-11 21:04:21 - INFO - Node computeinstance-e00md5edqrbbxfh3tg not found in topology ConfigMap, retrying... (5s elapsed)
+2026-10-11 21:04:26 - INFO - Node computeinstance-e00md5edqrbbxfh3tg not found in topology ConfigMap, retrying... (10s elapsed)
+2026-10-11 21:04:31 - INFO - Node computeinstance-e00md5edqrbbxfh3tg not found in topology ConfigMap, retrying... (15s elapsed)
+2026-10-11 21:04:36 - INFO - Node computeinstance-e00md5edqrbbxfh3tg not found in topology ConfigMap, retrying... (20s elapsed)
+2026-10-11 21:04:41 - INFO - Node computeinstance-e00md5edqrbbxfh3tg not found in topology ConfigMap, retrying... (25s elapsed)
+2026-10-11 21:04:46 - INFO - Node computeinstance-e00md5edqrbbxfh3tg not found in topology ConfigMap, retrying... (30s elapsed)
+2026-10-11 21:04:51 - INFO - Node computeinstance-e00md5edqrbbxfh3tg not found in topology ConfigMap, retrying... (35s elapsed)
+2026-10-11 21:04:56 - INFO - Node computeinstance-e00md5edqrbbxfh3tg not found in topology ConfigMap, retrying... (40s elapsed)
+2026-10-11 21:05:01 - INFO - Node computeinstance-e00md5edqrbbxfh3tg not found in topology ConfigMap, retrying... (45s elapsed)
+2026-10-11 21:05:06 - INFO - Node computeinstance-e00md5edqrbbxfh3tg not found in topology ConfigMap, retrying... (50s elapsed)
+2026-10-11 21:05:11 - INFO - Node computeinstance-e00md5edqrbbxfh3tg not found in topology ConfigMap, retrying... (55s elapsed)
+2026-10-11 21:05:16 - INFO - Node computeinstance-e00md5edqrbbxfh3tg not found in topology ConfigMap, retrying... (60s elapsed)
+2026-10-11 21:05:21 - INFO - Node computeinstance-e00md5edqrbbxfh3tg not found in topology ConfigMap, retrying... (65s elapsed)
+2026-10-11 21:05:26 - INFO - Node computeinstance-e00md5edqrbbxfh3tg not found in topology ConfigMap, retrying... (70s elapsed)
+2026-10-11 21:05:31 - INFO - Node computeinstance-e00md5edqrbbxfh3tg not found in topology ConfigMap, retrying... (75s elapsed)
+2026-10-11 21:05:36 - INFO - Node computeinstance-e00md5edqrbbxfh3tg not found in topology ConfigMap, retrying... (80s elapsed)
+2026-10-11 21:05:41 - INFO - Node computeinstance-e00md5edqrbbxfh3tg not found in topology ConfigMap, retrying... (85s elapsed)
+2026-10-11 21:05:46 - INFO - Node computeinstance-e00md5edqrbbxfh3tg not found in topology ConfigMap, retrying... (90s elapsed)
+2026-10-11 21:05:51 - INFO - Node computeinstance-e00md5edqrbbxfh3tg not found in topology ConfigMap, retrying... (95s elapsed)
+2026-10-11 21:05:56 - INFO - Node computeinstance-e00md5edqrbbxfh3tg not found in topology ConfigMap, retrying... (100s elapsed)
+2026-10-11 21:06:01 - INFO - Node computeinstance-e00md5edqrbbxfh3tg not found in topology ConfigMap, retrying... (105s elapsed)
+2026-10-11 21:06:06 - INFO - Node computeinstance-e00md5edqrbbxfh3tg not found in topology ConfigMap, retrying... (110s elapsed)
+2026-10-11 21:06:11 - INFO - Node computeinstance-e00md5edqrbbxfh3tg not found in topology ConfigMap, retrying... (115s elapsed)
+2026-10-11 21:06:16 - INFO - Node computeinstance-e00md5edqrbbxfh3tg not found in topology ConfigMap, retrying... (120s elapsed)
+2026-10-11 21:06:21 - INFO - Node computeinstance-e00md5edqrbbxfh3tg not found in topology ConfigMap, retrying... (125s elapsed)
+2026-10-11 21:06:26 - INFO - Node computeinstance-e00md5edqrbbxfh3tg not found in topology ConfigMap, retrying... (130s elapsed)
+2026-10-11 21:06:31 - INFO - Node computeinstance-e00md5edqrbbxfh3tg not found in topology ConfigMap, retrying... (135s elapsed)
+2026-10-11 21:06:36 - INFO - Node computeinstance-e00md5edqrbbxfh3tg not found in topology ConfigMap, retrying... (140s elapsed)
+2026-10-11 21:06:41 - INFO - Node computeinstance-e00md5edqrbbxfh3tg not found in topology ConfigMap, retrying... (145s elapsed)
+2026-10-11 21:06:46 - INFO - Node computeinstance-e00md5edqrbbxfh3tg not found in topology ConfigMap, retrying... (150s elapsed)
+2026-10-11 21:06:51 - INFO - Node computeinstance-e00md5edqrbbxfh3tg not found in topology ConfigMap, retrying... (155s elapsed)
+2026-10-11 21:06:56 - INFO - Node computeinstance-e00md5edqrbbxfh3tg not found in topology ConfigMap, retrying... (160s elapsed)
+2026-10-11 21:07:01 - INFO - Node computeinstance-e00md5edqrbbxfh3tg not found in topology ConfigMap, retrying... (165s elapsed)
+2026-10-11 21:07:06 - INFO - Node computeinstance-e00md5edqrbbxfh3tg not found in topology ConfigMap, retrying... (170s elapsed)
+2026-10-11 21:07:11 - INFO - Node computeinstance-e00md5edqrbbxfh3tg not found in topology ConfigMap, retrying... (175s elapsed)
+2026-10-11 21:07:16 - ERROR - Topology for node computeinstance-e00md5edqrbbxfh3tg not found after 180s
+2026-10-11 21:07:16 - ERROR - Available nodes in ConfigMap: []
+
+╭─    ~ ······························································································································ ✔  at nebius-mk8s-soperator-tshaker-demoday-e00qndd6ztyptrncxb 󱃾  at 01:10:03 a.m.  ─╮
+╰─ kubectl -n soperator get configmap topology-node-labels -o yaml                                                                                                                                                                 ─╯
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  annotations:
+    kruise.io/resourcedistribution.resource.from: topology-soperator
+    kruise.io/resourcedistribution.resource.hashcode: be92a688da96cc26ecc0e5afb493f418bb10944189dd0b7926bf4cba06f8167f
+  creationTimestamp: "2026-10-11T20:38:56Z"
+  name: topology-node-labels
+  namespace: soperator
+  ownerReferences:
+  - apiVersion: apps.kruise.io/v1alpha1
+    blockOwnerDeletion: true
+    controller: true
+    kind: ResourceDistribution
+    name: topology-soperator
+    uid: da6e3247-56bf-4c6b-a1ee-f925c062494b
+  resourceVersion: "9469"
+  uid: baab2755-bf8c-45b1-9846-6ca11ba1434d
+
+╭─    ~ ······························································································································ ✔  at nebius-mk8s-soperator-tshaker-demoday-e00qndd6ztyptrncxb 󱃾  at 01:10:09 a.m.  ─╮
+╰─ kubectl get node computeinstance-e00md5edqrbbxfh3tg --show-labels | tr ',' '\n' | grep -i -E 'topology|tier|ib'                                                                                                                 ─╯
+topology.kubernetes.io/region=eu-north1
+
+kubectl -n soperator get pod login-0 -o jsonpath='{.spec.nodeSelector}{"\n"}{.spec.tolerations}{"\n"}'                                                                                                                          ─╯
+
+[{"effect":"NoSchedule","key":"slurm.nebius.ai/nodeset","operator":"Equal","value":"login"},{"effect":"NoExecute","key":"node.kubernetes.io/not-ready","operator":"Exists","tolerationSeconds":300},{"effect":"NoExecute","key":"node.kubernetes.io/unreachable","operator":"Exists","tolerationSeconds":300}]
+
+kubectl -n soperator get pod login-0 -o jsonpath='{.spec.nodeSelector}{"\n"}{.spec.tolerations}{"\n"}'                                                                                                                          ─╯
+
+[{"effect":"NoSchedule","key":"slurm.nebius.ai/nodeset","operator":"Equal","value":"login"},{"effect":"NoExecute","key":"node.kubernetes.io/not-ready","operator":"Exists","tolerationSeconds":300},{"effect":"NoExecute","key":"node.kubernetes.io/unreachable","operator":"Exists","tolerationSeconds":300}]
+
+╭─    ~ ······························································································································ ✔  at nebius-mk8s-soperator-tshaker-demoday-e00qndd6ztyptrncxb 󱃾  at 01:11:30 a.m.  ─╮
+╰─ kubectl get resourcedistribution topology-soperator -o yaml                                                                                                                                                                     ─╯
+apiVersion: apps.kruise.io/v1alpha1
+kind: ResourceDistribution
+metadata:
+  creationTimestamp: "2026-10-11T20:38:05Z"
+  generation: 2
+  name: topology-soperator
+  resourceVersion: "9471"
+  uid: da6e3247-56bf-4c6b-a1ee-f925c062494b
+spec:
+  resource:
+    apiVersion: v1
+    kind: ConfigMap
+    metadata:
+      name: topology-node-labels
+  targets:
+    excludedNamespaces: {}
+    includedNamespaces:
+      list:
+      - name: soperator-system
+      - name: soperator
+    namespaceLabelSelector: {}
+status:
+  conditions:
+  - lastTransitionTime: "2026-10-11T20:38:05Z"
+    reason: Succeeded
+    status: "False"
+    type: GetResourceFailed
+  - lastTransitionTime: "2026-10-11T20:38:05Z"
+    reason: Succeeded
+    status: "False"
+    type: CreateResourceFailed
+  - lastTransitionTime: "2026-10-11T20:38:05Z"
+    reason: Succeeded
+    status: "False"
+    type: UpdateResourceFailed
+  - lastTransitionTime: "2026-10-11T20:38:05Z"
+    reason: Succeeded
+    status: "False"
+    type: DeleteResourceFailed
+  - lastTransitionTime: "2026-10-11T20:38:05Z"
+    reason: Succeeded
+    status: "False"
+    type: ConflictOccurred
+  - lastTransitionTime: "2026-10-11T20:38:05Z"
+    reason: Succeeded
+    status: "False"
+    type: NamespaceNotExists
+  desired: 2
+  observedGeneration: 2
+  succeeded: 2
+
+╭─    ~ ······························································································································································································ ✔  at 01:12:50 a.m.  ─╮
+╰─ grep -rn -i "topology" installations/example/terraform.tfvars installations/example/main.tf                                                                                                                                     ─╯
+grep -rn -i "topology" modules --include=*.tf | head -40
+grep: installations/example/terraform.tfvars: No such file or directory
+grep: installations/example/main.tf: No such file or directory
+zsh: no matches found: --include=*.tf
+
+╭─    ~ ······························································································································ ✔  at nebius-mk8s-soperator-tshaker-demoday-e00qndd6ztyptrncxb 󱃾  at 01:12:58 a.m.  ─╮
+╰─ kubectl -n soperator get pod login-0 -o jsonpath='{.spec.affinity}{"\n"}'                                                                                                                                                       ─╯
+{"nodeAffinity":{"requiredDuringSchedulingIgnoredDuringExecution":{"nodeSelectorTerms":[{"matchExpressions":[{"key":"slurm.nebius.ai/nodeset","operator":"In","values":["login"]}]}]}}}
+
+╭─    ~ ······························································································································ ✔  at nebius-mk8s-soperator-tshaker-demoday-e00qndd6ztyptrncxb 󱃾  at 01:14:18 a.m.  ─╮
+╰─ kubectl get nodes -L slurm.nebius.ai/nodeset-name                                                                                                                                                                               ─╯
+NAME                                 STATUS   ROLES    AGE   VERSION   NODESET-NAME
+computeinstance-e00cd1r3wff2khte0s   Ready    <none>   39m   v1.35.7
+computeinstance-e00d2d6np295h1j6k9   Ready    <none>   39m   v1.35.7
+computeinstance-e00j7yd7042vcmrefv   Ready    <none>   39m   v1.35.7
+computeinstance-e00md5edqrbbxfh3tg   Ready    <none>   39m   v1.35.7   worker
+computeinstance-e00myw0882qmm4mxds   Ready    <none>   39m   v1.35.7
+computeinstance-e00rtzex28cyw4brba   Ready    <none>   39m   v1.35.7   worker
+computeinstance-e00w5qxa7zkg3xd14k   Ready    <none>   39m   v1.35.7
+computeinstance-e00zxn2ctwbf5wax7q   Ready    <none>   39m   v1.35.7
+
+kubectl get nodes -L slurm.nebius.ai/nodeset                                                                                                                                                                                    ─╯
+
+NAME                                 STATUS   ROLES    AGE   VERSION   NODESET
+computeinstance-e00cd1r3wff2khte0s   Ready    <none>   40m   v1.35.7   system
+computeinstance-e00d2d6np295h1j6k9   Ready    <none>   40m   v1.35.7   system
+computeinstance-e00j7yd7042vcmrefv   Ready    <none>   40m   v1.35.7   controller
+computeinstance-e00md5edqrbbxfh3tg   Ready    <none>   40m   v1.35.7   worker
+computeinstance-e00myw0882qmm4mxds   Ready    <none>   40m   v1.35.7   system
+computeinstance-e00rtzex28cyw4brba   Ready    <none>   40m   v1.35.7   worker
+computeinstance-e00w5qxa7zkg3xd14k   Ready    <none>   40m   v1.35.7   system
+computeinstance-e00zxn2ctwbf5wax7q   Ready    <none>   40m   v1.35.7   nfs
+
+╭─    ~ ······························································································································ ✔  at nebius-mk8s-soperator-tshaker-demoday-e00qndd6ztyptrncxb 󱃾  at 01:15:22 a.m.  ─╮
+╰─ kubectl get nodes -o custom-columns='NAME:.metadata.name,TAINTS:.spec.taints[*].key'                                                                                                                                            ─╯
+NAME                                 TAINTS
+computeinstance-e00cd1r3wff2khte0s   <none>
+computeinstance-e00d2d6np295h1j6k9   <none>
+computeinstance-e00j7yd7042vcmrefv   slurm.nebius.ai/nodeset
+computeinstance-e00md5edqrbbxfh3tg   nvidia.com/gpu
+computeinstance-e00myw0882qmm4mxds   <none>
+computeinstance-e00rtzex28cyw4brba   nvidia.com/gpu
+computeinstance-e00w5qxa7zkg3xd14k   <none>
+computeinstance-e00zxn2ctwbf5wax7q   slurm.nebius.ai/nodeset
+
+╭─    ~ ······························································································································ ✔  at nebius-mk8s-soperator-tshaker-demoday-e00qndd6ztyptrncxb 󱃾  at 01:15:31 a.m.  ─╮
+╰─ kubectl -n flux-system get helmrelease flux-system-soperator-fluxcd-nodesets -o yaml | grep -i -B2 -A4 topology                                                                                                                 ─╯
+
+
+╭─    ~ ···························································································································· 1 ✘  at nebius-mk8s-soperator-tshaker-demoday-e00qndd6ztyptrncxb 󱃾  at 01:19:24 a.m.  ─╮
+╰─ kubectl get pods -A | grep -i topo                                                                                                                                                                                              ─╯
+
+╭─    ~ ·························································································································· 0|1 ✘  at nebius-mk8s-soperator-tshaker-demoday-e00qndd6ztyptrncxb 󱃾  at 01:19:30 a.m.  ─╮
+╰─ kubectl -n soperator get pod login-0 -o jsonpath='{range .spec.containers[*]}{.name}{" "}{.resources.requests}{"\n"}{end}'                                                                                                      ─╯
+sshd {"cpu":"14","ephemeral-storage":"164Gi","memory":"54Gi"}
+
+╭─    ~ ······························································································································ ✔  at nebius-mk8s-soperator-tshaker-demoday-e00qndd6ztyptrncxb 󱃾  at 01:20:41 a.m.  ─╮
+╰─ kubectl describe node computeinstance-e00cd1r3wff2khte0s | sed -n '/Allocated resources/,/Events/p'                                                                                                                             ─╯
+Allocated resources:
+  (Total limits may be over 100 percent, i.e., overcommitted.)
+  Resource           Requests       Limits
+  --------           --------       ------
+  cpu                3310m (41%)    2270m (28%)
+  memory             10060Mi (31%)  12200Mi (38%)
+  ephemeral-storage  560Mi (0%)     720Mi (0%)
+  hugepages-1Gi      0 (0%)         0 (0%)
+  hugepages-2Mi      0 (0%)         0 (0%)
+Events:
+
+╭─    ~ ······························································································································ ✔  at nebius-mk8s-soperator-tshaker-demoday-e00qndd6ztyptrncxb 󱃾  at 01:20:57 a.m.  ─╮
+╰─ kubectl label node <chosen-node> slurm.nebius.ai/nodeset=login --overwrite                                                                                                                                                      ─╯
+kubectl -n soperator get pod login-0 -w
+# to undo:
+kubectl label node <chosen-node> slurm.nebius.ai/nodeset=system --overwrite
+zsh: no such file or directory: chosen-node
+NAME      READY   STATUS    RESTARTS   AGE
+login-0   0/2     Pending   0          32m
+^Czsh: no such file or directory: chosen-node
+
+╭─    ~ ··············································································································································································· 1 ✘  took 48s   at 01:22:27 a.m.  ─╮
+╰─                                                                                                                                                                                                                                 ─╯
+
+╭─    ~ ···························································································································································································· 1 ✘  at 01:24:51 a.m.  ─╮
+╰─                                                                                                                                                                                                                                 ─╯
+
+╭─    ~ ···························································································································································································· 1 ✘  at 01:24:51 a.m.  ─╮
+╰─                                                                                                                                                                                                                                 ─╯
+
+╭─    ~ ···························································································································· 1 ✘  at nebius-mk8s-soperator-tshaker-demoday-e00qndd6ztyptrncxb 󱃾  at 01:24:51 a.m.  ─╮
+╰─ for n in computeinstance-e00md5edqrbbxfh3tg computeinstance-e00rtzex28cyw4brba; do                                                                                                                                              ─╯
+  kubectl label node $n topology.nebius.com/tier-1=demo-tier1 topology.nebius.com/tier-2=demo-tier2
+done
+node/computeinstance-e00md5edqrbbxfh3tg labeled
+node/computeinstance-e00rtzex28cyw4brba labeled
+
+╭─    ~ ······························································································································ ✔  at nebius-mk8s-soperator-tshaker-demoday-e00qndd6ztyptrncxb 󱃾  at 01:24:56 a.m.  ─╮
+╰─ kubectl -n soperator get configmap topology-node-labels -o yaml                                                                                                                                                                 ─╯
+apiVersion: v1
+data:
+  computeinstance-e00md5edqrbbxfh3tg: '{"tier-1":"demo-tier1","tier-2":"demo-tier2"}'
+  computeinstance-e00rtzex28cyw4brba: '{"tier-1":"demo-tier1","tier-2":"demo-tier2"}'
+kind: ConfigMap
+metadata:
+  annotations:
+    kruise.io/resourcedistribution.resource.from: topology-soperator
+    kruise.io/resourcedistribution.resource.hashcode: 9c4e5cd90d545d930d61fc31fe312aba1135f1d86c947b82d43b695b0cac9072
+  creationTimestamp: "2026-10-11T20:38:56Z"
+  name: topology-node-labels
+  namespace: soperator
+  ownerReferences:
+  - apiVersion: apps.kruise.io/v1alpha1
+    blockOwnerDeletion: true
+    controller: true
+    kind: ResourceDistribution
+    name: topology-soperator
+    uid: da6e3247-56bf-4c6b-a1ee-f925c062494b
+  resourceVersion: "40097"
+  uid: baab2755-bf8c-45b1-9846-6ca11ba1434d
+
+╭─    ~ ······························································································································ ✔  at nebius-mk8s-soperator-tshaker-demoday-e00qndd6ztyptrncxb 󱃾  at 01:25:11 a.m.  ─╮
+╰─ kubectl -n soperator get pods                                                                                                                                                                                                   ─╯
+NAME                                                 READY   STATUS                  RESTARTS      AGE
+controller-0                                         2/2     Running                 0             37m
+controller-placeholder-g9hxd                         3/3     Running                 0             37m
+controller-spool-mount-tsnlz                         1/1     Running                 0             47m
+helm-soperator-dcgm-exporter-ds-ddpzp                1/1     Running                 0             49m
+helm-soperator-dcgm-exporter-ds-wfpdq                1/1     Running                 0             49m
+jail-mount-4cmzp                                     1/1     Running                 0             47m
+jail-mount-77hjr                                     1/1     Running                 0             47m
+jail-mount-7mbgw                                     1/1     Running                 0             47m
+jail-mount-88r8z                                     1/1     Running                 0             47m
+jail-mount-cbkgp                                     1/1     Running                 0             47m
+jail-mount-lls69                                     1/1     Running                 0             47m
+jail-mount-lltvp                                     1/1     Running                 0             47m
+jail-submount-data-mount-2bk96                       1/1     Running                 0             47m
+jail-submount-data-mount-5lknv                       1/1     Running                 0             47m
+jail-submount-data-mount-bvjbz                       1/1     Running                 0             47m
+jail-submount-data-mount-gkqzw                       1/1     Running                 0             47m
+jail-submount-data-mount-hlcrt                       1/1     Running                 0             47m
+jail-submount-data-mount-kxp8k                       1/1     Running                 0             47m
+jail-submount-data-mount-vfkkt                       1/1     Running                 0             47m
+login-0                                              0/2     Pending                 0             37m
+run-extensive-check-on-reservations-29862555-8hmgx   0/2     Completed               0             10m
+run-extensive-check-on-reservations-29862560-gn49w   0/2     Completed               0             5m49s
+run-extensive-check-on-reservations-29862565-svh96   0/2     Completed               0             49s
+sconfigcontroller-7b868fdf86-kkrxx                   1/1     Running                 0             37m
+sconfigcontroller-7b868fdf86-q7l9m                   1/1     Running                 0             37m
+slurm-exporter-6cf785fbd7-kbdfc                      1/1     Running                 0             37m
+soperator-populate-jail-blnxp                        0/1     Completed               0             46m
+wait-for-active-checks-8bw72                         1/1     Running                 0             46m
+worker-0                                             2/2     Running                 0             37m
+worker-1                                             1/2     Init:CrashLoopBackOff   7 (37s ago)   37m
+
+╭─    ~ ······························································································································ ✔  at nebius-mk8s-soperator-tshaker-demoday-e00qndd6ztyptrncxb 󱃾  at 01:25:49 a.m.  ─╮
+╰─ kubectl -n soperator get pods                                                                                                                                                                                                   ─╯
+NAME                                                 READY   STATUS                  RESTARTS      AGE
+controller-0                                         2/2     Running                 0             37m
+controller-placeholder-g9hxd                         3/3     Running                 0             37m
+controller-spool-mount-tsnlz                         1/1     Running                 0             47m
+helm-soperator-dcgm-exporter-ds-ddpzp                1/1     Running                 0             49m
+helm-soperator-dcgm-exporter-ds-wfpdq                1/1     Running                 0             49m
+jail-mount-4cmzp                                     1/1     Running                 0             47m
+jail-mount-77hjr                                     1/1     Running                 0             47m
+jail-mount-7mbgw                                     1/1     Running                 0             47m
+jail-mount-88r8z                                     1/1     Running                 0             47m
+jail-mount-cbkgp                                     1/1     Running                 0             47m
+jail-mount-lls69                                     1/1     Running                 0             47m
+jail-mount-lltvp                                     1/1     Running                 0             47m
+jail-submount-data-mount-2bk96                       1/1     Running                 0             47m
+jail-submount-data-mount-5lknv                       1/1     Running                 0             47m
+jail-submount-data-mount-bvjbz                       1/1     Running                 0             47m
+jail-submount-data-mount-gkqzw                       1/1     Running                 0             47m
+jail-submount-data-mount-hlcrt                       1/1     Running                 0             47m
+jail-submount-data-mount-kxp8k                       1/1     Running                 0             47m
+jail-submount-data-mount-vfkkt                       1/1     Running                 0             47m
+login-0                                              0/2     Pending                 0             37m
+run-extensive-check-on-reservations-29862555-8hmgx   0/2     Completed               0             10m
+run-extensive-check-on-reservations-29862560-gn49w   0/2     Completed               0             5m55s
+run-extensive-check-on-reservations-29862565-svh96   0/2     Completed               0             55s
+sconfigcontroller-7b868fdf86-kkrxx                   1/1     Running                 0             37m
+sconfigcontroller-7b868fdf86-q7l9m                   1/1     Running                 0             37m
+slurm-exporter-6cf785fbd7-kbdfc                      1/1     Running                 0             37m
+soperator-populate-jail-blnxp                        0/1     Completed               0             46m
+wait-for-active-checks-8bw72                         1/1     Running                 0             46m
+worker-0                                             2/2     Running                 0             37m
+worker-1                                             1/2     Init:CrashLoopBackOff   7 (43s ago)   37m
+
+╭─    ~ ······························································································································ ✔  at nebius-mk8s-soperator-tshaker-demoday-e00qndd6ztyptrncxb 󱃾  at 01:25:55 a.m.  ─╮
+╰─ kubectl -n soperator get pods                                                                                                                                                                                                   ─╯
+NAME                                                 READY   STATUS                  RESTARTS       AGE
+controller-0                                         2/2     Running                 0              38m
+controller-placeholder-g9hxd                         3/3     Running                 0              38m
+controller-spool-mount-tsnlz                         1/1     Running                 0              48m
+helm-soperator-dcgm-exporter-ds-ddpzp                1/1     Running                 0              50m
+helm-soperator-dcgm-exporter-ds-wfpdq                1/1     Running                 0              50m
+jail-mount-4cmzp                                     1/1     Running                 0              48m
+jail-mount-77hjr                                     1/1     Running                 0              48m
+jail-mount-7mbgw                                     1/1     Running                 0              48m
+jail-mount-88r8z                                     1/1     Running                 0              48m
+jail-mount-cbkgp                                     1/1     Running                 0              48m
+jail-mount-lls69                                     1/1     Running                 0              48m
+jail-mount-lltvp                                     1/1     Running                 0              48m
+jail-submount-data-mount-2bk96                       1/1     Running                 0              48m
+jail-submount-data-mount-5lknv                       1/1     Running                 0              48m
+jail-submount-data-mount-bvjbz                       1/1     Running                 0              48m
+jail-submount-data-mount-gkqzw                       1/1     Running                 0              48m
+jail-submount-data-mount-hlcrt                       1/1     Running                 0              48m
+jail-submount-data-mount-kxp8k                       1/1     Running                 0              48m
+jail-submount-data-mount-vfkkt                       1/1     Running                 0              48m
+login-0                                              0/2     Pending                 0              38m
+run-extensive-check-on-reservations-29862555-8hmgx   0/2     Completed               0              11m
+run-extensive-check-on-reservations-29862560-gn49w   0/2     Completed               0              6m54s
+run-extensive-check-on-reservations-29862565-svh96   0/2     Completed               0              114s
+sconfigcontroller-7b868fdf86-kkrxx                   1/1     Running                 0              38m
+sconfigcontroller-7b868fdf86-q7l9m                   1/1     Running                 0              38m
+slurm-exporter-6cf785fbd7-kbdfc                      1/1     Running                 0              38m
+soperator-populate-jail-blnxp                        0/1     Completed               0              47m
+wait-for-active-checks-8bw72                         1/1     Running                 0              47m
+worker-0                                             2/2     Running                 0              38m
+worker-1                                             1/2     Init:CrashLoopBackOff   7 (102s ago)   38m
+
+╭─    ~ ······························································································································ ✔  at nebius-mk8s-soperator-tshaker-demoday-e00qndd6ztyptrncxb 󱃾  at 01:26:55 a.m.  ─╮
+╰─ kubectl -n soperator exec -it controller-0 -c slurmctld -- sinfo -N -o "%N %G %T"                                                                                                                                               ─╯
+NODELIST GRES STATE
+worker-0 gpu:nvidia_h100_80gb_hbm3:1 idle
+worker-0 gpu:nvidia_h100_80gb_hbm3:1 idle
+worker-1 gpu:nvidia_h100_80gb_hbm3:1 idle~
+worker-1 gpu:nvidia_h100_80gb_hbm3:1 idle~
+
+╭─    ~ ······························································································································ ✔  at nebius-mk8s-soperator-tshaker-demoday-e00qndd6ztyptrncxb 󱃾  at 01:27:09 a.m.  ─╮
+╰─ kubectl -n soperator get pod worker-1 -o jsonpath='{range .status.initContainerStatuses[*]}{.name}{"\t"}{.state}{"\t"}{.lastState.terminated.exitCode}{"\n"}{end}'                                                              ─╯
+
+ensure-jail-virtiofs	{"terminated":{"containerID":"containerd://e549db380b8ef38c3621309cd2b1f7503fc528b2d471b120e716823ad7d00ed9","exitCode":0,"finishedAt":"2026-10-11T20:48:49Z","reason":"Completed","startedAt":"2026-10-11T20:48:49Z"}}
+ensure-jail-submount-data-virtiofs	{"terminated":{"containerID":"containerd://745cbc6009c0649b56f6a92ff3dfcf79e5f49f557e8ed0473bdfa9789edcaae8","exitCode":0,"finishedAt":"2026-10-11T20:48:50Z","reason":"Completed","startedAt":"2026-10-11T20:48:50Z"}}
+munge	{"running":{"startedAt":"2026-10-11T20:49:03Z"}}
+worker-init	{"waiting":{"message":"back-off 5m0s restarting failed container=worker-init pod=worker-1_soperator(37e3cac1-2bc0-4fd9-9842-f4ccc6f62250)","reason":"CrashLoopBackOff"}}	1
+
+╭─    ~ ······························································································································ ✔  at nebius-mk8s-soperator-tshaker-demoday-e00qndd6ztyptrncxb 󱃾  at 01:28:01 a.m.  ─╮
+╰─ kubectl -n soperator logs worker-1 -c worker-init --previous | tail -20                                                                                                                                                         ─╯
+2026-10-11 21:23:42 - INFO - Node computeinstance-e00rtzex28cyw4brba not found in topology ConfigMap, retrying... (90s elapsed)
+2026-10-11 21:23:47 - INFO - Node computeinstance-e00rtzex28cyw4brba not found in topology ConfigMap, retrying... (95s elapsed)
+2026-10-11 21:23:52 - INFO - Node computeinstance-e00rtzex28cyw4brba not found in topology ConfigMap, retrying... (100s elapsed)
+2026-10-11 21:23:57 - INFO - Node computeinstance-e00rtzex28cyw4brba not found in topology ConfigMap, retrying... (105s elapsed)
+2026-10-11 21:24:02 - INFO - Node computeinstance-e00rtzex28cyw4brba not found in topology ConfigMap, retrying... (110s elapsed)
+2026-10-11 21:24:07 - INFO - Node computeinstance-e00rtzex28cyw4brba not found in topology ConfigMap, retrying... (115s elapsed)
+2026-10-11 21:24:12 - INFO - Node computeinstance-e00rtzex28cyw4brba not found in topology ConfigMap, retrying... (120s elapsed)
+2026-10-11 21:24:17 - INFO - Node computeinstance-e00rtzex28cyw4brba not found in topology ConfigMap, retrying... (125s elapsed)
+2026-10-11 21:24:22 - INFO - Node computeinstance-e00rtzex28cyw4brba not found in topology ConfigMap, retrying... (130s elapsed)
+2026-10-11 21:24:27 - INFO - Node computeinstance-e00rtzex28cyw4brba not found in topology ConfigMap, retrying... (135s elapsed)
+2026-10-11 21:24:32 - INFO - Node computeinstance-e00rtzex28cyw4brba not found in topology ConfigMap, retrying... (140s elapsed)
+2026-10-11 21:24:37 - INFO - Node computeinstance-e00rtzex28cyw4brba not found in topology ConfigMap, retrying... (145s elapsed)
+2026-10-11 21:24:42 - INFO - Node computeinstance-e00rtzex28cyw4brba not found in topology ConfigMap, retrying... (150s elapsed)
+2026-10-11 21:24:47 - INFO - Node computeinstance-e00rtzex28cyw4brba not found in topology ConfigMap, retrying... (155s elapsed)
+2026-10-11 21:24:52 - INFO - Node computeinstance-e00rtzex28cyw4brba not found in topology ConfigMap, retrying... (160s elapsed)
+2026-10-11 21:24:57 - INFO - Node computeinstance-e00rtzex28cyw4brba not found in topology ConfigMap, retrying... (165s elapsed)
+2026-10-11 21:25:02 - INFO - Node computeinstance-e00rtzex28cyw4brba not found in topology ConfigMap, retrying... (170s elapsed)
+2026-10-11 21:25:07 - INFO - Node computeinstance-e00rtzex28cyw4brba not found in topology ConfigMap, retrying... (175s elapsed)
+2026-10-11 21:25:12 - ERROR - Topology for node computeinstance-e00rtzex28cyw4brba not found after 180s
+2026-10-11 21:25:12 - ERROR - Available nodes in ConfigMap: []
+
+╭─    ~ ······························································································································ ✔  at nebius-mk8s-soperator-tshaker-demoday-e00qndd6ztyptrncxb 󱃾  at 01:28:20 a.m.  ─╮
+╰─ kubectl -n soperator get pods                                                                                                                                                                                                   ─╯
+NAME                                                 READY   STATUS                  RESTARTS        AGE
+controller-0                                         2/2     Running                 0               39m
+controller-placeholder-g9hxd                         3/3     Running                 0               39m
+controller-spool-mount-tsnlz                         1/1     Running                 0               50m
+helm-soperator-dcgm-exporter-ds-ddpzp                1/1     Running                 0               52m
+helm-soperator-dcgm-exporter-ds-wfpdq                1/1     Running                 0               52m
+jail-mount-4cmzp                                     1/1     Running                 0               50m
+jail-mount-77hjr                                     1/1     Running                 0               50m
+jail-mount-7mbgw                                     1/1     Running                 0               50m
+jail-mount-88r8z                                     1/1     Running                 0               50m
+jail-mount-cbkgp                                     1/1     Running                 0               50m
+jail-mount-lls69                                     1/1     Running                 0               50m
+jail-mount-lltvp                                     1/1     Running                 0               50m
+jail-submount-data-mount-2bk96                       1/1     Running                 0               50m
+jail-submount-data-mount-5lknv                       1/1     Running                 0               50m
+jail-submount-data-mount-bvjbz                       1/1     Running                 0               50m
+jail-submount-data-mount-gkqzw                       1/1     Running                 0               50m
+jail-submount-data-mount-hlcrt                       1/1     Running                 0               50m
+jail-submount-data-mount-kxp8k                       1/1     Running                 0               50m
+jail-submount-data-mount-vfkkt                       1/1     Running                 0               50m
+login-0                                              0/2     Pending                 0               39m
+run-extensive-check-on-reservations-29862555-8hmgx   0/2     Completed               0               13m
+run-extensive-check-on-reservations-29862560-gn49w   0/2     Completed               0               8m46s
+run-extensive-check-on-reservations-29862565-svh96   0/2     Completed               0               3m46s
+sconfigcontroller-7b868fdf86-kkrxx                   1/1     Running                 0               39m
+sconfigcontroller-7b868fdf86-q7l9m                   1/1     Running                 0               39m
+slurm-exporter-6cf785fbd7-kbdfc                      1/1     Running                 0               39m
+soperator-populate-jail-blnxp                        0/1     Completed               0               49m
+wait-for-active-checks-8bw72                         1/1     Running                 0               49m
+worker-0                                             2/2     Running                 0               39m
+worker-1                                             1/2     Init:CrashLoopBackOff   7 (3m34s ago)   39m
+
+╭─    ~ ······························································································································ ✔  at nebius-mk8s-soperator-tshaker-demoday-e00qndd6ztyptrncxb 󱃾  at 01:28:47 a.m.  ─╮
+╰─ kubectl -n soperator delete pod worker-1                                                                                                                                                                                        ─╯
+
+pod "worker-1" deleted from soperator namespace
+
+╭─    ~ ······························································································································ ✔  at nebius-mk8s-soperator-tshaker-demoday-e00qndd6ztyptrncxb 󱃾  at 01:28:53 a.m.  ─╮
+╰─ kubectl -n soperator get pods                                                                                                                                                                                                   ─╯
+NAME                                                 READY   STATUS      RESTARTS   AGE
+controller-0                                         2/2     Running     0          40m
+controller-placeholder-g9hxd                         3/3     Running     0          40m
+controller-spool-mount-tsnlz                         1/1     Running     0          50m
+helm-soperator-dcgm-exporter-ds-ddpzp                1/1     Running     0          52m
+helm-soperator-dcgm-exporter-ds-wfpdq                1/1     Running     0          52m
+jail-mount-4cmzp                                     1/1     Running     0          50m
+jail-mount-77hjr                                     1/1     Running     0          50m
+jail-mount-7mbgw                                     1/1     Running     0          50m
+jail-mount-88r8z                                     1/1     Running     0          50m
+jail-mount-cbkgp                                     1/1     Running     0          50m
+jail-mount-lls69                                     1/1     Running     0          50m
+jail-mount-lltvp                                     1/1     Running     0          50m
+jail-submount-data-mount-2bk96                       1/1     Running     0          50m
+jail-submount-data-mount-5lknv                       1/1     Running     0          50m
+jail-submount-data-mount-bvjbz                       1/1     Running     0          50m
+jail-submount-data-mount-gkqzw                       1/1     Running     0          50m
+jail-submount-data-mount-hlcrt                       1/1     Running     0          50m
+jail-submount-data-mount-kxp8k                       1/1     Running     0          50m
+jail-submount-data-mount-vfkkt                       1/1     Running     0          50m
+login-0                                              0/2     Pending     0          40m
+run-extensive-check-on-reservations-29862555-8hmgx   0/2     Completed   0          13m
+run-extensive-check-on-reservations-29862560-gn49w   0/2     Completed   0          8m57s
+run-extensive-check-on-reservations-29862565-svh96   0/2     Completed   0          3m57s
+sconfigcontroller-7b868fdf86-kkrxx                   1/1     Running     0          40m
+sconfigcontroller-7b868fdf86-q7l9m                   1/1     Running     0          40m
+slurm-exporter-6cf785fbd7-kbdfc                      1/1     Running     0          40m
+soperator-populate-jail-blnxp                        0/1     Completed   0          50m
+wait-for-active-checks-8bw72                         1/1     Running     0          49m
+worker-0                                             2/2     Running     0          40m
+worker-1                                             1/2     Init:3/4    0          4s
+
+╭─    ~ ······························································································································ ✔  at nebius-mk8s-soperator-tshaker-demoday-e00qndd6ztyptrncxb 󱃾  at 01:28:58 a.m.  ─╮
+╰─ kubectl -n soperator get pods                                                                                                                                                                                                   ─╯
+NAME                                                 READY   STATUS      RESTARTS   AGE
+controller-0                                         2/2     Running     0          40m
+controller-placeholder-g9hxd                         3/3     Running     0          40m
+controller-spool-mount-tsnlz                         1/1     Running     0          50m
+helm-soperator-dcgm-exporter-ds-ddpzp                1/1     Running     0          52m
+helm-soperator-dcgm-exporter-ds-wfpdq                1/1     Running     0          52m
+jail-mount-4cmzp                                     1/1     Running     0          50m
+jail-mount-77hjr                                     1/1     Running     0          50m
+jail-mount-7mbgw                                     1/1     Running     0          50m
+jail-mount-88r8z                                     1/1     Running     0          50m
+jail-mount-cbkgp                                     1/1     Running     0          50m
+jail-mount-lls69                                     1/1     Running     0          50m
+jail-mount-lltvp                                     1/1     Running     0          50m
+jail-submount-data-mount-2bk96                       1/1     Running     0          50m
+jail-submount-data-mount-5lknv                       1/1     Running     0          50m
+jail-submount-data-mount-bvjbz                       1/1     Running     0          50m
+jail-submount-data-mount-gkqzw                       1/1     Running     0          50m
+jail-submount-data-mount-hlcrt                       1/1     Running     0          50m
+jail-submount-data-mount-kxp8k                       1/1     Running     0          50m
+jail-submount-data-mount-vfkkt                       1/1     Running     0          50m
+login-0                                              0/2     Pending     0          40m
+run-extensive-check-on-reservations-29862555-8hmgx   0/2     Completed   0          14m
+run-extensive-check-on-reservations-29862560-gn49w   0/2     Completed   0          9m4s
+run-extensive-check-on-reservations-29862565-svh96   0/2     Completed   0          4m4s
+sconfigcontroller-7b868fdf86-kkrxx                   1/1     Running     0          40m
+sconfigcontroller-7b868fdf86-q7l9m                   1/1     Running     0          40m
+slurm-exporter-6cf785fbd7-kbdfc                      1/1     Running     0          40m
+soperator-populate-jail-blnxp                        0/1     Completed   0          50m
+wait-for-active-checks-8bw72                         1/1     Running     0          49m
+worker-0                                             2/2     Running     0          40m
+worker-1                                             2/2     Running     0          11s
+
+
+
+----
+
+kubectl -n soperator patch activecheck ensure-healthy-nodes --subresource=status --type=merge -p '{"status":{"slurmJobsStatus":{"lastRunStatus":"Complete"}}}'
+
+----
