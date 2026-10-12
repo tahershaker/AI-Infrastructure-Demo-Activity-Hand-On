@@ -393,7 +393,7 @@ slurm_nodeset_login = {
   node_group_enabled = false
   resource = {
     platform = "cpu-d3"
-    preset   = "16vcpu-64gb"
+    preset   = "4vcpu-16gb"
   }
   boot_disk = {
     type                 = "NETWORK_SSD"

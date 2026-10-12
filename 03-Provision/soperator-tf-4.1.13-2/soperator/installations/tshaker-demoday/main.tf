@@ -457,10 +457,12 @@ module "slurm" {
     login = local.gb300_enabled ? var.gb300_login_pod_worker_reserve : {
       cpu_cores        = local.resources.login.cpu_cores
       memory_gibibytes = floor(local.resources.login.memory_gibibytes)
-      ephemeral_storage_gibibytes = floor(
+      # Demo Day change: login node group is off, so the pod runs on a system node.
+      # A system node has about 109 GiB usable disk, so request a fixed 64 GiB.
+      ephemeral_storage_gibibytes = var.slurm_nodeset_login.node_group_enabled ? floor(
         var.slurm_nodeset_login.boot_disk.size_gibibytes * module.resources.k8s_ephemeral_storage_coefficient
         -module.resources.k8s_ephemeral_storage_reserve.gibibytes
-      )
+      ) : 64
     }
     accounting = var.accounting_enabled ? {
       cpu_cores        = local.resources.accounting.cpu_cores

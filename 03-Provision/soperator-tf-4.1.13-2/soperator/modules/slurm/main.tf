@@ -243,7 +243,7 @@ resource "helm_release" "soperator_fluxcd_cm" {
 
         login = {
           size                     = var.node_count.login
-          k8s_node_filter_name     = var.login_on_worker_nodes ? local.node_filters.worker.name : local.node_filters.login.name
+          k8s_node_filter_name     = var.login_on_worker_nodes ? local.node_filters.worker.name : local.node_filters.system.name
           allocation_id            = var.login_allocation_id
           sshd_config_map_ref_name = var.login_sshd_config_map_ref_name
           root_public_keys         = var.login_ssh_root_public_keys
