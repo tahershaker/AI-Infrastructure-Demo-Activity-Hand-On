@@ -1141,7 +1141,84 @@ for c in all-reduce-perf-nccl-with-ib all-reduce-perf-nccl-without-ib cuda-sampl
 
 Expected: six lines ending with `patched`. To check, run `kubectl -n soperator get activecheck`. Suspending only stops new runs. It does not delete the checks.
 
-```
-
 ---
 
+# Testing Slurm
+
+Now that the infrastructure is up, we also need to check that Slurm works as expected. We do this by running three small jobs from the login node. The first is a distributed job without a GPU. The second is a distributed job that uses the GPU on each worker. The third is an NCCL all-reduce test between the two GPUs. The scripts are adapted from the `test/quickcheck` folder of the Soperator release. I changed only the resource lines, to fit 2 workers with 1 GPU each. The release version asks for 8 GPUs per node, and Slurm would reject that here. The three scripts are in the `slurm-check-scripts` folder of this repository.
+
+### Step 1: Copy the scripts to the login node
+
+What: send the `slurm-check-scripts` folder to the login node. Why: Slurm jobs start from the login node, and its home folder is on the shared jail, so the workers see the same files. Run this on your laptop, from the `03-Provisioning` folder, with the login IP from Check 7:
+
+```bash
+scp -i ~/.ssh/taher-soperator-demoday -r ../../../../slurm-check-scripts root@<login-ip>:~
+```
+
+![image25](/03-Provision/Images/image25.png)
+
+Log in to the login pod, go to the scripts folder, and create a folder to hold the output of the scripts we will run. Slurm does not create this folder, and without it a job writes no output file. Run the first command on your laptop, from the installation folder. The other two run on the login pod:
+
+```bash
+./login.sh -k ~/.ssh/taher-soperator-demoday
+cd ~/slurm-check-scripts
+mkdir -p results
+```
+
+![image26](/03-Provision/Images/image26.png)
+
+### Step 2: Distributed job without a GPU
+
+What: one task on each worker, with no GPU requested. Why: it proves that Slurm can place a job on both workers.
+
+```bash
+sbatch --wait 01_hello_distributed.sh
+cat results/hello.out
+```
+
+![image28](/03-Provision/Images/image28.png)
+
+Expected: `Hello from worker-0` and `Hello from worker-1`, then the CPU count (2) for the second step on each worker.
+
+You can check the details of a job with `scontrol`. Accounting is disabled on this cluster, so `sacct` does not work. The full output is long, so the command keeps only the fields that matter. Replace `<job-id>` with the number that `sbatch` printed:
+
+
+```bash
+scontrol show job <job-id> | tr ' ' '\n' | grep -E '^(JobId|JobName|JobState|RunTime|StartTime|EndTime|NodeList|NumNodes|TRES|ExitCode)='
+```
+
+Expected: `JobState=COMPLETED`, `ExitCode=0:0`, `NodeList=worker-[0-1]` and `NumNodes=2`.
+
+### Step 3: Distributed job with a GPU
+
+What: one task on each worker, each with its own GPU. The job prints the GPU model, the GPU memory and the driver version on each worker. Why: it proves that the NVIDIA driver works on both workers and that Slurm hands a GPU to the job on each node.
+
+```bash
+sbatch --wait 02_gpu_distributed.sh
+cat results/gpu.out
+```
+
+![image29](/03-Provision/Images/image29.png)
+
+Expected: one block per worker with `NVIDIA H100 80GB HBM3`, `81559 MiB` of GPU memory and the driver version.
+
+### Step 4: NCCL test between the two GPUs
+
+What: a networking test based on `all_reduce_perf_mpi` benchmark from NVIDIA's `nccl-tests`. It makes the GPU on `worker-0` and the GPU on `worker-1` send data to each other, and it measures how fast the data moves. Why: AI training on more than one node depends on this, because the GPUs must exchange data all the time. If this works, the two workers can run one job together. This cluster has no InfiniBand, so the data goes over the normal network, which is much slower. That is expected here.
+
+The NCCL job runs one time, with tuned socket settings, to get as much bandwidth as the network gives. The script tells NCCL to use more parallel TCP connections because a single connection rarely fills a fast link.
+
+```bash
+sbatch --wait 03_nccl_multi_node.sh
+cat results/nccl.out
+```
+
+Expected: the data goes over `NET/Socket`, the `#wrong` column is `0` in every row, and the `busbw` column shows about 3.9 to 4.0 GB/s, with an average of 3.96 GB/s at the end (`Avg bus bandwidth`).
+
+Expected: one row per message size, from 512 MiB to 8 GiB, with `0` in the `#wrong` column. The log shows `NET/Socket` as the transport, not `NET/IB`. The `busbw` column shows about 3.9 to 4.0 GB/s in every row, and the average at the end (`Avg bus bandwidth`) is 3.96 GB/s.
+
+Expected: one row per message size, from 512 MiB to 8 GiB, with `0` in the `#wrong` column. The log shows `NET/Socket` as the transport, not `NET/IB`. In the `busbw` column I measured about 3 GB/s on the first cluster. **[TO COMPLETE with the number from this run]**
+
+![image30](/03-Provision/Images/image30.png)
+
+---
