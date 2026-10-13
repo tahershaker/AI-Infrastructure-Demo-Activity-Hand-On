@@ -547,7 +547,7 @@ variable "resources_vm_logs_server" {
   default = {
     memory = "2Gi"
     cpu    = "1000m"
-    size   = "256Gi"
+    size   = "32Gi"
   }
 }
 
@@ -559,10 +559,10 @@ variable "resources_vm_single" {
     gomaxprocs = number
   })
   default = {
-    memory     = "24Gi"
-    cpu        = "6000m"
-    size       = "512Gi"
-    gomaxprocs = 6
+    memory     = "8Gi"
+    cpu        = "2000m"
+    size       = "32Gi"
+    gomaxprocs = 2
   }
 }
 

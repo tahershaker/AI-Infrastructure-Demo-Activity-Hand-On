@@ -40,7 +40,7 @@ GRES means "generic resource". Slurm knows CPUs and memory by itself, but it doe
 A line in `gres.conf` looks like this:
 
 ```text
-AutoDetect=off Name=gpu Type=${local.gres_by_platforms[local.platforms.gpu-h100-sxm]} File=/dev/nvidia0 Cores=0-15 Links=-1 Flags=nvidia_gpu_env
+AutoDetect=off Name=gpu Type=${local.gres_by_platforms[local.platforms.gpu-h100-sxm]} File=/dev/nvidia0 Cores=0-7 Links=-1 Flags=nvidia_gpu_env
 ```
 
 | Part | Meaning |
@@ -48,10 +48,10 @@ AutoDetect=off Name=gpu Type=${local.gres_by_platforms[local.platforms.gpu-h100-
 | `AutoDetect=off` | Slurm does not detect the GPUs by itself. It uses only the lines that it is given. |
 | `Name=gpu` and `Type=...` | The kind of resource. |
 | `File=/dev/nvidia0` | The device file of the GPU on the node. |
-| `Cores=0-15` | The CPU cores that are close to this GPU. Slurm uses this to place jobs next to their GPU. |
+| `Cores=0-7` | The CPU cores that are close to this GPU. Slurm uses this to place jobs next to their GPU. |
 | `Links=-1` | The fast links (NVLink) from this GPU to the other GPUs on the node. `-1` means the GPU itself. |
 
-You can think of it as a seating plan. The node definition says "this room has 1 desk". The GRES lines say "desk 0 is at `/dev/nvidia0`, next to CPU cores 0-15". If the plan lists 8 desks, and seats that do not exist, Slurm refuses to open the room.
+You can think of it as a seating plan. The node definition says "this room has 1 desk". The GRES lines say "desk 0 is at `/dev/nvidia0`, next to CPU cores 0-7". If the plan lists 8 desks, and seats that do not exist, Slurm refuses to open the room.
 
 `terraform apply` was waiting for the Flux release `flux-system-soperator-fluxcd-soperator-activechecks` to finish. The Kubernetes cluster was up, and I could connect and investigate. The problem looked like it was inside the services that Flux creates. The steps below show how it led to the GRES lines.
 
@@ -75,9 +75,9 @@ Then I checked the Flux releases. Two of them were `Unknown`, and all the others
 ```bash
 kubectl get helmreleases -A
 NAMESPACE     NAME                                                              AGE   READY     STATUS
-flux-system   flux-system-soperator-fluxcd-opentelemetry-collector-jail-logs    15m   Unknown   Running 'install' action with timeout of 15m0s
-flux-system   flux-system-soperator-fluxcd-slurm-cluster                        15m   True      Helm install succeeded for release soperator/soperator.v1 with chart helm-slurm-cluster@4.1.13
-flux-system   flux-system-soperator-fluxcd-soperator-activechecks               15m   Unknown   Running 'install' action with timeout of 2h0m0s
+flux-system   flux-system-soperator-fluxcd-opentelemetry-collector-jail-logs    7m   Unknown   Running 'install' action with timeout of 7m0s
+flux-system   flux-system-soperator-fluxcd-slurm-cluster                        7m   True      Helm install succeeded for release soperator/soperator.v1 with chart helm-slurm-cluster@4.1.13
+flux-system   flux-system-soperator-fluxcd-soperator-activechecks               7m   Unknown   Running 'install' action with timeout of 2h0m0s
 ...
 ```
 
@@ -87,7 +87,7 @@ flux-system   flux-system-soperator-fluxcd-soperator-activechecks               
 
 ## Step 2: Find what the two releases wait for
 
-`jail-logs` waited 15 minutes for its pod to become ready. Then the install failed with `context deadline exceeded`, and Flux removed the release to try again.
+`jail-logs` waited 7 minutes for its pod to become ready. Then the install failed with `context deadline exceeded`, and Flux removed the release to try again.
 
 ```bash
 kubectl -n flux-system describe helmrelease flux-system-soperator-fluxcd-opentelemetry-collector-jail-logs
@@ -119,7 +119,7 @@ controller-0                        1/2     CrashLoopBackOff   5 (100s ago)   6m
 login-0                             0/2     Pending            0              6m41s
 worker-0                            1/2     Init:3/4           1 (59s ago)    6m41s
 worker-1                            1/2     Init:3/4           1 (59s ago)    6m41s
-wait-for-active-checks-xxxxx        1/1     Running            0              15m
+wait-for-active-checks-xxxxx        1/1     Running            0              7m
 ...
 ```
 
@@ -230,7 +230,7 @@ The GRES lines cannot be changed from `terraform.tfvars`, so I edited the recipe
 
 ```hcl
 (local.platforms.gpu-h100-sxm) = [
-  "AutoDetect=off Name=gpu Type=${local.gres_by_platforms[local.platforms.gpu-h100-sxm]} File=/dev/nvidia0 Cores=0-15 Links=-1 Flags=nvidia_gpu_env"
+  "AutoDetect=off Name=gpu Type=${local.gres_by_platforms[local.platforms.gpu-h100-sxm]} File=/dev/nvidia0 Cores=0-7 Links=-1 Flags=nvidia_gpu_env"
   # "AutoDetect=off Name=gpu Type=${local.gres_by_platforms[local.platforms.gpu-h100-sxm]} File=/dev/nvidia4 Cores=0-31 Links=-1,1,1,1,1,1,1,1 Flags=nvidia_gpu_env",
   # "AutoDetect=off Name=gpu Type=${local.gres_by_platforms[local.platforms.gpu-h100-sxm]} File=/dev/nvidia5 Cores=0-31 Links=1,-1,1,1,1,1,1,1 Flags=nvidia_gpu_env",
   # "AutoDetect=off Name=gpu Type=${local.gres_by_platforms[local.platforms.gpu-h100-sxm]} File=/dev/nvidia6 Cores=0-31 Links=1,1,-1,1,1,1,1,1 Flags=nvidia_gpu_env",

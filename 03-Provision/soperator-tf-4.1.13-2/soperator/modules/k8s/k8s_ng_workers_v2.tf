@@ -134,13 +134,7 @@ resource "nebius_mk8s_v1_node_group" "worker_v2" {
         (local.node_group_gpu_present_v2.worker[count.index] ? module.labels.label_nebius_gpu : {}),
         local.node_group_nvl_instance_group_label_v2.worker[count.index],
         module.labels.label_exclude_from_external_lb,
-        # Demo Day change: single-H100 nodes have no InfiniBand fabric, so Nebius
-        # sets no topology labels. Soperator's worker-init waits for them.
-        # These are demo values. They do not describe a real network.
-        {
-          "topology.nebius.com/tier-1" = "demo-tier1"
-          "topology.nebius.com/tier-2" = "demo-tier2"
-        },
+        { "topology.nebius.com/tier-1" = "demo-tier1", "topology.nebius.com/tier-2" = "demo-tier2" },
       )
     }
     taints = local.node_group_gpu_present_v2.worker[count.index] ? [{
