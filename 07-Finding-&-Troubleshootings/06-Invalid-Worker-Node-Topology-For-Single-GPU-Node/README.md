@@ -234,16 +234,6 @@ worker-1 gpu:nvidia_h100_80gb_hbm3:1 idle
 
 ---
 
-## Step 8: Move the labels into Terraform
-
-I added the two labels to the worker node group template (see Workaround) and rebuilt the cluster. The labels reached **only one of the two worker nodes**, so the other worker waited again. I used the manual workaround for that node (label by hand, then delete its pod). I have not found why only one node got the labels.
-
-```bash
-kubectl get nodes -l slurm.nebius.ai/nodeset=worker -L topology.nebius.com/tier-1 -L topology.nebius.com/tier-2
-```
-
----
-
 # Conclusion
 
 Soperator will not start a worker until the ConfigMap `topology-node-labels` has an entry for it, and the entry is built from the `topology.nebius.com/tier-*` node labels. Nebius sets these labels only for nodes in a GPU cluster (InfiniBand). Single-H100 nodes are not in one, so the ConfigMap stays empty and `worker-init` fails after 180 seconds, again and again. The recipe uses `topology/tree` for H100, Terraform adds no topology data for it, and there is no setting to skip the wait. Two demo labels per worker node fix it.
