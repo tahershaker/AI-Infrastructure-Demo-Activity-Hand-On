@@ -242,10 +242,6 @@ I added the two labels to the worker node group template (see Workaround) and re
 kubectl get nodes -l slurm.nebius.ai/nodeset=worker -L topology.nebius.com/tier-1 -L topology.nebius.com/tier-2
 ```
 
-```text
-[TO COMPLETE: paste the output. It should show the label on one node and an empty value on the other.]
-```
-
 ---
 
 # Conclusion
