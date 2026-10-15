@@ -1,0 +1,174 @@
+# Axolotl configuration for the LoRA fine-tune of Qwen2.5-7B-Instruct on gretelai/synthetic_text_to_sql.
+# This file explains every setting. The README holds the same settings with one-line comments.
+# [TO CONFIRM] means that the smoke test settles the value. [TO TUNE] means that the first runs set the best value.
+
+# ---------- Model ----------
+
+# The model to fine-tune. Axolotl downloads it from Hugging Face on first use.
+# Qwen2.5-7B-Instruct is not gated, so no Hugging Face token is needed.
+base_model: Qwen/Qwen2.5-7B-Instruct
+
+# [No Quantization] 8-bit loading is off. It would save memory, but the memory is not needed here,
+# and it adds a small loss in quality and some speed.
+load_in_8bit: false
+
+# 4-bit loading is off for the same reason. With both off, this is LoRA, not QLoRA.
+load_in_4bit: false
+
+# ---------- Method: LoRA in bf16 ----------
+
+# Train a LoRA adapter on top of the frozen base model.
+# Left empty, Axolotl would train all 7B weights, which does not fit on one GPU.
+adapter: lora
+
+# Rank of the LoRA matrices. A higher rank can learn more but uses more memory.
+# 16 is a common starting point for a narrow task.
+lora_r: 16
+
+# Scaling of the adapter's effect on the output. 32 is 2 x the rank, a common rule.
+lora_alpha: 32
+
+# Randomly drops a small share of adapter values during training to reduce overfitting.
+lora_dropout: 0.05
+
+# Put LoRA on all linear layers of the model, not only on attention.
+# This usually gives a better result for a small extra cost.
+lora_target_linear: true
+
+# Use PyTorch's built-in attention (SDPA). Flash attention 2 is not installed in the container,
+# so flash_attention_2 would fail. With sample_packing, Axolotl uses a faster varlen path
+# automatically when the setup supports it, and the packed examples stay separate.
+# [TO CONFIRM] in the smoke test.
+attn_implementation: sdpa
+
+# ---------- Data ----------
+# The training file was built in step 3b of Phase 3 and uploaded to the cluster.
+
+datasets:
+    # Local file on the shared filesystem, so both nodes read the same data.
+  - path: /mnt/data/data/train.jsonl
+
+    # Each row is a list of chat messages. Axolotl turns it into a prompt
+    # with the chat template.
+    type: chat_template
+
+    # The field that holds the list of messages in each row. This is also the default.
+    field_messages: messages
+
+    # Compute the loss on the assistant turn only, which is the SQL query.
+    # By default, the end marker of each trained turn is learned too, so the model knows where to stop.
+    roles_to_train: ["assistant"]
+
+# Use the chat template that comes with the Qwen tokenizer (from tokenizer_config.json), so the
+# prompt format matches what the model was trained on. Axolotl stops with an error if the tokenizer has none.
+chat_template: tokenizer_default
+
+# Do not count the prompt tokens (tables and question) in the loss.
+# The model should learn to write the SQL, not to repeat the question.
+train_on_inputs: false
+
+# Hold back 1% of the training data to compute a validation loss during training.
+# This is separate from the test data (test.jsonl) that is used for the before-and-after comparison.
+val_set_size: 0.01
+
+# Where the tokenized data is saved. A shared path lets both nodes reuse it,
+# and a rerun skips the preparation.
+dataset_prepared_path: /mnt/data/prepared
+
+# ---------- Sequence and packing ----------
+
+# Maximum tokens in one sequence. The Axolotl default is 512, which is too short for our longest example.
+# The longest example has 715 tokens (step 3d), so 2048 drops nothing.
+# Axolotl drops by default an example that does not fit.
+sequence_len: 2048
+
+# Pack several short examples into one sequence. This removes most of the padding,
+# so less compute is wasted and GPU utilization is higher. The examples stay separate inside the piece.
+sample_packing: true
+
+# Pad every batch to the same length. Constant buffer sizes reduce memory
+# fragmentation. Axolotl turns this on by default with packing. It is set explicitly here.
+pad_to_sequence_len: true
+
+# No packing during evaluation. The docs advise this when errors appear
+# in evaluation with packing on. It is set here as a precaution.
+eval_sample_packing: false
+
+# ---------- Batch ----------
+# Effective batch = micro_batch_size x gradient_accumulation_steps x number of GPUs.
+# With these values: 4 x 4 x 2 = 32 pieces per optimizer step.
+# With sample_packing, each piece holds several examples, so one step covers many more than 32.
+
+# Pieces per GPU in one forward pass. [TO TUNE] Raised until GPU memory
+# is about 70-80% used. Too small leaves the GPU underused. Too big runs out of memory.
+micro_batch_size: 4
+
+# Micro-batches added up before one optimizer step. [TO TUNE] after the micro-batch size
+# is known. A higher value means fewer gradient syncs over the network per sample.
+gradient_accumulation_steps: 4
+
+# Number of passes over the training data. [TO CONFIRM] A fixed max_steps may be used
+# instead, to get a steady phase of 20-30 minutes. max_steps takes precedence.
+num_epochs: 1
+
+# ---------- Optimizer ----------
+
+# The update rule. This is the Axolotl default, a fused AdamW that is faster
+# than the plain version. There is enough memory, so no 8-bit optimizer is needed.
+optimizer: adamw_torch_fused
+
+# Size of each weight update. 0.0002 is a common value for LoRA.
+# Too high makes training diverge. Too low barely learns.
+learning_rate: 0.0002
+
+# Learning rate falls along a cosine curve toward zero. This is the Axolotl default.
+lr_scheduler: cosine
+
+# The learning rate rises from zero over the first 10 steps. This avoids
+# unstable updates at the start.
+warmup_steps: 10
+
+# No weight decay. This is the Axolotl default, and it is fine for a short LoRA run.
+weight_decay: 0.0
+
+# ---------- Precision and speed ----------
+
+# Train in bfloat16. It halves memory against fp32 and is much faster. The H100 supports it.
+bf16: true
+
+# Allow TensorFloat-32 for the matrix math that stays in fp32. Faster, with no real loss.
+tf32: true
+
+# Use flash attention 2. It is faster and uses less memory, especially with packing.
+# This key replaces the old flash_attention key, which the docs mark as deprecated.
+# [TO CONFIRM] that the pinned image accepts it.
+attn_implementation: flash_attention_2
+
+# Do not recompute activations to save memory. Recomputing slows training down.
+# Turn on only if memory runs out.
+gradient_checkpointing: false
+
+# Processes that prepare batches. [TO TUNE] Too few and the GPU waits for data.
+# Each node has 16 vCPUs.
+dataloader_num_workers: 4
+
+# ---------- Logging and saving ----------
+
+# Log the loss every 5 steps. Frequent enough to see the trend, rare enough to keep logs short.
+logging_steps: 5
+
+# Run the validation 4 times per epoch to draw a validation loss curve.
+evals_per_epoch: 4
+
+# Save a checkpoint 4 times per epoch, so a failure does not lose the whole run.
+saves_per_epoch: 4
+
+# Keep only the 2 latest checkpoints, so the disk does not fill up.
+save_total_limit: 2
+
+# Where results and the final adapter are written. It is on the shared filesystem,
+# so the serving step finds the adapter in a known place.
+output_dir: /mnt/data/outputs/qwen25-7b-sql-lora
+
+# Fixes the random choices, so two runs can be compared.
+seed: 42
