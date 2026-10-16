@@ -6,8 +6,6 @@
 
 # Description
 
-# Description
-
 This section holds everything needed to serve the fine-tuned model built in [04-Fine-Tuning](/04-Fine-Tune/README.md) on the Soperator cluster built in [03-Provision](/03-Provision/README.md).
 
 It covers task 2 of the Nebius Demo Day: serve the trained model for inference on the same Kubernetes cluster.
