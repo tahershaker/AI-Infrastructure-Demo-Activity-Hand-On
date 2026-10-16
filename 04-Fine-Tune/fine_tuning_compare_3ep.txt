@@ -1,0 +1,501 @@
+cpu-bind=MASK - worker-0, task  0  0 [79177]: mask 0xffff set
+pyxis: importing docker image: axolotlai/axolotl:main-20261013-py3.12-cu130-2.13.0
+pyxis: imported docker image: axolotlai/axolotl:main-20261013-py3.12-cu130-2.13.0
+/workspace/axolotl-venv/lib/python3.12/site-packages/torchao/quantization/quant_api.py:1558: SyntaxWarning: invalid escape sequence '\.'
+  * regex for parameter names, must start with `re:`, e.g. `re:language\.layers\..+\.q_proj.weight`.
+W1016 09:22:57.500000 79177 torch/utils/_pytree.py:630] <enum 'KernelPreference'> is an Enum subclass and is now natively supported by torch.compile as an opaque value type. Calling register_constant() on Enum subclasses is deprecated and will be an error in a future release.
+W1016 09:22:57.574000 79177 torch/utils/_pytree.py:630] <enum 'ScaleCalculationMode'> is an Enum subclass and is now natively supported by torch.compile as an opaque value type. Calling register_constant() on Enum subclasses is deprecated and will be an error in a future release.
+[transformers] `torch_dtype` is deprecated! Use `dtype` instead!
+Loading weights: 100%|██████████| 339/339 [00:05<00:00, 61.90it/s]
+======================================================================
+ROW 0
+QUESTION: What is the average explainability score of creative AI applications in 'Europe' and 'North America' in the 'creative_ai' table?
+
+CORRECT SQL:
+SELECT AVG(explainability_score) FROM creative_ai WHERE region IN ('Europe', 'North America');
+
+ORIGINAL MODEL:
+To find the average explainability score of creative AI applications in both 'Europe' and 'North America', you can use the following SQL query:
+
+```sql
+SELECT
+    region,
+    AVG(explainability_score) AS average_explainability_score
+FROM
+    creative_ai
+WHERE
+    region IN ('Europe', 'North America')
+GROUP BY
+    region;
+```
+
+This query calculates the average explainability score for each region ('Europe' and 'North America') separately. If you want a single value representing the overall average across both regions, you can modify the query as follows:
+
+```sql
+SELECT
+    AVG(explainability_score) AS overall_average_explainability_score
+FROM
+    creative_ai
+WHERE
+    region IN ('Europe', 'North America');
+```
+
+The second query will give you the combined average explainability score for all applications in 'Europe' and 'North America'.
+
+TUNED MODEL:
+SELECT AVG(explainability_score) FROM creative_ai WHERE region IN ('Europe', 'North America');
+
+SAME ANSWER: False
+======================================================================
+ROW 1
+QUESTION: Delete all records of rural infrastructure projects in Indonesia that have a completion date before 2010.
+
+CORRECT SQL:
+DELETE FROM rural_infrastructure WHERE country = 'Indonesia' AND completion_date < '2010-01-01';
+
+ORIGINAL MODEL:
+To delete all records of rural infrastructure projects in Indonesia that have a completion date before 2010, you can use the following SQL query:
+
+```sql
+DELETE FROM rural_infrastructure
+WHERE country = 'Indonesia' AND YEAR(completion_date) < 2010;
+```
+
+This query deletes rows from the `rural_infrastructure` table where the `country` is 'Indonesia' and the year part of the `completion_date` is less than 2010.
+
+TUNED MODEL:
+DELETE FROM rural_infrastructure WHERE country = 'Indonesia' AND completion_date < '2010-01-01';
+
+SAME ANSWER: False
+======================================================================
+ROW 2
+QUESTION: How many accidents have been recorded for SpaceX and Blue Origin rocket launches?
+
+CORRECT SQL:
+SELECT launch_provider, COUNT(*) FROM Accidents GROUP BY launch_provider;
+
+ORIGINAL MODEL:
+To answer the question about how many accidents have been recorded for SpaceX and Blue Origin rocket launches, you can use the following SQL query:
+
+```sql
+SELECT
+    launch_provider,
+    COUNT(*) AS accident_count
+FROM
+    Accidents
+WHERE
+    launch_provider IN ('SpaceX', 'Blue Origin')
+GROUP BY
+    launch_provider;
+```
+
+This query will count the number of accidents for each specified launch provider (SpaceX and Blue Origin).
+
+TUNED MODEL:
+SELECT launch_provider, COUNT(*) as total_accidents FROM Accidents WHERE launch_provider IN ('SpaceX', 'Blue Origin') GROUP BY launch_provider;
+
+SAME ANSWER: False
+======================================================================
+ROW 3
+QUESTION: What is the maximum quantity of seafood sold in a single transaction?
+
+CORRECT SQL:
+SELECT MAX(quantity) FROM sales;
+
+ORIGINAL MODEL:
+The question seems to be asking for the maximum quantity of seafood sold in a single transaction. However, the provided `sales` table does not contain any information about the type of seafood sold. Assuming we need to find the maximum quantity sold regardless of the type of product, the query would look like this:
+
+```sql
+SELECT MAX(quantity) AS max_quantity_sold
+FROM sales;
+```
+
+If you need to filter by a specific location or other criteria, please provide additional details.
+
+TUNED MODEL:
+SELECT MAX(quantity) FROM sales WHERE location = 'West';
+
+SAME ANSWER: False
+======================================================================
+ROW 4
+QUESTION: What is the total budget for movies released before 2010?
+
+CORRECT SQL:
+SELECT SUM(budget) FROM Movies_Release_Year WHERE release_year < 2010;
+
+ORIGINAL MODEL:
+To find the total budget for movies released before 2010, you can use the following SQL query:
+
+```sql
+SELECT SUM(budget) AS total_budget
+FROM Movies_Release_Year
+WHERE release_year < 2010;
+```
+
+This query sums up the `budget` column for all rows where the `release_year` is less than 2010.
+
+TUNED MODEL:
+SELECT SUM(budget) FROM Movies_Release_Year WHERE release_year < 2010;
+
+SAME ANSWER: False
+======================================================================
+ROW 5
+QUESTION: Add a new attorney named 'Oliver Martinez' with email 'oliver.martinez@lawfirm.com' and phone '555-555-5678' to the 'attorneys' table
+
+CORRECT SQL:
+INSERT INTO attorneys (attorney_name, attorney_email, attorney_phone) VALUES ('Oliver Martinez', 'oliver.martinez@lawfirm.com', '555-555-5678');
+
+ORIGINAL MODEL:
+To add a new attorney named 'Oliver Martinez' with the specified email and phone number to the `attorneys` table, you can use the following SQL `INSERT` statement:
+
+```sql
+INSERT INTO attorneys (attorney_name, attorney_email, attorney_phone)
+VALUES ('Oliver Martinez', 'oliver.martinez@lawfirm.com', '555-555-5678');
+```
+
+This query inserts a new row into the `attorneys` table with the given values for the `attorney_name`, `attorney_email`, and `attorney_phone` columns.
+
+TUNED MODEL:
+INSERT INTO attorneys (attorney_name, attorney_email, attorney_phone) VALUES ('Oliver Martinez', 'oliver.martinez@lawfirm.com', '555-555-5678');
+
+SAME ANSWER: False
+======================================================================
+ROW 6
+QUESTION: Identify the top 2 plants with the highest CO2 emissions per ton produced.
+
+CORRECT SQL:
+SELECT plant_name, SUM(co2_emission_per_ton_produced) AS total_co2_emission FROM co2_emissions GROUP BY plant_name ORDER BY total_co2_emission DESC LIMIT 2;
+
+ORIGINAL MODEL:
+To identify the top 2 plants with the highest CO2 emissions per ton produced, you can use the `ORDER BY` clause to sort the plants by their CO2 emissions in descending order and then limit the result to the top 2 using the `LIMIT` clause.
+
+Here is the SQL query to achieve this:
+
+```sql
+SELECT plant_name, co2_emission_per_ton_produced
+FROM co2_emissions
+ORDER BY co2_emission_per_ton_produced DESC
+LIMIT 2;
+```
+
+This query will return the names of the plants along with their CO2 emissions per ton produced, sorted from the highest to the lowest, and will limit the output to the top 2 results.
+
+TUNED MODEL:
+SELECT plant_name, SUM(co2_emission_per_ton_produced) as total_co2_emission FROM co2_emissions GROUP BY plant_name ORDER BY total_co2_emission DESC LIMIT 2;
+
+SAME ANSWER: False
+======================================================================
+ROW 7
+QUESTION: What is the total cost of all climate communication projects that ended after 2010 in 'Antarctica'?
+
+CORRECT SQL:
+SELECT SUM(total_cost) FROM climate_communication WHERE location = 'Antarctica' AND end_date >= '2010-12-31';
+
+ORIGINAL MODEL:
+To find the total cost of all climate communication projects that ended after 2010 in 'Antarctica', you can use the following SQL query:
+
+```sql
+SELECT SUM(total_cost) AS total_cost
+FROM climate_communication
+WHERE location = 'Antarctica' AND end_date > '2010-12-31';
+```
+
+This query sums up the `total_cost` for projects where the `location` is 'Antarctica' and the `end_date` is after December 31, 2010.
+
+TUNED MODEL:
+SELECT SUM(total_cost) FROM climate_communication WHERE location = 'Antarctica' AND end_date > '2010-12-31';
+
+SAME ANSWER: False
+======================================================================
+ROW 8
+QUESTION: List all marine species with their conservation status.
+
+CORRECT SQL:
+SELECT name, conservation_status FROM marine_species;
+
+ORIGINAL MODEL:
+Certainly! Here is the SQL query to list all marine species along with their conservation status:
+
+```sql
+SELECT name, conservation_status
+FROM marine_species;
+```
+
+This query selects the `name` and `conservation_status` columns from the `marine_species` table and lists them for each row in the table.
+
+TUNED MODEL:
+SELECT name, conservation_status FROM marine_species;
+
+SAME ANSWER: False
+======================================================================
+ROW 9
+QUESTION: What is the average number of publications per researcher for researchers working at the 'National Geographic' organization?
+
+CORRECT SQL:
+SELECT organization, AVG(publications) as avg_publications FROM researchers WHERE organization = 'National Geographic';
+
+ORIGINAL MODEL:
+To find the average number of publications per researcher for those working at the 'National Geographic' organization, you can use the following SQL query:
+
+```sql
+SELECT AVG(publications) AS average_publications
+FROM researchers
+WHERE organization = 'National Geographic';
+```
+
+This query calculates the average number of publications for researchers who are associated with the 'National Geographic' organization.
+
+TUNED MODEL:
+SELECT AVG(publications) FROM researchers WHERE organization = 'National Geographic';
+
+SAME ANSWER: False
+======================================================================
+ROW 10
+QUESTION: How many decentralized applications have been downloaded from the 'Asia-Pacific' region?
+
+CORRECT SQL:
+SELECT SUM(dapp_downloads) FROM dapp_ranking WHERE dapp_region = 'Asia-Pacific';
+
+ORIGINAL MODEL:
+To find out how many decentralized applications have been downloaded from the 'Asia-Pacific' region, you can use the following SQL query:
+
+```sql
+SELECT SUM(dapp_downloads) AS total_downloads
+FROM dapp_ranking
+WHERE dapp_region = 'Asia-Pacific';
+```
+
+This query sums up the `dapp_downloads` for all entries in the `dapp_ranking` table where the `dapp_region` is 'Asia-Pacific'.
+
+TUNED MODEL:
+SELECT SUM(dapp_downloads) FROM dapp_ranking WHERE dapp_region = 'Asia-Pacific';
+
+SAME ANSWER: False
+======================================================================
+ROW 11
+QUESTION: Identify forests in Canada or the United States with an area larger than 1 million hectares?
+
+CORRECT SQL:
+SELECT forests.name FROM forests WHERE (forests.country = 'Canada' OR forests.country = 'USA') AND forests.hectares > 1000000;
+
+ORIGINAL MODEL:
+To identify forests in Canada or the United States with an area larger than 1 million hectares, you can use the following SQL query:
+
+```sql
+SELECT *
+FROM forests
+WHERE (country = 'Canada' OR country = 'United States') AND hectares > 1000000;
+```
+
+This query filters the `forests` table to include only those records where the `country` is either 'Canada' or 'United States' and the `hectares` is greater than 1,000,000.
+
+TUNED MODEL:
+SELECT name FROM forests WHERE country IN ('Canada', 'United States') AND hectares > 1000000;
+
+SAME ANSWER: False
+======================================================================
+ROW 12
+QUESTION: What is the maximum response time for emergency calls in the city of Los Angeles?
+
+CORRECT SQL:
+SELECT MAX(response_time) FROM emergency_calls WHERE city = 'Los Angeles';
+
+ORIGINAL MODEL:
+To find the maximum response time for emergency calls in the city of Los Angeles, you can use the following SQL query:
+
+```sql
+SELECT MAX(response_time) AS max_response_time
+FROM emergency_calls
+WHERE city = 'Los Angeles';
+```
+
+This query selects the maximum `response_time` from the `emergency_calls` table where the `city` is 'Los Angeles'. The result will be labeled as `max_response_time`.
+
+TUNED MODEL:
+SELECT MAX(response_time) FROM emergency_calls WHERE city = 'Los Angeles';
+
+SAME ANSWER: False
+======================================================================
+ROW 13
+QUESTION: What is the total number of police patrols and community engagement events in each district in January 2021?
+
+CORRECT SQL:
+SELECT d.name, SUM(IF(p.type = 'Patrol', 1, 0)) as num_patrols, SUM(IF(p.type = 'Community', 1, 0)) as num_community FROM districts d JOIN patrols p ON d.id = p.district_id WHERE p.date >= '2021-01-01' AND p.date < '2021-02-01' GROUP BY d.id;
+
+ORIGINAL MODEL:
+To answer the question, you can use the following SQL query:
+
+```sql
+SELECT
+    district_id,
+    COUNT(CASE WHEN type = 'Patrol' THEN id END) AS patrols,
+    COUNT(CASE WHEN type = 'Community' THEN id END) AS community_engagement
+FROM
+    patrols
+WHERE
+    date >= '2021-01-01' AND date < '2021-02-01'
+GROUP BY
+    district_id;
+```
+
+This query does the following:
+1. Filters the records to only include those from January 2021.
+2. Uses `COUNT` with `CASE` statements to count the number of patrols and community engagement events separately for each district.
+3. Groups the results by `district_id` to get the counts for each district.
+
+TUNED MODEL:
+SELECT district_id, COUNT(*) as total_events FROM patrols WHERE date BETWEEN '2021-01-01' AND '2021-01-31' GROUP BY district_id;
+
+SAME ANSWER: False
+======================================================================
+ROW 14
+QUESTION: What is the average cybersecurity contract value?
+
+CORRECT SQL:
+SELECT AVG(value) as avg_value FROM contracts WHERE category = 'Cybersecurity';
+
+ORIGINAL MODEL:
+To find the average cybersecurity contract value, you can use the following SQL query:
+
+```sql
+SELECT AVG(value) AS average_value
+FROM contracts
+WHERE category = 'Cybersecurity';
+```
+
+This query calculates the average (`AVG`) value of all contracts in the `contracts` table where the `category` is 'Cybersecurity'.
+
+TUNED MODEL:
+SELECT AVG(value) FROM contracts WHERE category = 'Cybersecurity';
+
+SAME ANSWER: False
+======================================================================
+ROW 15
+QUESTION: Delete arms_imports table records where year is before 2000
+
+CORRECT SQL:
+DELETE FROM arms_imports WHERE year < 2000;
+
+ORIGINAL MODEL:
+To delete records from the `arms_imports` table where the `year` is before 2000, you can use the following SQL query:
+
+```sql
+DELETE FROM arms_imports
+WHERE year < 2000;
+```
+
+This query will remove all rows from the `arms_imports` table where the `year` column has a value less than 2000. Given the data provided in your example, this query would delete the single record since the only year provided is 1999, which is before 2000.
+
+TUNED MODEL:
+DELETE FROM arms_imports WHERE year < 2000;
+
+SAME ANSWER: False
+======================================================================
+ROW 16
+QUESTION: What is the average number of military personnel per country involved in peacekeeping operations?
+
+CORRECT SQL:
+SELECT AVG(military_personnel) FROM Peacekeeping_Operations;
+
+ORIGINAL MODEL:
+To find the average number of military personnel per country involved in peacekeeping operations, you can use the following SQL query:
+
+```sql
+SELECT AVG(military_personnel) AS average_military_personnel
+FROM Peacekeeping_Operations;
+```
+
+This query calculates the average value of the `military_personnel` column from the `Peacekeeping_Operations` table.
+
+TUNED MODEL:
+SELECT AVG(military_personnel) FROM Peacekeeping_Operations GROUP BY country;
+
+SAME ANSWER: False
+======================================================================
+ROW 17
+QUESTION: What is the maximum daily investment for each client?
+
+CORRECT SQL:
+SELECT client_id, MAX(investment) OVER (PARTITION BY client_id ORDER BY client_id) as max_daily_investment FROM daily_investments;
+
+ORIGINAL MODEL:
+To find the maximum daily investment for each client, you can use the `MAX` function along with a `GROUP BY` clause to group the results by `client_id` and `date`. Here is the SQL query to achieve this:
+
+```sql
+SELECT client_id, date, MAX(investment) AS max_daily_investment
+FROM daily_investments
+GROUP BY client_id, date;
+```
+
+This query will return the maximum investment amount for each day and for each client.
+
+TUNED MODEL:
+SELECT client_id, MAX(investment) as max_daily_investment FROM daily_investments GROUP BY client_id;
+
+SAME ANSWER: False
+======================================================================
+ROW 18
+QUESTION: List the ports with their total cargo weight for 'Fruit' type from the 'CARGO_HANDLING' table.
+
+CORRECT SQL:
+SELECT P.PortName, SUM(CH.Weight) FROM PORTS P JOIN CARGO_HANDLING CH ON P.ID = CH.PortID WHERE CH.CargoType = 'Fruit' GROUP BY P.PortName;
+
+ORIGINAL MODEL:
+To list the ports along with their total cargo weight for the 'Fruit' type, you can use the following SQL query:
+
+```sql
+SELECT
+    P.PortName,
+    SUM(CH.Weight) AS TotalCargoWeight
+FROM
+    CARGO_HANDLING CH
+JOIN
+    PORTS P ON CH.PortID = P.ID
+WHERE
+    CH.CargoType = 'Fruit'
+GROUP BY
+    P.PortName;
+```
+
+This query joins the `PORTS` and `CARGO_HANDLING` tables on the `PortID`, filters the rows where the `CargoType` is 'Fruit', groups the results by `PortName`, and calculates the sum of the `Weight` for each port.
+
+TUNED MODEL:
+SELECT P.PortName, SUM(CH.Weight) FROM PORTS P INNER JOIN CARGO_HANDLING CH ON P.ID = CH.PortID WHERE CH.CargoType = 'Fruit' GROUP BY P.PortName;
+
+SAME ANSWER: False
+======================================================================
+ROW 19
+QUESTION: What is the minimum fuel consumption of container ships built in 2016, grouped by container type?
+
+
+CORRECT SQL:
+SELECT container_type, MIN(fuel_consumption) FROM container_ships WHERE year = 2016 GROUP BY container_type;
+
+ORIGINAL MODEL:
+To find the minimum fuel consumption of container ships built in 2016, grouped by container type, you can use the following SQL query:
+
+```sql
+SELECT
+    container_type,
+    MIN(fuel_consumption) AS min_fuel_consumption
+FROM
+    container_ships
+WHERE
+    year = 2016
+GROUP BY
+    container_type;
+```
+
+This query filters the records to only include those from 2016, then groups the results by `container_type` and finds the minimum `fuel_consumption` for each group.
+
+TUNED MODEL:
+SELECT container_type, MIN(fuel_consumption) FROM container_ships WHERE year = 2016 GROUP BY container_type;
+
+SAME ANSWER: False
+======================================================================
+SUMMARY FOR 20 QUESTIONS
+Same answer from both models:         0 of 20
+Original model matches correct SQL:   0 of 20
+Tuned model matches correct SQL:      10 of 20
+Original answers with a code block:   20 of 20
+Tuned answers with a code block:      0 of 20

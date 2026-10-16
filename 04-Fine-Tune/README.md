@@ -1626,3 +1626,66 @@ Result: the run finished with no errors. For every question, the original model 
 For the full output of `compare.log`, see [fine_tuning_compare.txt](fine_tuning_compare.txt).
 
 ---
+
+
+
+
+
+```bash
+cat > /mnt/data/logs/compare-3ep.py <<'EOF'
+import sys, json, torch
+from transformers import AutoTokenizer, AutoModelForCausalLM
+from peft import PeftModel
+
+BASE = "Qwen/Qwen2.5-7B-Instruct"
+ADAPTER = "/mnt/data/outputs/qwen25-7b-sql-lora-3ep"
+
+rows = [json.loads(line) for line in open("/mnt/data/data/test.jsonl")]
+idx = [int(a) for a in sys.argv[1:]] or list(range(20))
+
+tok = AutoTokenizer.from_pretrained(BASE)
+model = AutoModelForCausalLM.from_pretrained(BASE, torch_dtype=torch.bfloat16, device_map={"": 0})
+model.eval()
+
+def ask(m, messages):
+    prompt = messages[:-1]                     # system + user. The last message is the correct answer, so we drop it.
+    text = tok.apply_chat_template(prompt, tokenize=False, add_generation_prompt=True)
+    ids = tok(text, return_tensors="pt").to("cuda")
+    with torch.no_grad():
+        out = m.generate(**ids, max_new_tokens=300, do_sample=False)
+    return tok.decode(out[0][ids["input_ids"].shape[1]:], skip_special_tokens=True).strip()
+
+def norm(s):
+    return " ".join(s.lower().replace(";", " ").split())
+
+# 1. The original model, no adapter
+base_answers = {i: ask(model, rows[i]["messages"]) for i in idx}
+
+# 2. The same model with the adapter
+model = PeftModel.from_pretrained(model, ADAPTER)
+model.eval()
+tuned_answers = {i: ask(model, rows[i]["messages"]) for i in idx}
+
+for i in idx:
+    msgs = rows[i]["messages"]
+    user = next(m for m in msgs if m["role"] == "user")["content"]
+    print("=" * 70)
+    print("ROW", i)
+    print("QUESTION:", user.split("Question:")[-1].strip())
+    print("\nCORRECT SQL:\n" + msgs[-1]["content"])
+    print("\nORIGINAL MODEL:\n" + base_answers[i])
+    print("\nTUNED MODEL:\n" + tuned_answers[i])
+    print("\nSAME ANSWER:", base_answers[i] == tuned_answers[i])
+
+ref = {i: rows[i]["messages"][-1]["content"] for i in idx}
+n = len(idx)
+print("=" * 70)
+print("SUMMARY FOR", n, "QUESTIONS")
+print("Same answer from both models:        ", sum(base_answers[i] == tuned_answers[i] for i in idx), "of", n)
+print("Original model matches correct SQL:  ", sum(norm(base_answers[i]) == norm(ref[i]) for i in idx), "of", n)
+print("Tuned model matches correct SQL:     ", sum(norm(tuned_answers[i]) == norm(ref[i]) for i in idx), "of", n)
+print("Original answers with a code block:  ", sum("```" in base_answers[i] for i in idx), "of", n)
+print("Tuned answers with a code block:     ", sum("```" in tuned_answers[i] for i in idx), "of", n)
+EOF
+ls -l /mnt/data/logs/compare-3ep.py
+```
