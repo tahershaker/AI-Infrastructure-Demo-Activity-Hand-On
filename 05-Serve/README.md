@@ -142,11 +142,12 @@ Before we serve the models, we do two preparation tasks:
 
 > [!NOTE]
 > The commands below run on the Slurm login pod, and not on the laptop. Go to the terminal that is logged in to the login pod before you run them.
-> If you are not logged in to th eslurm login, use the below commands to login
+> If you are not logged in to the slurm login, use the below commands to login
 >
 > ```bash
 > export KEY=~/.ssh/taher-soperator-demoday
 > export LOGIN_IP=$(kubectl -n soperator get svc soperator-login-svc -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
+> ssh -i $KEY root@$LOGIN_IP
 > ```
 >
 
@@ -239,7 +240,7 @@ The key is read from the file we made in Preparation 2. `--served-model-name` se
 
 > [!NOTE]
 > The commands below run on the Slurm login pod, and not on the laptop. Go to the terminal that is logged in to the login pod before you run them.
-> If you are not logged in to th eslurm login, use the below commands to login
+> If you are not logged in to the slurm login, use the below commands to login
 >
 > ```bash
 > export KEY=~/.ssh/taher-soperator-demoday

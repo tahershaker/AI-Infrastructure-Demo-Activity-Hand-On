@@ -1,12 +1,21 @@
-cpu-bind=MASK - worker-0, task  0  0 [79177]: mask 0xffff set
-pyxis: importing docker image: axolotlai/axolotl:main-20261013-py3.12-cu130-2.13.0
-pyxis: imported docker image: axolotlai/axolotl:main-20261013-py3.12-cu130-2.13.0
-/workspace/axolotl-venv/lib/python3.12/site-packages/torchao/quantization/quant_api.py:1558: SyntaxWarning: invalid escape sequence '\.'
-  * regex for parameter names, must start with `re:`, e.g. `re:language\.layers\..+\.q_proj.weight`.
-W1016 09:22:57.500000 79177 torch/utils/_pytree.py:630] <enum 'KernelPreference'> is an Enum subclass and is now natively supported by torch.compile as an opaque value type. Calling register_constant() on Enum subclasses is deprecated and will be an error in a future release.
-W1016 09:22:57.574000 79177 torch/utils/_pytree.py:630] <enum 'ScaleCalculationMode'> is an Enum subclass and is now natively supported by torch.compile as an opaque value type. Calling register_constant() on Enum subclasses is deprecated and will be an error in a future release.
-[transformers] `torch_dtype` is deprecated! Use `dtype` instead!
-Loading weights: 100%|██████████| 339/339 [00:05<00:00, 61.90it/s]
+This file is the output of compare-3ep.py, the script we ran after the 3-epoch fine-tuning run. It sends the same 20 questions from the test dataset to the original model and to the model tuned for 3 epochs, so that you can compare their answers.
+
+SUMMARY
+- Model: Qwen/Qwen2.5-7B-Instruct, original and with the LoRA adapter from /mnt/data/outputs/qwen25-7b-sql-lora-3ep.
+- Training: 3 epochs, started from the base model. The final validation loss is 0.1634. The 1-epoch run ended at 0.1773.
+- Questions: rows 0 to 19 of /mnt/data/data/test.jsonl. The model did not see these rows during training. They are the same rows as in the 1-epoch test.
+- Settings: greedy decoding (do_sample=False), max 300 new tokens. The same question always gives the same answer.
+- Same answer from both models: 0 of 20. The adapter changed the output in every case.
+- Original model: 20 of 20 answers have an explanation and a markdown code block around the SQL. 0 of 20 match the correct SQL text. This is because of the code block, so it does not mean the SQL was wrong.
+- Tuned model: 20 of 20 answers are SQL only, with no code block. 10 of 20 are exactly the same as the correct SQL (rows 0, 1, 4, 5, 6, 8, 10, 12, 15, 19).
+- Compared with the 1-epoch run (8 of 20): rows 5, 6 and 10 now match. Row 16 matched before, and now it adds GROUP BY country, so it differs from the reference.
+- Tuned model, other rows: most are close to the correct SQL. Rows 3, 13 and 17 are still different from the correct query. Row 3 adds a filter that is not in the question. Row 13 gives one total and not two separate counts.
+- The match check is strict. It lowercases the text and removes ";" and extra spaces, and then it needs the same text. A correct query written in a different way counts as a miss.
+- This is a check on 20 examples. A gain of 2 rows is small. It shows that more epochs helped a little. It is not a score for the whole test set.
+
+FULL OUTPUT:
+------------
+
 ======================================================================
 ROW 0
 QUESTION: What is the average explainability score of creative AI applications in 'Europe' and 'North America' in the 'creative_ai' table?
