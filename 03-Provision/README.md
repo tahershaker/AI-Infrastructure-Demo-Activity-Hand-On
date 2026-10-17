@@ -4,6 +4,52 @@
 
 ---
 
+# Summary
+
+This is a summary of the file, with a link to each main section.
+
+* [Description](#description) - what the task is, what Soperator is, and why the recipe must be adapted to two single-H100 nodes with no InfiniBand.
+* [How the Terraform script works](#how-the-terraform-script-works) - how the Soperator recipe builds the cluster in four layers (`.envrc`, Terraform, Flux and the Soperator operator), which files it uses, and what Terraform does in order.
+* [Editing the recipe](#editing-the-recipe) - the recipe cannot run as it is for this environment, so 8 edits were made. Each one has the commands to apply it and a link to its issue page.
+  * [Edit 1: `.envrc`](#edit-1-envrc-service-account-group-and-bucket) - use the provided service account and state bucket, and skip the `editors` group step.
+  * [Edit 2: `variables.tf`](#edit-2-variablestf-unused-tenant-lookup) - comment out a tenant lookup that the sandbox user is not allowed to run.
+  * [Edit 3: `gpu_fabric_validation.tf`](#edit-3-modulesk8sgpu_fabric_validationtf-infiniband-check) - do not demand an InfiniBand GPU cluster for a preset that cannot join one.
+  * [Edit 4: `gres.tf`](#edit-4-modulesavailable_resourcesgrestf-gres-config---gpu-lines-for-one-gpu) - describe one GPU, not eight, in the Slurm GRES lines.
+  * [Edit 5: `k8s_ng_workers_v2.tf`](#edit-5-modulesk8sk8s_ng_workers_v2tf-topology-labels) - add demo topology labels to the workers, so they do not wait for ever.
+  * [Edit 6: `modules/slurm/main.tf`](#edit-6-modulesslurmmaintf-login-pod-placement) - run the login pod on the system nodes.
+  * [Edit 7: `installations/taher-demoday/main.tf`](#edit-7-installationstaher-demodaymaintf-login-pod-disk-request) - fix the disk request of the login pod at 64 GiB.
+  * [Edit 8: `modules/slurm/variables.tf`](#edit-8-modulesslurmvariablestf-victoriametrics-and-victorialogs-sizes) - make the monitoring disks, CPU and memory smaller.
+* [The `terraform.tfvars` file](#the-terraformtfvars-file) - the values that describe our cluster, and how they fit it into the 2048 GiB disk quota (1970 GiB used) by turning off accounting and the login node group and by making the disks smaller.
+* [Deployment steps](#deployment-steps) - the ten steps from installing the tools to `terraform apply`.
+  * [Step 0: Install the tools](#step-0-install-the-tools) - Terraform, the Nebius CLI, `kubectl`, `jq`, `coreutils` and `yq`.
+  * [Step 1: Download the release](#step-1-download-the-release) - get the release `soperator-v4.1.13-2` from GitHub.
+  * [Step 2: Unpack it into a new folder](#step-2-unpack-it-into-a-new-folder) - keep it separate from any earlier attempt.
+  * [Step 3: Create the installation folder and copy the example](#step-3-create-the-installation-folder-and-copy-the-example) - all the work happens in our own copy of `example`.
+  * [Step 4: Make the edits](#step-4-make-the-edits) - apply the 8 edits and the `terraform.tfvars` values.
+  * [Step 5: Set the Nebius variables](#step-5-set-the-nebius-variables) - the tenant ID, the project ID and the region.
+  * [Step 6: Load `.envrc`](#step-6-load-envrc) - get the token, the service account, the state bucket and the `TF_VAR_*` variables.
+  * [Step 7: Initialize Terraform](#step-7-initialize-terraform) - download the providers and connect to the state bucket.
+  * [Step 8: Validate the configuration](#step-8-validate-the-configuration) - check the syntax and the size rules before anything is created.
+  * [Step 9: Plan](#step-9-plan) - list what Terraform would create. The plan creates 42 resources.
+  * [Step 10: Apply](#step-10-apply) - create the infrastructure and let Flux install Soperator. It usually takes 40 to 50 minutes.
+* [Validating the environment](#validating-the-environment) - seven checks to run in a second terminal whilst the apply is still running.
+  * [Check 1: Shared filesystems](#check-1-shared-filesystems) - the jail, the `data` filesystem and the controller spool are `Ready`.
+  * [Check 2: Kubernetes cluster and nodes](#check-2-kubernetes-cluster-and-nodes) - one cluster, four node groups and 8 nodes, with one GPU on each worker.
+  * [Check 3: Topology labels on the workers](#check-3-topology-labels-on-the-workers) - both workers have the two topology labels, or we add them by hand.
+  * [Check 4: Flux and the Helm releases](#check-4-flux-and-the-helm-releases) - the Flux pods run and the Helm releases turn `True`.
+  * [Check 5: Active checks](#check-5-active-checks) - the health checks finish, and the job that waits for them completes.
+  * [Check 6: Soperator pods](#check-6-soperator-pods) - the controller, login and worker pods are `Running`.
+  * [Check 7: Slurm](#check-7-slurm) - both workers are `idle` with one GPU each, and `srun` works from the login node.
+  * [Terraform apply: complete](#terraform-apply-complete) - the apply ends with `Apply complete!`.
+  * [After the apply: suspend the GPU health checks](#after-the-apply-suspend-the-gpu-health-checks) - suspend the six GPU health checks, because they would block our own jobs.
+* [Testing Slurm](#testing-slurm) - four tests that prove the cluster is ready for training.
+  * [Step 1: Copy the scripts to the login node](#step-1-copy-the-scripts-to-the-login-node) - put the test scripts on the login node.
+  * [Step 2: Distributed job without a GPU](#step-2-distributed-job-without-a-gpu) - a job across both workers that does not use a GPU.
+  * [Step 3: Distributed job with a GPU](#step-3-distributed-job-with-a-gpu) - a job across both workers that uses one GPU on each.
+  * [Step 4: NCCL test between the two GPUs](#step-4-nccl-test-between-the-two-gpus) - a test of the GPU-to-GPU communication over the network.
+
+---
+
 # Description
 
 This section holds everything needed to provision the cluster for the Nebius Demo Day task, starting from nothing.
@@ -1167,7 +1213,7 @@ mkdir -p results
 
 ![image26](/03-Provision/Images/image26.png)
 
-### Step 2: Distributed job without a GPU
+## Step 2: Distributed job without a GPU
 
 What: one task on each worker, with no GPU requested. Why: it proves that Slurm can place a job on both workers.
 
@@ -1189,7 +1235,7 @@ scontrol show job <job-id> | tr ' ' '\n' | grep -E '^(JobId|JobName|JobState|Run
 
 Expected: `JobState=COMPLETED`, `ExitCode=0:0`, `NodeList=worker-[0-1]` and `NumNodes=2`.
 
-### Step 3: Distributed job with a GPU
+## Step 3: Distributed job with a GPU
 
 What: one task on each worker, each with its own GPU. The job prints the GPU model, the GPU memory and the driver version on each worker. Why: it proves that the NVIDIA driver works on both workers and that Slurm hands a GPU to the job on each node.
 
@@ -1202,7 +1248,7 @@ cat results/gpu.out
 
 Expected: one block per worker with `NVIDIA H100 80GB HBM3`, `81559 MiB` of GPU memory and the driver version.
 
-### Step 4: NCCL test between the two GPUs
+## Step 4: NCCL test between the two GPUs
 
 What: a networking test based on `all_reduce_perf_mpi` benchmark from NVIDIA's `nccl-tests`. It makes the GPU on `worker-0` and the GPU on `worker-1` send data to each other, and it measures how fast the data moves. Why: AI training on more than one node depends on this, because the GPUs must exchange data all the time. If this works, the two workers can run one job together. This cluster has no InfiniBand, so the data goes over the normal network, which is much slower. That is expected here.
 
