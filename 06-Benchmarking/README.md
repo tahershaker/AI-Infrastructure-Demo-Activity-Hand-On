@@ -4,6 +4,26 @@
 
 ---
 
+# Summary
+
+This is a summary of the file, with a link to each main section.
+
+* [Description](#description) - what we benchmark, the 11 measurements, and the infrastructure in short
+* [Strategy and why](#strategy-and-why) - how we compare the two models and the reasons behind each choice. Send same questions to both modles using the test dataset Using GuidLLM which is deployed on the system nodes. We will be doing 2 scenarios - One will with natural answers & one with limited 128 output tokens limit
+* [The new tools](#the-new-tools) - the tool that is new to the project. GuidLLM
+* [Preparation](#preparation) - the tasks to do before the tests. - Suspend enroot-clean-up checks + Increase CPU count for the vllm to 12 CPU + Remove answers from the test dataset.
+* [Step-by-step](#step-by-step) - deploy the client and run the four tests
+  * [Step 1. Deploy the GuideLLM client](#step-1-deploy-the-guidellm-client) - choose a system node, create the pod, and check it is running
+  * [Step 2. Run the tests](#step-2-run-the-tests) - the shape of the command shared by all four tests
+    * [Test 1: the original model, scenario A (natural answers)](#test-1-the-original-model-scenario-a-natural-answers) - what a user of the original model feels
+    * [Test 2: the tuned model, scenario A (natural answers)](#test-2-the-tuned-model-scenario-a-natural-answers) - the same test against the tuned model
+    * [Comparison of the two models for scenario A](#comparison-of-the-two-models-for-scenario-a-natural-answers) - results, latency against load, and the conclusion
+    * [Test 3: the original model, scenario B (equal answers)](#test-3-the-original-model-scenario-b-equal-answers) - 128 forced tokens on the original model
+    * [Test 4: the tuned model, scenario B (equal answers)](#test-4-the-tuned-model-scenario-b-equal-answers) - 128 forced tokens on the tuned model
+    * [Comparison of the two models for scenario B](#comparison-of-the-two-models-for-scenario-b-equal-answers) - results, latency against load, and the conclusion
+
+---
+
 # Description
 
 This section holds everything needed to benchmark the two models that we serve in [05-Serve](/05-Serve/README.md): the original model, and the model that we fine-tuned in [04-Fine-Tuning](/04-Fine-Tune/README.md). The cluster is built in [03-Provision](/03-Provision/README.md).
