@@ -11,6 +11,17 @@ Use this file when something looks wrong. Each section answers one question. Eac
 
 ---
 
+## 0. General Commands
+
+```bash
+cd ~/Downloads/dataset_synthetic_text_to_sql
+export DATA_DIR=~/Downloads/dataset_synthetic_text_to_sql
+export KEY=~/.ssh/taher-soperator-demoday
+export LOGIN_IP=$(kubectl -n soperator get svc soperator-login-svc -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
+```
+
+---
+
 ## 1. Is the cluster healthy? (first five minutes)
 
 ```bash
@@ -29,8 +40,6 @@ kubectl get helmreleases -A
 # Is the SlurmCluster Available, and are the workers ready?
 kubectl -n soperator get slurmcluster,nodeset
 ```
-
-What to look for: a node `NotReady`, a pod in `Pending`, `CrashLoopBackOff` or `ImagePullBackOff`, a HelmRelease with `READY False`, or a SlurmCluster that is not `Available`.
 
 ---
 
@@ -51,12 +60,11 @@ kubectl get nodes -o custom-columns=NAME:.metadata.name,TAINTS:.spec.taints
 
 # Does the node report a GPU to Kubernetes?
 kubectl get nodes -o custom-columns=NAME:.metadata.name,GPU:.status.allocatable.nvidia\\.com/gpu
+kubectl describe node <node-name> | grep -E -A 20 '^Allocatable'
 
 # Node conditions, including GPU faults from the problem detector
 kubectl get nodes -o json | jq -r '.items[] | .metadata.name as $n | .status.conditions[] | select(.status=="True" and .type!="Ready") | "\($n) \(.type) \(.message)"'
 ```
-
-**Example.** A pod is `Pending` with "0/8 nodes are available: ... Insufficient cpu". `describe nodes` shows the system nodes at 90% CPU requests. The fix is more room, not a restart.
 
 ---
 
@@ -127,17 +135,6 @@ kubectl top pods -n soperator
 kubectl -n soperator exec -it <pod> -c <container> -- bash
 ```
 
-**Reading pod states.**
-
-| State | Usual cause | First command |
-|---|---|---|
-| `Pending` | No node fits: not enough CPU or memory, taint, or label mismatch | `describe pod`, read Events |
-| `Init:0/1` stuck | Init container waiting, for example the jail is not mounted | `logs <pod> -c ensure-jail-virtiofs` |
-| `ImagePullBackOff` | Wrong image name or no access to the registry | `describe pod`, read Events |
-| `CrashLoopBackOff` | The program starts and exits | `logs --previous` |
-| `ContainerCreating` for long | A volume cannot be attached or mounted | `describe pod`, read Events |
-| `Error` or `Completed` on a Job pod | Normal for one-shot checks. Read the logs only if the job failed | `logs <pod>` |
-
 ---
 
 ## 5. The Soperator objects
@@ -164,8 +161,6 @@ kubectl -n soperator-system get pods
 kubectl -n soperator-system logs deploy/soperator-controller-manager --tail=100
 ```
 
-If a worker pod does not appear, read the operator log first. If the SlurmCluster is not `Available`, `describe` it and look at the conditions.
-
 ---
 
 ## 6. Health checks (ActiveChecks)
@@ -189,11 +184,6 @@ kubectl -n soperator logs job/<job-name>
 kubectl -n soperator-system logs deploy/soperator-checks-checks --tail=100
 ```
 
-Notes:
-- `SUSPEND true` with a schedule of `0 0 1 1 *` means the check does not run on its own.
-- A check that never finishes can block others. Example: `ensure-healthy-nodes` waits for the nodes to be healthy before the next release starts.
-- `wait-for-topology` waits for the topology labels on the nodes. If it hangs, check the labels (section 2).
-
 ---
 
 ## 7. Networking
@@ -210,6 +200,7 @@ kubectl -n soperator get endpoints
 
 # Test DNS from inside a pod
 kubectl -n soperator exec -it worker-0 -c <container> -- getent hosts controller-0
+kubectl -n soperator exec -it login-0 -- /bin/bash
 
 # Cilium: is the network plugin healthy on every node?
 kubectl -n kube-system get pods -l k8s-app=cilium -o wide
@@ -225,8 +216,6 @@ kubectl get networkpolicy -A
 # Pod network details from inside a worker (MTU, address)
 kubectl -n soperator exec -it worker-0 -c <container> -- ip addr show eth0
 ```
-
-**Example.** SSH to the login address times out. Check that `soperator-login-svc` has an external address, that `login-0` is `Running`, and that the service has an endpoint.
 
 ---
 
@@ -258,8 +247,6 @@ kubectl -n soperator exec -it worker-0 -c <container> -- df -h
 kubectl -n nfs-system get pods,pvc
 kubectl -n nfs-system logs sts/nfs-server --tail=50
 ```
-
-What to look for: a claim `Pending`, a `jail-mount` pod missing on a node, or a full disk (`df -h` shows 100%).
 
 ---
 

@@ -2,21 +2,7 @@
 
 A recap of what runs inside the Kubernetes cluster that Terraform built: namespaces, labels, HelmReleases, CRDs, networking and storage. It is not about the VMs underneath.
 
-**The short version.** Terraform builds the managed Kubernetes cluster and the node groups. Then it installs Flux and one bootstrap chart. From there, Flux installs 25 HelmReleases in a fixed order. Those install the operators and their CRDs. The operator then reads a few custom resources (`SlurmCluster`, `NodeSet`, `ActiveCheck`) and creates the Slurm pods: `controller-0`, `login-0`, `worker-0`, `worker-1`. Slurm is just another application on Kubernetes, with its own scheduler inside.
-
----
-
-## 0. How to read this file
-
-Every fact has one of three tags, so you know how sure to sound.
-
-| Tag | Meaning |
-|---|---|
-| **[live]** | Seen in real `kubectl` or `helm` output from my cluster |
-| **[code]** | Read in the Terraform release code (`soperator-v4.1.13-2`) |
-| **[inferred]** | My reading from names and behavior. Not proven. Say "I believe" in the interview |
-
-**Source and date.** The live output comes from my first full inventory (12 October 2026, 8 nodes). I rebuilt the cluster on 13 October with the same settings, so the structure is the same. Names, IPs and IDs differ. I removed node names, IDs and public IPs from this file.
+**The short version.** Terraform builds the managed Kubernetes cluster and the node groups. Then it installs Flux and one bootstrap chart. From there, Flux installs 25 HelmReleases in a fixed order. Those install the operators and their CRDs. The operator then reads a few custom resources (`SlurmCluster`, `NodeSet`, `ActiveCheck`) and creates the Slurm pods: `controller-0`, `login-0`, `worker-0`, `worker-1`. 
 
 ---
 
@@ -40,10 +26,6 @@ Flux (6 controllers in flux-system)
 Operator
   └─ creates the Slurm pods in namespace soperator: controller-0, login-0, worker-0, worker-1
 ```
-
-**Why it matters.** Terraform does not install the Slurm components one by one. It installs Flux and hands over one bootstrap chart. That chart describes all the other releases. Flux keeps them in sync every 5 minutes. **[code]**
-
-**GitOps without Git.** Flux normally reads from a Git repository. Here there are no Git sources. Flux reads Helm charts from Helm and OCI registries, and the values come from Terraform. **[live]**
 
 ---
 
