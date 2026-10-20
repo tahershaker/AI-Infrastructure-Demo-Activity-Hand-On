@@ -4,6 +4,30 @@
 
 ---
 
+# Summary
+
+This is a summary of the file, with a link to each main section.
+
+* [Description](#description) - what the task is, how the Soperator cluster is built, and the skill we teach the model: writing SQL from an English question and the tables of a database.
+* [Strategy and why](#strategy-and-why) - the plan in four parts (train, save, serve and test), and the reasons behind the main choices.
+* [The tools](#the-tools) - the software stack from top to bottom, and what each tool does in this job (Hugging Face Transformers/PEFT/Accelerate/Pytorch/Tokenizer, Pexis & Enroot, Axolotl, LoRA, DDP, NCCL).
+* [Preparation](#preparation) - everything from the dataset to the finished fine-tune and its first test.
+  * [Downloading the dataset](#downloading-the-dataset) - get `gretelai/synthetic_text_to_sql` to the laptop, pinned to one commit. - Install Hugging Face CLI + Download Dataset (Sunthetic SQL-To-Text)
+  * [Checking the dataset](#checking-the-dataset) - three phases of checks and preparation, run on the laptop before any GPU time is spent.
+    * [Phase 1: Data validation](#phase-1-data-validation) - is the data fit to use? - Missing or Blank value + Duplicate Data + Overlap between training & test datasets.
+    * [Phase 2: Data checking for the Axolotl settings](#phase-2-data-checking-for-the-axolotl-settings) - the facts that set the values in the Axolotl file. - Checl Data structure + Length of texts.
+    * [Phase 3: Data preparation](#phase-3-data-preparation) - get the data ready for the training and for the final test. - Handel Data Issues + Convert Training Training Data (System, User, Assistent For Each Row) + Converting Training Data (System, User, Assistent For Each Row) + Check the token length for the converted data.
+  * [Uploading the data](#uploading-the-data) - copy the files to `/mnt/data` and prove that both 
+  * [Checking flash attention](#checking-flash-attention) - the container has no `flash_attn` package, and the PyTorch `sdpa` kernel runs instead.
+  * [The Axolotl configuration](#the-axolotl-configuration) - the final YAML file, with a short comment next to each setting.
+  * [Running the smoke test](#running-the-smoke-test) - 20 steps on one worker to check the config, the memory and the GPU.
+  * [Testing on two nodes](#testing-on-two-nodes) - both GPUs train as one job, and the step time is 3.19 s against 3.17 s on one node.
+  * [Updating the configuration](#updating-the-configuration) - the tests confirm the batch and attention settings.
+  * [Running the fine-tuning](#running-the-fine-tuning) - the real run on both nodes: 282 steps in 13 minutes, and the validation loss falls from 1.214 to 0.1773.
+  * [Testing the tuned model](#testing-the-tuned-model) - the same 20 test questions go to the original and the tuned model. The tuned model answers with SQL only, and 8 of 20 answers match the correct SQL exactly.
+
+---
+
 # Description
 
 This section holds everything needed to fine-tune a general-purpose language model, `Qwen2.5-7B-Instruct`, on a Slurm cluster that runs on Kubernetes and is provisioned with Soperator. For how the cluster is built, see [03-Provision](/03-Provision/README.md).
