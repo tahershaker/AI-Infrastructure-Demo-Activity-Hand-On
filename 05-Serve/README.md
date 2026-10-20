@@ -4,6 +4,23 @@
 
 ---
 
+# Summary
+
+This is a summary of the file, with a link to each main section.
+
+* [Description](#description) - what the section covers: serving the original and the tuned model with `vLLM` on the two Slurm workers, and reaching both through one `Open WebUI` chat page.
+* [Strategy and why](#strategy-and-why) - the plan and the reasons behind each choice. - The based and the tuned modle both have to be surved on the same kubernetes node - thus using `Axolotl` to server both models on the 2 slurm worker nodes using `vLLM` and accessing them through `Open WebUI`
+* [The new tools](#the-new-tools) - the two tools that are new to the project. - `vLLM` + `Open WebUI`
+* [Preparation](#preparation) - two tasks before we serve the models. Merging the based model with the LoRA adaptor + Creating API Key to communicate with the models.
+* [Step-by-step](#step-by-step) - the five steps from the running servers to the live comparison.
+  * [Step 1. Start the two vLLM servers](#step-1-start-the-two-vllm-servers) - two `sbatch` jobs, one on each worker, from `vllm/vllm-openai:v0.31.0`.
+  * [Step 2. Give each server a stable name inside the cluster](#step-2-give-each-server-a-stable-name-inside-the-cluster) - two `ClusterIP` Services, `vllm-qwen-base` and `vllm-qwen-tuned`.
+  * [Step 3. Deploy Open WebUI](#step-3-deploy-open-webui) - one pod on a system node, connected to both servers.
+  * [Step 4. Expose Open WebUI with one load balancer](#step-4-expose-open-webui-with-one-load-balancer) - one `LoadBalancer` Service gives the chat page its public IP.
+  * [Step 5. Log in and compare the models](#step-5-log-in-and-compare-the-models) - create the admin account, close sign-up, and ask both models the same question.
+
+---
+
 # Description
 
 This section holds everything needed to serve the fine-tuned model built in [04-Fine-Tuning](/04-Fine-Tune/README.md) on the Soperator cluster built in [03-Provision](/03-Provision/README.md).

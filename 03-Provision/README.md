@@ -13,7 +13,7 @@ This is a summary of the file, with a link to each main section.
 * [Editing the recipe](#editing-the-recipe) - the recipe cannot run as it is for this environment, so 8 edits were made. Each one has the commands to apply it and a link to its issue page.
   * [Edit 1: `.envrc`](#edit-1-envrc-service-account-group-and-bucket) - use the provided service account and state bucket, and skip the `editors` group step.
   * [Edit 2: `variables.tf`](#edit-2-variablestf-unused-tenant-lookup) - comment out a tenant lookup that the sandbox user is not allowed to run.
-  * [Edit 3: `gpu_fabric_validation.tf`](#edit-3-modulesk8sgpu_fabric_validationtf-infiniband-check) - do not demand an InfiniBand GPU cluster for a preset that cannot join one.
+  * [Edit 3: `gpu_fabric_validation.tf`](#edit-3-modulesk8sgpu_fabric_validationtf-infiniband-check) - do not demand an InfiniBand GPU cluster for a preset that cannot join one. - Adding an additional check for `gpu_cluster_compatible`
   * [Edit 4: `gres.tf`](#edit-4-modulesavailable_resourcesgrestf-gres-config---gpu-lines-for-one-gpu) - describe one GPU, not eight, in the Slurm GRES lines.
   * [Edit 5: `k8s_ng_workers_v2.tf`](#edit-5-modulesk8sk8s_ng_workers_v2tf-topology-labels) - add demo topology labels to the workers, so they do not wait for ever.
   * [Edit 6: `modules/slurm/main.tf`](#edit-6-modulesslurmmaintf-login-pod-placement) - run the login pod on the system nodes.
